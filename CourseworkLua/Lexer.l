@@ -4,11 +4,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h> //va_list
 
 #define fileno _fileno
 #define noyywrap
-
-int brackets = 0;
+#define DEBUG
 
 #define YY_USER_ACTION \
 yylloc.first_line = yylloc.last_line; \
@@ -22,55 +22,29 @@ else { \
 yylloc.last_column++; \
 } \
 }
+
+void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
+	{
+#ifdef DEBUG 
+		va_list args;
+		va_start(args, format);
+		vprintf(format, args);
+		va_end(args);
+#endif
+	}
+
 %}
 
 %option noyywrap yylineno
-%x C_COMMENT
 
 %%
 [ \t\n\r\f\v\a]			/* Ignore */
-"/*"					{ BEGIN(C_COMMENT); }
-<C_COMMENT>"*/"			{ BEGIN(INITIAL); }
-<C_COMMENT>.			{ }
-<C_COMMENT>\n			{ }
-";"						return ENDL;
-[a-z]					{
-							yylval.num = yytext[0];
-							return LETTER;
-						}
-[A-Z]([^ = -+^*;]+)	{
-							printf("At line: %d. ", yylineno);
-							printf("Error code: 22. Incorrect polynom name\n");
-							exit(-1);
-						}
-(-)(-)+					{
-							printf("At line: %d. ", yylineno);
-							printf("Error code: 23. Do not use '-' like this\n");
-							exit(-1);
-						}
-(\+)(\+)+					{
-							printf("At line: %d. ", yylineno);
-							printf("Error code: 23. Do not use '+' like this\n");
-							exit(-1);
-						}
-[A-Z]					{
-							yylval.num = yytext[0];
-							return VAR;
-						}
-[0-9]					{
-							yylval.num = atoi(yytext);
-							return DIGIT;
-						}
-
-[\*+-^=#]				return yytext[0];
-"(" 					{
-							brackets++;
-							return yytext[0];
-						}
-")" 					{
-							brackets--;
-							return yytext[0];
-						}
+("not"|"#"|"~")			{ DEBUGPRINT("\nLex: operation UNOP: %s", yytext); return UNOP; }
+("+"|"*"|"/"|"//"|"^"|"%"|"&"|"~"|"|"|">>"|"<<"|".."|"<"|"<="|">"|">="|"=="|"~="|"and"|"or") { DEBUGPRINT("\nLex: operation BINOP: %s", yytext); return BINOP; }
+"-"						{ DEBUGPRINT("\nLex: operation SUB: %s", yytext); return SUB; }
+"nil"					{ DEBUGPRINT("\nLex: operation NIL: %s", yytext); return NIL; }
+"false"					{ DEBUGPRINT("\nLex: operation FALSE: %s", yytext); return FALSE; }
+"true"					{ DEBUGPRINT("\nLex: operation TRUE: %s", yytext); return TRUE; }
 .						{
 							printf("At line: %d. ", yylineno);
 							printf("Error code: 21. Unknown symbol\n");

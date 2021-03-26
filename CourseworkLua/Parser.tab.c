@@ -75,275 +75,22 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+
 FILE *yyin;
 int yyerror();
 extern int yylex();
 
 extern int brackets;
 extern int yylineno;
+extern void DEBUGPRINT(char* format, ...);
 
-#define DEBUG
 #define YYERROR_VERBOSE 1
-#define SIZE 10
 
-struct polynomial
-	{
-		int coefs[SIZE];
-	};
-int var_polynomial[26][SIZE+1] = {0};
-
-enum CodeError {
-    DIFFVAR = 1,
-    NEG_DEGREE,
-    TOOMUCHDEGREE,
-    MISSINGBR,
-    ZERODEGREEZERO,
-	INCORRECTDEGREE,
-	NOTDEFINEDPOLY
-    //некорректное имя полинома в лексе
-    //неизвестный символ
-};
-
-void parse_code_error(int code)
-{
-	//printf("Location: first line: %d, first column: %d, last line: %d,  last column: %d\n", yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
-	printf("At line: %d. ", yylineno);
-	switch(code)
-	{
-	    case DIFFVAR:
-        {
-        	printf("Error code: %d. Different variables\n", code);
-        	break;
-        }
-	    case NEG_DEGREE:
-	    {
-        	printf("Error code: %d. Negative degree\n", code);
-        	break;
-        }
-	    case TOOMUCHDEGREE:
-	    {
-	    	printf("Error code: %d. Too much degree\n", code);
-	    	break;
-	    }
-	    case MISSINGBR:
-	    {
-	    	if (brackets < 0)
-	    		printf("Error code: %d. Lost (\n", code);
-			else printf("Error code: %d. Lost )\n", code);
-			break;
-	    }
-	    case ZERODEGREEZERO:
-	    {
-	    	printf("Error code: %d. 0^0 is uncertainty\n", code);
-	    	break;
-	    }
-		case INCORRECTDEGREE:
-		{
-			printf("Error code: %d. x_convol^x_convol is incorrect\n", code);
-			break;
-		}
-		case NOTDEFINEDPOLY:
-		{
-			printf("Error code: %d. x_convol^(NOT DEFINУD POLYNOM) is incorrect\n", code);
-			break;
-		}
-	}
-	exit(1);
-
-}
-
-int check_x_convol_degree(int* source)
-{
-	for (int i = 1; i < SIZE; i++)
-		if (source[i] != 0)
-			parse_code_error(INCORRECTDEGREE);
-	if (source[0] != 0)
-		return 1;
-	return 1;
-}
-
-void init_polynomial(int *dest, int *coefs, int name)
-	{
-		if (dest == NULL) return;
-		if (dest[SIZE] != '\0' && name != dest[SIZE]) { //возможно, уже лишнее. проверить.
-			parse_code_error(DIFFVAR);
-		}
-
-		memset(dest, 0, sizeof(int)*SIZE);
-		if (coefs != NULL) memcpy(dest, coefs, sizeof(int)*SIZE);
-		if (dest[SIZE] == '\0') dest[SIZE] = name; 
-	}
-
-void copy_polynomial(int *dest, int *src)
-{
-	if (dest == NULL || src == NULL) return;
-	if (dest[SIZE] != '\0' && src[SIZE] != dest[SIZE]) {
-			parse_code_error(DIFFVAR);
-		}
-	memcpy(dest, src, sizeof(int)*SIZE);
-	if (dest[SIZE] == '\0') dest[SIZE] = src[SIZE];
-}
-
-void check_x(int *dest, int* src)
-{
-	if (dest[SIZE] != '\0' && src[SIZE] != '\0')
-	{
-		if (src[SIZE] != dest[SIZE]) parse_code_error(DIFFVAR);
-	}
-}
-
-int set_name(int* poly1, int* poly2)
-{
-	if (poly1[SIZE] != '\0')
-		return poly1[SIZE];
-	else if (poly2[SIZE] != '\0')
-		return poly2[SIZE];
-	else return '\0';
-}
-void check_degree(int degree)
-{
-	if (degree < 0)
-	{
-		parse_code_error(NEG_DEGREE);
-	}
-	if (degree > SIZE)
-	{
-		parse_code_error(TOOMUCHDEGREE);
-	}
-}
-
-// Устанавливает коэффицент coef для степени i полинома dest.
-void set_coef(int *dest, int i, int coef)
-{
-	if (dest == NULL) return;
-	if (i >= SIZE) {printf("set_coef(): i >= SIZE\n"); return; }
-	dest[i] = coef;
-}
-
-void print_in_file(int* coefs)
-{
-	FILE* fout = fopen("answer.txt", "a");
-	int *pcoefs = coefs;
-
-		fprintf(fout, "[ANS %d]: ", yylineno);
-		char buf[SIZE*5];
-		char *p = buf;
-		memset(buf, 0, sizeof(buf));
-
-		for (int i = SIZE - 1; i >= 0; i--)
-		{
-			int coef = coefs[i];
-			if (coef == 0) continue;
-
-			if (i == 0)
-			{
-				if (coef > 0)
-				{ sprintf(p, "+"); p += 1; }
-
-				sprintf(p, "%d", coef);
-				p = buf + strlen(buf);
-				continue;
-			}
-
-			if (coef > 0)
-			{ sprintf(p, "+"); p += 1; }
-			else
-			{ sprintf(p, "-"); p += 1; }
-
-			if (abs(coef) != 1)
-			{
-				sprintf(p, "%d", abs(coef));
-				p = buf + strlen(buf);
-			}
-
-			if (i > 1) {
-				sprintf(p, "(x");
-			}
-
-			else sprintf(p, "x");
-			p = buf + strlen(buf);
-
-			if (i > 1)
-			{
-				sprintf(p, "^%d)", i);
-				p = buf + strlen(buf);
-			}
-		}
-
-		if (p == buf) fprintf(fout, "0\n");
-		else fprintf(fout, "%s\n", *buf == '+' ? buf + 1 : buf);
-		fclose(fout);
-}
-
-void print(int *coefs)
-	{
-		int *pcoefs = coefs;
-
-		printf("[ANS %d]: ", yylineno);
-		char buf[SIZE*5];
-		char *p = buf;
-		memset(buf, 0, sizeof(buf));
-
-		for (int i = SIZE - 1; i >= 0; i--)
-		{
-			int coef = coefs[i];
-			if (coef == 0) continue;
-
-			if (i == 0)
-			{
-				if (coef > 0)
-				{ sprintf(p, "+"); p += 1; }
-
-				sprintf(p, "%d", coef);
-				p = buf + strlen(buf);
-				continue;
-			}
-
-			if (coef > 0)
-			{ sprintf(p, "+"); p += 1; }
-			else
-			{ sprintf(p, "-"); p += 1; }
-
-			if (abs(coef) != 1)
-			{
-				sprintf(p, "%d", abs(coef));
-				p = buf + strlen(buf);
-			}
-			//printf ("%d CODE\n", coefs[SIZE]);
-			char name = coefs[SIZE];
-			if (i > 1) {
-				sprintf(p, "(%c", name);
-			}
-
-			else sprintf(p, "%c", name);
-			p = buf + strlen(buf);
-
-			if (i > 1)
-			{
-				sprintf(p, "^%d)", i);
-				p = buf + strlen(buf);
-			}
-		}
-
-		if (p == buf) printf("0\n");
-		else printf("%s\n", *buf == '+' ? buf + 1 : buf);
-	}
-
-void debug(char* str, int *dest)
-	{
-		#ifdef DEBUG
-		int *coefs = dest;
-		printf("%s:\t", str);
-		for (int i = 0; i < SIZE; i++)
-			printf("%d\t", coefs[i]);
-		printf("\n");
-		#endif
-	}
 
 
 
 /* Line 189 of yacc.c  */
-#line 347 "Parser.tab.c"
+#line 94 "Parser.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -370,36 +117,19 @@ void debug(char* str, int *dest)
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     DIGIT = 258,
-     LETTER = 259,
-     ENDL = 260,
-     VAR = 261,
-     COMMENT = 262,
-     UMINUS = 263
+     UNOP = 258,
+     SUB = 259,
+     BINOP = 260,
+     NIL = 261,
+     FALSE = 262,
+     TRUE = 263
    };
 #endif
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-{
-
-/* Line 214 of yacc.c  */
-#line 276 "Parser.y"
-
-    int num;
-    char ch; 
-    int coefs[1000]; 			//уже не видит SIZE
-    //struct polynomial* poly; 	//только указатель, иначе забыла какая уже ошибка
-    							// от указателя на структуру пришлось отказаться, т.к. 
-    							//возникают большие сложности с malloc при использовании рекурсии. можно каждый раз смотреть в функции копирования и инициализации, если указатель NULL, то malloc.
-
-
-
-/* Line 214 of yacc.c  */
-#line 402 "Parser.tab.c"
-} YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -423,7 +153,7 @@ typedef struct YYLTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 427 "Parser.tab.c"
+#line 157 "Parser.tab.c"
 
 #ifdef short
 # undef short
@@ -638,18 +368,18 @@ union yyalloc
 #endif
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  18
+#define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   57
+#define YYLAST   1
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  18
+#define YYNTOKENS  9
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  7
+#define YYNNTS  2
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  21
+#define YYNRULES  2
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  36
+#define YYNSTATES  4
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -664,13 +394,13 @@ static const yytype_uint8 yytranslate[] =
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,    17,     2,     2,     2,     2,
-      11,    12,    13,     9,     2,    10,     2,    14,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     8,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,    15,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -687,7 +417,7 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,    16
+       5,     6,     7,     8
 };
 
 #if YYDEBUG
@@ -695,29 +425,19 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     5,     8,    11,    14,    18,    21,    23,
-      25,    27,    31,    34,    38,    42,    46,    50,    52,    55,
-      60,    62
+       0,     0,     3
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      19,     0,    -1,    20,    -1,    19,    20,    -1,    22,     5,
-      -1,    21,     5,    -1,     6,     8,    22,    -1,    17,     6,
-      -1,     4,    -1,    24,    -1,     6,    -1,    11,    22,    12,
-      -1,    10,    22,    -1,    22,     9,    22,    -1,    22,    10,
-      22,    -1,    22,    13,    22,    -1,    22,    15,    22,    -1,
-      23,    -1,    24,     4,    -1,    24,     4,    15,    22,    -1,
-       3,    -1,    24,     3,    -1
+      10,     0,    -1,     3,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
-static const yytype_uint16 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,   316,   316,   317,   320,   324,   328,   335,   342,   348,
-     370,   390,   395,   403,   411,   420,   480,   521,   529,   535,
-     656,   660
+       0,    48,    48
 };
 #endif
 
@@ -726,10 +446,8 @@ static const yytype_uint16 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "DIGIT", "LETTER", "ENDL", "VAR",
-  "COMMENT", "'='", "'+'", "'-'", "'('", "')'", "'*'", "'/'", "'^'",
-  "UMINUS", "'#'", "$accept", "main", "line", "var_convol", "x_convol",
-  "abb_mult", "number", 0
+  "$end", "error", "$undefined", "UNOP", "SUB", "BINOP", "NIL", "FALSE",
+  "TRUE", "$accept", "main", 0
 };
 #endif
 
@@ -738,25 +456,20 @@ static const char *const yytname[] =
    token YYLEX-NUM.  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261,   262,    61,    43,
-      45,    40,    41,    42,    47,    94,   263,    35
+       0,   256,   257,   258,   259,   260,   261,   262,   263
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    18,    19,    19,    20,    20,    21,    21,    22,    22,
-      22,    22,    22,    22,    22,    22,    22,    22,    23,    23,
-      24,    24
+       0,     9,    10
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     2,     2,     2,     3,     2,     1,     1,
-       1,     3,     2,     3,     3,     3,     3,     1,     2,     4,
-       1,     2
+       0,     2,     1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -764,33 +477,27 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,    20,     8,    10,     0,     0,     0,     0,     2,     0,
-       0,    17,     9,     0,    10,    12,     0,     7,     1,     3,
-       5,     4,     0,     0,     0,     0,    21,    18,     6,    11,
-      13,    14,    15,    16,     0,    19
+       0,     2,     0,     1
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     7,     8,     9,    10,    11,    12
+      -1,     2
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -9
+#define YYPACT_NINF -4
 static const yytype_int8 yypact[] =
 {
-       0,    -9,    -9,    -6,    39,    39,     2,    22,    -9,    10,
-      31,    -9,     9,    39,    -9,    -9,    42,    -9,    -9,    -9,
-      -9,    -9,    39,    39,    39,    39,    -9,    -1,    14,    -9,
-      -8,    -8,     1,     1,    39,     1
+      -3,    -4,     1,    -4
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -9,    -9,    24,    -9,    -4,    -9,    -9
+      -4,    -4
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -800,32 +507,19 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      15,    16,    13,     1,     2,    24,     3,    25,    17,    28,
-       4,     5,    26,    27,    34,    20,    25,     6,    30,    31,
-      32,    33,    18,    22,    23,     1,     2,    24,     3,    25,
-      35,    19,     4,     5,     0,     0,    21,     0,     0,     6,
-      22,    23,     1,     2,    24,    14,    25,     0,     0,     4,
-       5,    22,    23,     0,    29,    24,     0,    25
+       1,     3
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_uint8 yycheck[] =
 {
-       4,     5,     8,     3,     4,    13,     6,    15,     6,    13,
-      10,    11,     3,     4,    15,     5,    15,    17,    22,    23,
-      24,    25,     0,     9,    10,     3,     4,    13,     6,    15,
-      34,     7,    10,    11,    -1,    -1,     5,    -1,    -1,    17,
-       9,    10,     3,     4,    13,     6,    15,    -1,    -1,    10,
-      11,     9,    10,    -1,    12,    13,    -1,    15
+       3,     0
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     3,     4,     6,    10,    11,    17,    19,    20,    21,
-      22,    23,    24,     8,     6,    22,    22,     6,     0,    20,
-       5,     5,     9,    10,    13,    15,     3,     4,    22,    12,
-      22,    22,    22,    22,    15,    22
+       0,     3,    10,     0
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1671,251 +1365,10 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 4:
+      
 
 /* Line 1455 of yacc.c  */
-#line 320 "Parser.y"
-    {
-			debug("main", (yyvsp[(1) - (2)].coefs));
-			print((yyvsp[(1) - (2)].coefs));
-		;}
-    break;
-
-  case 6:
-
-/* Line 1455 of yacc.c  */
-#line 329 "Parser.y"
-    {
-				var_polynomial[(yyvsp[(1) - (3)].num) - 'A'][SIZE] = '\0';
-				init_polynomial(var_polynomial[(yyvsp[(1) - (3)].num) - 'A'], (yyvsp[(3) - (3)].coefs), (yyvsp[(3) - (3)].coefs)[SIZE]);
-				copy_polynomial((yyval.coefs), (yyvsp[(3) - (3)].coefs));
-				debug("VAR = convol", var_polynomial[(yyvsp[(1) - (3)].num) - 'A']);
-			;}
-    break;
-
-  case 7:
-
-/* Line 1455 of yacc.c  */
-#line 336 "Parser.y"
-    {
-				printf("%c", (yyvsp[(2) - (2)].num));
-				print(var_polynomial[(yyvsp[(2) - (2)].num) - 'A']);
-			;}
-    break;
-
-  case 8:
-
-/* Line 1455 of yacc.c  */
-#line 343 "Parser.y"
-    {
-				init_polynomial((yyval.coefs), NULL, (yyvsp[(1) - (1)].num));
-				(yyval.coefs)[1] = 1;
-				debug("x_convol: LETTER", (yyval.coefs));
-			;}
-    break;
-
-  case 9:
-
-/* Line 1455 of yacc.c  */
-#line 349 "Parser.y"
-    {
-				init_polynomial((yyval.coefs), NULL, '\0');
-				(yyval.coefs)[0] = (yyvsp[(1) - (1)].num);
-				debug("x_convol: number", (yyval.coefs));
-			;}
-    break;
-
-  case 10:
-
-/* Line 1455 of yacc.c  */
-#line 371 "Parser.y"
-    {
-				copy_polynomial((yyval.coefs), var_polynomial[(yyvsp[(1) - (1)].num) - 'A']);
-				debug("x_convol: VAR", (yyval.coefs));
-			;}
-    break;
-
-  case 11:
-
-/* Line 1455 of yacc.c  */
-#line 391 "Parser.y"
-    {
-				copy_polynomial((yyval.coefs), (yyvsp[(2) - (3)].coefs));
-				debug("(x_convol)", (yyval.coefs));
-			;}
-    break;
-
-  case 12:
-
-/* Line 1455 of yacc.c  */
-#line 396 "Parser.y"
-    {
-				copy_polynomial((yyval.coefs), (yyvsp[(2) - (2)].coefs));
-				for (int i = 0; i < SIZE; i++)
-					(yyval.coefs)[i] *= -1;
-
-				debug("-x", (yyval.coefs));
-			;}
-    break;
-
-  case 13:
-
-/* Line 1455 of yacc.c  */
-#line 404 "Parser.y"
-    {
-				check_x((yyvsp[(1) - (3)].coefs), (yyvsp[(3) - (3)].coefs));
-				(yyval.coefs)[SIZE] = set_name((yyvsp[(1) - (3)].coefs), (yyvsp[(3) - (3)].coefs));
-				for (int i = 0; i < SIZE; i++)
-				 	(yyval.coefs)[i] = (yyvsp[(1) - (3)].coefs)[i] + (yyvsp[(3) - (3)].coefs)[i];
-				debug("x+x", (yyval.coefs));
-			;}
-    break;
-
-  case 14:
-
-/* Line 1455 of yacc.c  */
-#line 412 "Parser.y"
-    {
-				check_x((yyvsp[(1) - (3)].coefs), (yyvsp[(3) - (3)].coefs));
-				(yyval.coefs)[SIZE] = set_name((yyvsp[(1) - (3)].coefs), (yyvsp[(3) - (3)].coefs));
-				for (int i = 0; i < SIZE; i++)
-					(yyval.coefs)[i] = (yyvsp[(1) - (3)].coefs)[i] - (yyvsp[(3) - (3)].coefs)[i];
-
-				debug("x_c-x_c", (yyval.coefs));
-			;}
-    break;
-
-  case 15:
-
-/* Line 1455 of yacc.c  */
-#line 421 "Parser.y"
-    {
-				check_x((yyvsp[(1) - (3)].coefs), (yyvsp[(3) - (3)].coefs));
-			    int name = set_name((yyvsp[(1) - (3)].coefs), (yyvsp[(3) - (3)].coefs));
-				init_polynomial((yyval.coefs), NULL, name);
-				for (int i = 0; i < SIZE; i++) {
-					for (int j = 0; j < SIZE; j++)
-					{
-						int coef = (yyvsp[(1) - (3)].coefs)[i] * (yyvsp[(3) - (3)].coefs)[j];
-						if (i + j < SIZE)
-							(yyval.coefs)[i + j] += coef;
-						else if (coef != 0) {
-							parse_code_error(TOOMUCHDEGREE);
-						}
-					}
-				}
-
-				debug("x_convol*x_convol", (yyval.coefs));
-			;}
-    break;
-
-  case 16:
-
-/* Line 1455 of yacc.c  */
-#line 481 "Parser.y"
-    {
-				if (check_x_convol_degree((yyvsp[(3) - (3)].coefs)))
-				{
-					check_degree((yyvsp[(3) - (3)].coefs)[0]);
-					if ((yyvsp[(3) - (3)].coefs)[0] == 0)
-					{
-						if ((yyvsp[(1) - (3)].coefs)[0] == 0) parse_code_error(ZERODEGREEZERO);
-						int name = set_name((yyvsp[(1) - (3)].coefs), (yyvsp[(3) - (3)].coefs));
-						init_polynomial((yyval.coefs), NULL, name);
-						(yyval.coefs)[0] = 1;
-					}
-					else
-					{
-						copy_polynomial((yyval.coefs), (yyvsp[(1) - (3)].coefs));
-						int buf[SIZE];
-
-						for (int k = 1; k < (yyvsp[(3) - (3)].coefs)[0]; k++)
-						{
-							memset(buf, 0, sizeof(buf));
-							for (int i = SIZE - 1; i >= 0; i--)
-							{
-								if ((yyval.coefs)[i] == 0) continue;
-								for (int j = SIZE - 1; j >= 0; j--)
-								{
-									if ((yyvsp[(1) - (3)].coefs)[j] == 0) continue;
-									int coef = (yyval.coefs)[i] * (yyvsp[(1) - (3)].coefs)[j];
-									if (i + j < SIZE)
-										buf[i + j] += coef;
-									else if (coef != 0)
-									{
-										parse_code_error(TOOMUCHDEGREE);
-									}
-								}
-							}
-							memcpy((yyval.coefs), buf, SIZE * sizeof(int));
-						}
-					}
-					debug("x_convol ^x_convol", (yyval.coefs));
-				}
-			;}
-    break;
-
-  case 17:
-
-/* Line 1455 of yacc.c  */
-#line 522 "Parser.y"
-    {
-				copy_polynomial((yyval.coefs), (yyvsp[(1) - (1)].coefs));
-			;}
-    break;
-
-  case 18:
-
-/* Line 1455 of yacc.c  */
-#line 530 "Parser.y"
-    {
-				init_polynomial((yyval.coefs), NULL, (yyvsp[(2) - (2)].num));
-				(yyval.coefs)[1] = (yyvsp[(1) - (2)].num);
-				debug("abb: number x", (yyval.coefs));
-			;}
-    break;
-
-  case 19:
-
-/* Line 1455 of yacc.c  */
-#line 536 "Parser.y"
-    {
-				if (check_x_convol_degree((yyvsp[(4) - (4)].coefs))) 
-				{
-					check_degree((yyvsp[(4) - (4)].coefs)[0]);
-					init_polynomial((yyval.coefs), NULL, (yyvsp[(2) - (4)].num));
-					if ((yyvsp[(4) - (4)].coefs) == 0) (yyval.coefs)[0] = (yyvsp[(1) - (4)].num);
-					else {
-						int num = (yyvsp[(4) - (4)].coefs)[0];
-						(yyval.coefs)[num] = (yyvsp[(1) - (4)].num);
-					}
-					debug("abb: number x^(num_c)", (yyval.coefs));
-				}
-			;}
-    break;
-
-  case 20:
-
-/* Line 1455 of yacc.c  */
-#line 657 "Parser.y"
-    {
-				(yyval.num) = (yyvsp[(1) - (1)].num);
-			;}
-    break;
-
-  case 21:
-
-/* Line 1455 of yacc.c  */
-#line 661 "Parser.y"
-    {
-				(yyval.num) = (yyvsp[(1) - (2)].num) * 10 + (yyvsp[(2) - (2)].num);
-			;}
-    break;
-
-
-
-/* Line 1455 of yacc.c  */
-#line 1919 "Parser.tab.c"
+#line 1372 "Parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2134,7 +1587,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 665 "Parser.y"
+#line 66 "Parser.y"
 
 
 int parser_main(int argc, char *argv[])
@@ -2165,9 +1618,6 @@ int parser_main(int argc, char *argv[])
 
 int yyerror(const char *p)
 { 
-	if (brackets != 0) {
-		parse_code_error(MISSINGBR);
-	}
 	printf("%s in line %d. Location: first line: %d, first column: %d, last line: %d,  last column: %d\n", p, yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
 	return 0;
 }

@@ -39,36 +39,19 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     DIGIT = 258,
-     LETTER = 259,
-     ENDL = 260,
-     VAR = 261,
-     COMMENT = 262,
-     UMINUS = 263
+     UNOP = 258,
+     SUB = 259,
+     BINOP = 260,
+     NIL = 261,
+     FALSE = 262,
+     TRUE = 263
    };
 #endif
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-{
-
-/* Line 1676 of yacc.c  */
-#line 276 "Parser.y"
-
-    int num;
-    char ch; 
-    int coefs[1000]; 			//уже не видит SIZE
-    //struct polynomial* poly; 	//только указатель, иначе забыла какая уже ошибка
-    							// от указателя на структуру пришлось отказаться, т.к. 
-    							//возникают большие сложности с malloc при использовании рекурсии. можно каждый раз смотреть в функции копирования и инициализации, если указатель NULL, то malloc.
-
-
-
-/* Line 1676 of yacc.c  */
-#line 71 "Parser.tab.h"
-} YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
