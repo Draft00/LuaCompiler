@@ -44,7 +44,11 @@
      BINOP = 260,
      NIL = 261,
      FALSE = 262,
-     TRUE = 263
+     TRUE = 263,
+     INT = 264,
+     HEX = 265,
+     FLOAT = 266,
+     HEX_FLOAT = 267
    };
 #endif
 

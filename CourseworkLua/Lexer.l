@@ -45,6 +45,17 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 "nil"					{ DEBUGPRINT("\nLex: operation NIL: %s", yytext); return NIL; }
 "false"					{ DEBUGPRINT("\nLex: operation FALSE: %s", yytext); return FALSE; }
 "true"					{ DEBUGPRINT("\nLex: operation TRUE: %s", yytext); return TRUE; }
+
+[0-9]+					{ DEBUGPRINT("\nLex: operation INT: %s", yytext); return INT; }
+(0)[xX][0-9a-fA-F]+		{ DEBUGPRINT("\nLex: operation HEX: %s", yytext); return HEX; }
+
+[0-9]+(.)([0-9])*([eE][+-]?[0-9]+)?						{ DEBUGPRINT("\nLex: operation FLOAT_1: %s", yytext); return FLOAT; }
+(.)[1-9]+([eE][+-]?[0-9]+)?								{ DEBUGPRINT("\nLex: operation FLOAT_2: %s", yytext); return FLOAT; }
+[0-9]+([eE][+-]?[0-9]+)									{ DEBUGPRINT("\nLex: operation FLOAT_3: %s", yytext); return FLOAT; }
+
+(0)[xX]([0-9a-fA-F]+)(.)([0-9a-fA-F]*)([pP][+-]?[0-9]+)?	{ DEBUGPRINT("\nLex: operation HEX_FLOAT_1: %s", yytext); return HEX_FLOAT; }
+(0)[xX](.)([0-9a-fA-F]+)([pP][+-]?[0-9]+)?					{ DEBUGPRINT("\nLex: operation HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
+(0)[xX]([0-9a-fA-F]+)([pP][+-]?[0-9]+)						{ DEBUGPRINT("\nLex: operation HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 .						{
 							printf("At line: %d. ", yylineno);
 							printf("Error code: 21. Unknown symbol\n");

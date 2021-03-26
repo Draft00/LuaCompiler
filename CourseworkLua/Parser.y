@@ -23,6 +23,7 @@ extern void DEBUGPRINT(char* format, ...);
 %token UNOP SUB
 %token BINOP
 %token NIL FALSE TRUE
+%token INT HEX FLOAT HEX_FLOAT
 
 
 /* SECTION OF WHAT WE SHOULD TEST */
@@ -45,14 +46,14 @@ extern void DEBUGPRINT(char* format, ...);
 %%
 /*================ 2. The Grammar Section ================================*/
 
-main: UNOP
+main: exp
 ;
 
 exp: NIL
 	| FALSE
 	| TRUE
-	/*| Numeral
-	| LiteralString
+	| Numeral
+	/*| LiteralString
 	| ‘...’ 
 	| functiondef 
 	| prefixexp 
@@ -63,6 +64,11 @@ exp: NIL
 	| SUB exp
 ;
 
+Numeral: INT
+		| HEX
+		| FLOAT
+		| HEX_FLOAT
+;
 %%
 
 int parser_main(int argc, char *argv[])
