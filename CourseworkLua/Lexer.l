@@ -33,10 +33,22 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 #endif
 	}
 
+
+/* TEST IT SECTION */
+
+//UtfEscape
 %}
 
 %option noyywrap yylineno
 
+Digit					[0-9]
+HexDigit				[0-9a-fA-F]
+Exponent				[eE][+-]?[0-9]+
+HexExponent				[pP][+-]?[0-9]+
+DecimalEscape			(\\{Digit})|(\\{Digit}{Digit})
+HexEscape				(\\)(x){HexDigit}{HexDigit}
+UtfEscape				(\\)(u\{){HexDigit}+(\}) 
+EscapeSequence			(\\[abfnrtvz\"\'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
 %%
 [ \t\n\r\f\v\a]			/* Ignore */
 ("not"|"#"|"~")			{ DEBUGPRINT("\nLex: operation UNOP: %s", yytext); return UNOP; }
@@ -45,18 +57,19 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 "nil"					{ DEBUGPRINT("\nLex: operation NIL: %s", yytext); return NIL; }
 "false"					{ DEBUGPRINT("\nLex: operation FALSE: %s", yytext); return FALSE; }
 "true"					{ DEBUGPRINT("\nLex: operation TRUE: %s", yytext); return TRUE; }
+{Digit}+					{ DEBUGPRINT("\nLex: Numeral INT: %s", yytext); return INT; }
+(0)[xX]{HexDigit}+		{ DEBUGPRINT("\nLex: Numeral HEX: %s", yytext); return HEX; }
 
-[0-9]+					{ DEBUGPRINT("\nLex: Numeral INT: %s", yytext); return INT; }
-(0)[xX][0-9a-fA-F]+		{ DEBUGPRINT("\nLex: Numeral HEX: %s", yytext); return HEX; }
+{Digit}+(.){Digit}*{Exponent}?						{ DEBUGPRINT("\nLex: Numeral FLOAT_1: %s", yytext); return FLOAT; }
+(.){Digit}+{Exponent}?								{ DEBUGPRINT("\nLex: Numeral FLOAT_2: %s", yytext); return FLOAT; }
+{Digit}+{Exponent}									{ DEBUGPRINT("\nLex: Numeral FLOAT_3: %s", yytext); return FLOAT; }
 
-[0-9]+(.)([0-9])*([eE][+-]?[0-9]+)?						{ DEBUGPRINT("\nLex: Numeral FLOAT_1: %s", yytext); return FLOAT; }
-(.)[1-9]+([eE][+-]?[0-9]+)?								{ DEBUGPRINT("\nLex: Numeral FLOAT_2: %s", yytext); return FLOAT; }
-[0-9]+([eE][+-]?[0-9]+)									{ DEBUGPRINT("\nLex: Numeral FLOAT_3: %s", yytext); return FLOAT; }
+(0)[xX]{HexDigit}+(.){HexDigit}*{HexExponent}?	{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_1: %s", yytext); return HEX_FLOAT; }
+(0)[xX](.){HexDigit}+(HexExponent)?					{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
+(0)[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
-(0)[xX]([0-9a-fA-F]+)(.)([0-9a-fA-F]*)([pP][+-]?[0-9]+)?	{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_1: %s", yytext); return HEX_FLOAT; }
-(0)[xX](.)([0-9a-fA-F]+)([pP][+-]?[0-9]+)?					{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
-(0)[xX]([0-9a-fA-F]+)([pP][+-]?[0-9]+)						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
-
+(\")([^\\\"]|{EscapeSequence})*(\")					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
+				
 (...)					{ DEBUGPRINT("\nLex: VARARG: %s", yytext); return VARARG; }
 .						{
 							printf("At line: %d. ", yylineno);

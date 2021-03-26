@@ -25,6 +25,7 @@ extern void DEBUGPRINT(char* format, ...);
 %token NIL FALSE TRUE
 %token INT HEX FLOAT HEX_FLOAT
 %token VARARG //'...'
+%token TWOQ ONEQ ONEQSTRING TWOQSTRING
 
 
 /* SECTION OF WHAT WE SHOULD TEST */
@@ -54,7 +55,7 @@ exp: NIL
 	| FALSE
 	| TRUE
 	| Numeral
-	/*| LiteralString*/
+	| LiteralString
 	/*| VARARG 
 	| functiondef 
 	| prefixexp 
@@ -64,6 +65,11 @@ exp: NIL
 	| UNOP exp 
 	| SUB exp
 ;
+
+LiteralString:	ONEQSTRING 
+				| TWOQSTRING
+
+TwoQString: TWOQ TWOQ
 
 Numeral: INT
 		| HEX

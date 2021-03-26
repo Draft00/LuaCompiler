@@ -48,7 +48,12 @@
      INT = 264,
      HEX = 265,
      FLOAT = 266,
-     HEX_FLOAT = 267
+     HEX_FLOAT = 267,
+     VARARG = 268,
+     TWOQ = 269,
+     ONEQ = 270,
+     ONEQSTRING = 271,
+     TWOQSTRING = 272
    };
 #endif
 
