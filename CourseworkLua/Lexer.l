@@ -37,6 +37,11 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 /* TEST IT SECTION */
 
 //UtfEscape
+//LONGSTR_LVL
+
+
+/*TODO LIST!!!*/
+//LONGSTR_LVL add the laziness of the | ' [' .*? ']'
 %}
 
 %option noyywrap yylineno
@@ -49,6 +54,7 @@ DecimalEscape			(\\{Digit})|(\\{Digit}{Digit})
 HexEscape				(\\)(x){HexDigit}{HexDigit}
 UtfEscape				(\\)(u\{){HexDigit}+(\}) 
 EscapeSequence			(\\[abfnrtvz\"\'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
+LONGSTR_LVL				(=){LONGSTR_LVL}(=)
 %%
 [ \t\n\r\f\v\a]			/* Ignore */
 ("not"|"#"|"~")			{ DEBUGPRINT("\nLex: operation UNOP: %s", yytext); return UNOP; }
@@ -69,7 +75,8 @@ EscapeSequence			(\\[abfnrtvz\"\'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{U
 (0)[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
 (\")([^\\\"]|{EscapeSequence})*(\")					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
-(\')([^\\\']|{EscapeSequence})*(\')					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }		
+(\')([^\\\']|{EscapeSequence})*(\')					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }	
+
 (...)					{ DEBUGPRINT("\nLex: VARARG: %s", yytext); return VARARG; }
 .						{
 							printf("At line: %d. ", yylineno);

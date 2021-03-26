@@ -53,7 +53,8 @@
      TWOQ = 269,
      ONEQ = 270,
      ONEQSTRING = 271,
-     TWOQSTRING = 272
+     TWOQSTRING = 272,
+     LONGSTRING = 273
    };
 #endif
 

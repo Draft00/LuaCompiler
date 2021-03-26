@@ -658,7 +658,12 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 /* TEST IT SECTION */
 
 //UtfEscape
-#line 662 "Lexer.c"
+//LONGSTR_LVL
+
+
+/*TODO LIST!!!*/
+//LONGSTR_LVL add the laziness of the | ' ['operator .*? ']'
+#line 667 "Lexer.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -809,9 +814,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 52 "Lexer.l"
+#line 58 "Lexer.l"
 
-#line 815 "Lexer.c"
+#line 820 "Lexer.c"
 
 	if ( yy_init )
 		{
@@ -904,97 +909,97 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 53 "Lexer.l"
+#line 59 "Lexer.l"
 /* Ignore */
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 54 "Lexer.l"
+#line 60 "Lexer.l"
 { DEBUGPRINT("\nLex: operation UNOP: %s", yytext); return UNOP; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 55 "Lexer.l"
+#line 61 "Lexer.l"
 { DEBUGPRINT("\nLex: operation BINOP: %s", yytext); return BINOP; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 56 "Lexer.l"
+#line 62 "Lexer.l"
 { DEBUGPRINT("\nLex: operation SUB: %s", yytext); return SUB; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 57 "Lexer.l"
+#line 63 "Lexer.l"
 { DEBUGPRINT("\nLex: operation NIL: %s", yytext); return NIL; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 58 "Lexer.l"
+#line 64 "Lexer.l"
 { DEBUGPRINT("\nLex: operation FALSE: %s", yytext); return FALSE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 59 "Lexer.l"
+#line 65 "Lexer.l"
 { DEBUGPRINT("\nLex: operation TRUE: %s", yytext); return TRUE; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 60 "Lexer.l"
+#line 66 "Lexer.l"
 { DEBUGPRINT("\nLex: Numeral INT: %s", yytext); return INT; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 61 "Lexer.l"
+#line 67 "Lexer.l"
 { DEBUGPRINT("\nLex: Numeral HEX: %s", yytext); return HEX; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 63 "Lexer.l"
+#line 69 "Lexer.l"
 { DEBUGPRINT("\nLex: Numeral FLOAT_1: %s", yytext); return FLOAT; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 64 "Lexer.l"
+#line 70 "Lexer.l"
 { DEBUGPRINT("\nLex: Numeral FLOAT_2: %s", yytext); return FLOAT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 65 "Lexer.l"
+#line 71 "Lexer.l"
 { DEBUGPRINT("\nLex: Numeral FLOAT_3: %s", yytext); return FLOAT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 67 "Lexer.l"
+#line 73 "Lexer.l"
 { DEBUGPRINT("\nLex: Numeral HEX_FLOAT_1: %s", yytext); return HEX_FLOAT; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 68 "Lexer.l"
+#line 74 "Lexer.l"
 { DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 69 "Lexer.l"
+#line 75 "Lexer.l"
 { DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 71 "Lexer.l"
+#line 77 "Lexer.l"
 { DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 72 "Lexer.l"
-{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }		
+#line 78 "Lexer.l"
+{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }	
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 73 "Lexer.l"
+#line 80 "Lexer.l"
 { DEBUGPRINT("\nLex: VARARG: %s", yytext); return VARARG; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 74 "Lexer.l"
+#line 81 "Lexer.l"
 {
 							printf("At line: %d. ", yylineno);
 							printf("Error code: 21. Unknown symbol\n");
@@ -1003,10 +1008,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 80 "Lexer.l"
+#line 87 "Lexer.l"
 ECHO;
 	YY_BREAK
-#line 1010 "Lexer.c"
+#line 1015 "Lexer.c"
 			case YY_STATE_EOF(INITIAL):
 				yyterminate();
 
@@ -1890,4 +1895,4 @@ int main()
 	return 0;
 	}
 #endif
-#line 80 "Lexer.l"
+#line 87 "Lexer.l"
