@@ -24,6 +24,7 @@ extern void DEBUGPRINT(char* format, ...);
 %token BINOP
 %token NIL FALSE TRUE
 %token INT HEX FLOAT HEX_FLOAT
+%token VARARG //'...'
 
 
 /* SECTION OF WHAT WE SHOULD TEST */
@@ -53,8 +54,8 @@ exp: NIL
 	| FALSE
 	| TRUE
 	| Numeral
-	/*| LiteralString
-	| ‘...’ 
+	/*| LiteralString*/
+	/*| VARARG 
 	| functiondef 
 	| prefixexp 
 	| tableconstructor */
