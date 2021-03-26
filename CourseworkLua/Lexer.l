@@ -68,8 +68,8 @@ EscapeSequence			(\\[abfnrtvz\"\'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{U
 (0)[xX](.){HexDigit}+(HexExponent)?					{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
 (0)[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
-(\")([^\\\"]|{EscapeSequence})*(\")					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; 
-('\'([^\\\']|{EscapeSequence})*(\')					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }		
+(\")([^\\\"]|{EscapeSequence})*(\")					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
+(\')([^\\\']|{EscapeSequence})*(\')					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }		
 (...)					{ DEBUGPRINT("\nLex: VARARG: %s", yytext); return VARARG; }
 .						{
 							printf("At line: %d. ", yylineno);
