@@ -57,7 +57,7 @@ EscapeSequence			(\\[abfnrtvz\"\'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{U
 "nil"					{ DEBUGPRINT("\nLex: operation NIL: %s", yytext); return NIL; }
 "false"					{ DEBUGPRINT("\nLex: operation FALSE: %s", yytext); return FALSE; }
 "true"					{ DEBUGPRINT("\nLex: operation TRUE: %s", yytext); return TRUE; }
-{Digit}+					{ DEBUGPRINT("\nLex: Numeral INT: %s", yytext); return INT; }
+{Digit}+				{ DEBUGPRINT("\nLex: Numeral INT: %s", yytext); return INT; }
 (0)[xX]{HexDigit}+		{ DEBUGPRINT("\nLex: Numeral HEX: %s", yytext); return HEX; }
 
 {Digit}+(.){Digit}*{Exponent}?						{ DEBUGPRINT("\nLex: Numeral FLOAT_1: %s", yytext); return FLOAT; }
@@ -68,8 +68,8 @@ EscapeSequence			(\\[abfnrtvz\"\'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{U
 (0)[xX](.){HexDigit}+(HexExponent)?					{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
 (0)[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
-(\")([^\\\"]|{EscapeSequence})*(\")					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
-				
+(\")([^\\\"]|{EscapeSequence})*(\")					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; 
+('\'([^\\\']|{EscapeSequence})*(\')					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }		
 (...)					{ DEBUGPRINT("\nLex: VARARG: %s", yytext); return VARARG; }
 .						{
 							printf("At line: %d. ", yylineno);
