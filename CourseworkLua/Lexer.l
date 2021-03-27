@@ -41,7 +41,11 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 
 
 /*TODO LIST!!!*/
+
+//To do LONGSTR
 //LONGSTR_LVL add the laziness of the | ' [' .*? ']'
+
+
 %}
 
 %option noyywrap yylineno
@@ -54,11 +58,14 @@ DecimalEscape			(\\{Digit})|(\\{Digit}{Digit})
 HexEscape				(\\)(x){HexDigit}{HexDigit}
 UtfEscape				(\\)(u\{){HexDigit}+(\}) 
 EscapeSequence			(\\[abfnrtvz\"\'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
-LONGSTR_LVL				(=){LONGSTR_LVL}(=)
+LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
+
 %%
 [ \t\n\r\f\v\a]			/* Ignore */
+[a-zA-Z_][a-zA-Z_0-9]*	{ DEBUGPRINT("\nLex: NAME: %s", yytext); return NAME; }
 ("not"|"#"|"~")			{ DEBUGPRINT("\nLex: operation UNOP: %s", yytext); return UNOP; }
 ("+"|"*"|"/"|"//"|"^"|"%"|"&"|"~"|"|"|">>"|"<<"|".."|"<"|"<="|">"|">="|"=="|"~="|"and"|"or") { DEBUGPRINT("\nLex: operation BINOP: %s", yytext); return BINOP; }
+"="						{ DEBUGPRINT("\nLex: operation equall: %s", yytext); return yytext[0]; }
 "-"						{ DEBUGPRINT("\nLex: operation SUB: %s", yytext); return SUB; }
 "nil"					{ DEBUGPRINT("\nLex: operation NIL: %s", yytext); return NIL; }
 "false"					{ DEBUGPRINT("\nLex: operation FALSE: %s", yytext); return FALSE; }
@@ -70,12 +77,13 @@ LONGSTR_LVL				(=){LONGSTR_LVL}(=)
 (.){Digit}+{Exponent}?								{ DEBUGPRINT("\nLex: Numeral FLOAT_2: %s", yytext); return FLOAT; }
 {Digit}+{Exponent}									{ DEBUGPRINT("\nLex: Numeral FLOAT_3: %s", yytext); return FLOAT; }
 
-(0)[xX]{HexDigit}+(.){HexDigit}*{HexExponent}?	{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_1: %s", yytext); return HEX_FLOAT; }
+(0)[xX]{HexDigit}+(.){HexDigit}*{HexExponent}?		{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_1: %s", yytext); return HEX_FLOAT; }
 (0)[xX](.){HexDigit}+(HexExponent)?					{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
 (0)[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
 (\")([^\\\"]|{EscapeSequence})*(\")					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
 (\')([^\\\']|{EscapeSequence})*(\')					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }	
+
 
 (...)					{ DEBUGPRINT("\nLex: VARARG: %s", yytext); return VARARG; }
 .						{
