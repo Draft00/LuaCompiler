@@ -54,7 +54,8 @@
      ONEQ = 270,
      ONEQSTRING = 271,
      TWOQSTRING = 272,
-     LONGSTRING = 273
+     LONGSTRING = 273,
+     NAME = 274
    };
 #endif
 

@@ -2,6 +2,7 @@ Terminals unused in grammar
 
    TWOQ
    ONEQ
+   NAME
 
 
 Состояние 18 конфликты: 2 сдвига/вывода
@@ -57,19 +58,20 @@ ONEQ (270)
 ONEQSTRING (271) 12
 TWOQSTRING (272) 13
 LONGSTRING (273) 14
+NAME (274)
 
 
 Нетерминальные символы с правилами, в которых они появляются
 
-$accept (19)
+$accept (20)
     налево: 0
-main (20)
+main (21)
     налево: 1, направо: 0
-exp (21)
+exp (22)
     налево: 2 3 4 5 6 7 8 9 10 11, направо: 1 8 9 10 11
-LiteralString (22)
+LiteralString (23)
     налево: 12 13 14, направо: 6
-Numeral (23)
+Numeral (24)
     налево: 15 16 17 18, направо: 5
 
 

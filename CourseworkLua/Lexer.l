@@ -82,8 +82,8 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 (0)[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
 (\")([^\\\"]|{EscapeSequence})*(\")					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
-(\')([^\\\']|{EscapeSequence})*(\')					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }	
-
+(\')([^\\\']|{EscapeSequence})*(\')					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }
+"--"(.*|EOF)										{ /* one line comment */}
 
 (...)					{ DEBUGPRINT("\nLex: VARARG: %s", yytext); return VARARG; }
 .						{
