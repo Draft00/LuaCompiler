@@ -25,7 +25,7 @@ extern void DEBUGPRINT(char* format, ...);
 %token NIL FALSE TRUE
 %token INT HEX FLOAT HEX_FLOAT
 %token VARARG //'...'
-%token TWOQ ONEQ ONEQSTRING TWOQSTRING LONGSTRING
+%token TWOQ ONEQ ONEQSTRING TWOQSTRING LONGSTRING NESTED_STR
 %token NAME
 
 
@@ -69,9 +69,24 @@ exp: NIL
 
 LiteralString:	ONEQSTRING 
 				| TWOQSTRING
-				| LONGSTRING /* TODO */
-//LongString:
+				//| LONGSTRING /* TODO */
+				//| LongString
 
+/*
+This is not work
+In Lex: 
+"["						{ BEGIN(NESTEDSTR1); }
+<NESTEDSTR1>"]"			{ BEGIN(INITIAL); DEBUGPRINT("\nLex STR1: %s", yytext); return NESTED_STR;}
+<NESTEDSTR1>.			{DEBUGPRINT("\nLex STR2: %s", yytext); }
+<NESTEDSTR1>\n			{DEBUGPRINT("\nLex STR3: %s", yytext); }
+
+LongString: '[' NestedStr ']'
+;
+
+NestedStr: NESTED_STR |
+			'=' NestedStr '='
+;
+*/
 Numeral: INT
 		| HEX
 		| FLOAT

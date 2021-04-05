@@ -55,7 +55,8 @@
      ONEQSTRING = 271,
      TWOQSTRING = 272,
      LONGSTRING = 273,
-     NAME = 274
+     NESTED_STR = 274,
+     NAME = 275
    };
 #endif
 
