@@ -6,7 +6,6 @@
 #include <string.h>
 #include <stdarg.h> //va_list
 
-#define fileno fileno
 #define noyywrap
 #define DEBUG
 
@@ -78,6 +77,10 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "."						{ DEBUGPRINT("\nLex: DOT: %s", yytext); 		return *yytext; }
 
 
+"..."					{ DEBUGPRINT("\nLex: DOTS: %s", yytext);        return DOTS; } /* Args */
+","						{ DEBUGPRINT("\nLex: COMMA: %s", yytext);       return *yytext; }
+
+
 "do"            		{ DEBUGPRINT("\nLex: DO: %s", yytext); 			return DO; }	/* Looping */
 "while"         		{ DEBUGPRINT("\nLex: WHILE: %s", yytext); 		return WHILE; }
 "for"           		{ DEBUGPRINT("\nLex: FOR: %s", yytext); 		return FOR; }
@@ -100,15 +103,16 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "break"					{ DEBUGPRINT("\nLex: BREAK: %s", yytext); 		return BREAK; }
 
 
+"-"						{ DEBUGPRINT("\nLex: MINUS: %s", yytext); 			return MINUS; } /* UNOP and BINOP */ 
+
 "+"						{ DEBUGPRINT("\nLex: PLUS: %s", yytext); 			return BINOP; } /* Digit operators */
-"-"						{ DEBUGPRINT("\nLex: MINUS: %s", yytext); 			return BINOP; }
 "*"						{ DEBUGPRINT("\nLex: TIMES: %s", yytext); 			return BINOP; }
 "/"						{ DEBUGPRINT("\nLex: DIVIDE: %s", yytext); 			return BINOP; }
 "^"						{ DEBUGPRINT("\nLex: POWER: %s", yytext); 			return BINOP; }
 "%"						{ DEBUGPRINT("\nLex: MODULO: %s", yytext);      	return BINOP; }
 
 
-"=" 					{ DEBUGPRINT("\nLex: ASSIGN: %s", yytext);			return BINOP; } /* Combined binops */
+"=" 					{ DEBUGPRINT("\nLex: ASSIGN: %s", yytext);			return *yytext; } /* Combined binops */
 "+="					{ DEBUGPRINT("\nLex: PLUS_ASSIGN: %s", yytext); 	return BINOP; }
 "-="					{ DEBUGPRINT("\nLex: MINUS_ASSIGN: %s", yytext); 	return BINOP; }
 "*="					{ DEBUGPRINT("\nLex: TIMES_ASSIGN: %s", yytext); 	return BINOP; }

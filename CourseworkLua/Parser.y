@@ -21,15 +21,17 @@ extern void DEBUGPRINT(char* format, ...);
 %locations
 
 %token INT HEX FLOAT HEX_FLOAT
-%token VARARG //'...'
 %token TWOQ ONEQ ONEQSTRING TWOQSTRING LONGSTRING NESTED_STR
 %token NAME
+
+/* Arguments */
+%token DOTS
 
 /* Keyworded values */
 %token NIL FALSE TRUE
 
 /* Operators */
-%token BINOP UNOP
+%token BINOP UNOP MINUS
 
 /* Looping */
 %token DO WHILE FOR UNTIL REPEAT END
@@ -64,22 +66,36 @@ extern void DEBUGPRINT(char* format, ...);
 %%
 /*================ 2. The Grammar Section ================================*/
 
-main: exp
+main: exp 				{ printf("1\n"); }
+	| chunk				{ printf("2\n"); }
+	| args 				{ printf("3\n"); }
 ;
 
-exp: NIL
+chunk: var '=' exp
+;
+
+args:  '(' args  ')'	{ printf("4\n"); }
+	 | NAME				{ printf("5\n"); }
+	 | NAME ',' NAME	{ printf("6\n"); }
+;
+
+exp:  NIL
 	| FALSE
 	| TRUE
-	| Numeral
-	| LiteralString
-	| VARARG 
+	| DOTS
 	/*| functiondef 
 	| prefixexp 
 	| tableconstructor */
+	| '(' exp ')'
 	| exp BINOP exp
-	| exp SUB exp 
+	| exp MINUS exp 
 	| UNOP exp 
-	| SUB exp
+	| MINUS exp
+	| numeral
+	| literalString
+;
+
+var:  NAME
 ;
 
 literalString:	ONEQSTRING 
