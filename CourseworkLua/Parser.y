@@ -86,6 +86,13 @@ literalString:	ONEQSTRING
 				| TWOQSTRING
 				//| LONGSTRING /* TODO */
 				//| LongString
+;
+
+numeral:  INT
+		| HEX
+		| FLOAT
+		| HEX_FLOAT
+;
 
 /*
 This is not work
@@ -102,11 +109,6 @@ NestedStr: NESTED_STR |
 			'=' NestedStr '='
 ;
 */
-numeral: INT
-		| HEX
-		| FLOAT
-		| HEX_FLOAT
-;
 %%
 
 int parser_main(int argc, char *argv[])

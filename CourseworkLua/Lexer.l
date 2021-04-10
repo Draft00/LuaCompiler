@@ -67,26 +67,37 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 [ \t\n\r\f\v\a]			/* Ignore */
 
 
-"do"            		{ DEBUGPRINT("\nLex: DO: %s", yytext); 				return DO; }	/* Looping */
-"while"         		{ DEBUGPRINT("\nLex: WHILE: %s", yytext); 			return WHILE; }
-"for"           		{ DEBUGPRINT("\nLex: FOR: %s", yytext); 			return FOR; }
-"until"         		{ DEBUGPRINT("\nLex: UNTIL: %s", yytext); 			return UNTIL; }
-"repeat"        		{ DEBUGPRINT("\nLex: REPEAT: %s", yytext); 			return REPEAT; }
-"end"           		{ DEBUGPRINT("\nLex: END: %s", yytext); 			return END; }
+"{"						{ DEBUGPRINT("\nLex: FUNC_BLOCK: %s", yytext); 	return *yytext; } /* Block */
+"}"						{ DEBUGPRINT("\nLex: FUNC_BLOCK: %s", yytext); 	return *yytext; }
+"("						{ DEBUGPRINT("\nLex: ARGS_BLOCK: %s", yytext); 	return *yytext; }
+")"						{ DEBUGPRINT("\nLex: ARGS_BLOCK: %s", yytext); 	return *yytext; }
 
 
-"if"					{ DEBUGPRINT("\nLex: IF: %s", yytext); 				return IF; }	/* Statements */
-"then"					{ DEBUGPRINT("\nLex: THEN: %s", yytext); 			return THEN; }
-"elseif"				{ DEBUGPRINT("\nLex: ELSEIF: %s", yytext); 			return ELSEIF; }
-"else"					{ DEBUGPRINT("\nLex: ELSE: %s", yytext); 			return ELSE; }
+"["						{ DEBUGPRINT("\nLex: ELEM_BLOCK: %s", yytext); 	return *yytext; } /* Element */
+"]"						{ DEBUGPRINT("\nLex: ELEM_BLOCK: %s", yytext); 	return *yytext; }
+"."						{ DEBUGPRINT("\nLex: DOT: %s", yytext); 		return *yytext; }
 
 
-"local"					{ DEBUGPRINT("\nLex: LOCAL: %s", yytext); 			return LOCAL; } /* Values */
+"do"            		{ DEBUGPRINT("\nLex: DO: %s", yytext); 			return DO; }	/* Looping */
+"while"         		{ DEBUGPRINT("\nLex: WHILE: %s", yytext); 		return WHILE; }
+"for"           		{ DEBUGPRINT("\nLex: FOR: %s", yytext); 		return FOR; }
+"until"         		{ DEBUGPRINT("\nLex: UNTIL: %s", yytext); 		return UNTIL; }
+"repeat"        		{ DEBUGPRINT("\nLex: REPEAT: %s", yytext); 		return REPEAT; }
+"end"           		{ DEBUGPRINT("\nLex: END: %s", yytext); 		return END; }
 
 
-"function"				{ DEBUGPRINT("\nLex: ELSE: %s", yytext); 			return FUNCTION; } /* Function */
-"return"				{ DEBUGPRINT("\nLex: RETURN: %s", yytext); 			return RETURN; }
-"break"					{ DEBUGPRINT("\nLex: BREAK: %s", yytext); 			return BREAK; }
+"if"					{ DEBUGPRINT("\nLex: IF: %s", yytext); 			return IF; }	/* Statements */
+"then"					{ DEBUGPRINT("\nLex: THEN: %s", yytext); 		return THEN; }
+"elseif"				{ DEBUGPRINT("\nLex: ELSEIF: %s", yytext); 		return ELSEIF; }
+"else"					{ DEBUGPRINT("\nLex: ELSE: %s", yytext); 		return ELSE; }
+
+
+"local"					{ DEBUGPRINT("\nLex: LOCAL: %s", yytext); 		return LOCAL; } /* Values */
+
+
+"function"				{ DEBUGPRINT("\nLex: ELSE: %s", yytext); 		return FUNCTION; } /* Function */
+"return"				{ DEBUGPRINT("\nLex: RETURN: %s", yytext); 		return RETURN; }
+"break"					{ DEBUGPRINT("\nLex: BREAK: %s", yytext); 		return BREAK; }
 
 
 "+"						{ DEBUGPRINT("\nLex: PLUS: %s", yytext); 			return BINOP; } /* Digit operators */
@@ -97,7 +108,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "%"						{ DEBUGPRINT("\nLex: MODULO: %s", yytext);      	return BINOP; }
 
 
-"=" 					{ DEBUGPRINT("\nLex: ASSIGN: %s", yytext); }		return BINOP; } /* Combined binops */
+"=" 					{ DEBUGPRINT("\nLex: ASSIGN: %s", yytext);			return BINOP; } /* Combined binops */
 "+="					{ DEBUGPRINT("\nLex: PLUS_ASSIGN: %s", yytext); 	return BINOP; }
 "-="					{ DEBUGPRINT("\nLex: MINUS_ASSIGN: %s", yytext); 	return BINOP; }
 "*="					{ DEBUGPRINT("\nLex: TIMES_ASSIGN: %s", yytext); 	return BINOP; }
@@ -113,7 +124,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 ">="					{ DEBUGPRINT("\nLex: MORE_EQUALS: %s", yytext); 	return BINOP; }
 "and"					{ DEBUGPRINT("\nLex: AND: %s", yytext); 			return BINOP; }
 "or"					{ DEBUGPRINT("\nLex: OR: %s", yytext); 				return BINOP; }
-".."					{ DEBUGPRINT("\nLex: POINT_POINT: %s", yytext); 	return BINOP; }
+".."					{ DEBUGPRINT("\nLex: CONCAT: %s", yytext); 			return BINOP; }
 
 
 "&" 					{ DEBUGPRINT("\nLex: AND: %s", yytext); 			return BINOP; } /* Bitwise binary operators */
@@ -135,8 +146,8 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 [a-zA-Z_][a-zA-Z_0-9]*	{ DEBUGPRINT("\nLex: NAME: %s", yytext); 			return NAME; }
 
 
-{Digit}+				{ DEBUGPRINT("\nLex: Numeral INT: %s", yytext);		 return INT; }
-"0"[xX]{HexDigit}+		{ DEBUGPRINT("\nLex: Numeral HEX: %s", yytext); 	 return HEX; }
+{Digit}+				{ DEBUGPRINT("\nLex: Numeral INT: %s", yytext);		return INT; }
+"0"[xX]{HexDigit}+		{ DEBUGPRINT("\nLex: Numeral HEX: %s", yytext); 	return HEX; }
 
 {Digit}+"."{Digit}*{Exponent}?						{ DEBUGPRINT("\nLex: Numeral FLOAT_1: %s", yytext); return FLOAT; }
 "."{Digit}+{Exponent}?								{ DEBUGPRINT("\nLex: Numeral FLOAT_2: %s", yytext); return FLOAT; }
