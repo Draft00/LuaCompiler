@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdarg.h> //va_list
 
-#define fileno _fileno
+#define fileno fileno
 #define noyywrap
 #define DEBUG
 
@@ -65,16 +65,78 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 
 %%
 [ \t\n\r\f\v\a]			/* Ignore */
-[a-zA-Z_][a-zA-Z_0-9]*	{ DEBUGPRINT("\nLex: NAME: %s", yytext); return NAME; }
-("not"|"#"|"~")			{ DEBUGPRINT("\nLex: operation UNOP: %s", yytext); return UNOP; }
-("+"|"*"|"/"|"//"|"^"|"%"|"&"|"~"|"|"|">>"|"<<"|".."|"<"|"<="|">"|">="|"=="|"~="|"and"|"or") { DEBUGPRINT("\nLex: operation BINOP: %s", yytext); return BINOP; }
-"="						{ DEBUGPRINT("\nLex: operation equall: %s", yytext); return yytext[0]; }
-"-"						{ DEBUGPRINT("\nLex: operation SUB: %s", yytext); return SUB; }
-"nil"					{ DEBUGPRINT("\nLex: operation NIL: %s", yytext); return NIL; }
+
+
+"do"            		{ DEBUGPRINT("\nLex: DO: %s", yytext); 				return DO; }	/* Looping */
+"while"         		{ DEBUGPRINT("\nLex: WHILE: %s", yytext); 			return WHILE; }
+"for"           		{ DEBUGPRINT("\nLex: FOR: %s", yytext); 			return FOR; }
+"until"         		{ DEBUGPRINT("\nLex: UNTIL: %s", yytext); 			return UNTIL; }
+"repeat"        		{ DEBUGPRINT("\nLex: REPEAT: %s", yytext); 			return REPEAT; }
+"end"           		{ DEBUGPRINT("\nLex: END: %s", yytext); 			return END; }
+
+
+"if"					{ DEBUGPRINT("\nLex: IF: %s", yytext); 				return IF; }	/* Statements */
+"then"					{ DEBUGPRINT("\nLex: THEN: %s", yytext); 			return THEN; }
+"elseif"				{ DEBUGPRINT("\nLex: ELSEIF: %s", yytext); 			return ELSEIF; }
+"else"					{ DEBUGPRINT("\nLex: ELSE: %s", yytext); 			return ELSE; }
+
+
+"local"					{ DEBUGPRINT("\nLex: LOCAL: %s", yytext); 			return LOCAL; } /* Values */
+
+
+"function"				{ DEBUGPRINT("\nLex: ELSE: %s", yytext); 			return FUNCTION; } /* Function */
+"return"				{ DEBUGPRINT("\nLex: RETURN: %s", yytext); 			return RETURN; }
+"break"					{ DEBUGPRINT("\nLex: BREAK: %s", yytext); 			return BREAK; }
+
+
+"+"						{ DEBUGPRINT("\nLex: PLUS: %s", yytext); 			return BINOP; } /* Digit operators */
+"-"						{ DEBUGPRINT("\nLex: MINUS: %s", yytext); 			return BINOP; }
+"*"						{ DEBUGPRINT("\nLex: TIMES: %s", yytext); 			return BINOP; }
+"/"						{ DEBUGPRINT("\nLex: DIVIDE: %s", yytext); 			return BINOP; }
+"^"						{ DEBUGPRINT("\nLex: POWER: %s", yytext); 			return BINOP; }
+"%"						{ DEBUGPRINT("\nLex: MODULO: %s", yytext);      	return BINOP; }
+
+
+"=" 					{ DEBUGPRINT("\nLex: ASSIGN: %s", yytext); }		return BINOP; } /* Combined binops */
+"+="					{ DEBUGPRINT("\nLex: PLUS_ASSIGN: %s", yytext); 	return BINOP; }
+"-="					{ DEBUGPRINT("\nLex: MINUS_ASSIGN: %s", yytext); 	return BINOP; }
+"*="					{ DEBUGPRINT("\nLex: TIMES_ASSIGN: %s", yytext); 	return BINOP; }
+"/="					{ DEBUGPRINT("\nLex: DIVIDE_ASSIGN: %s", yytext); 	return BINOP; }
+"^="					{ DEBUGPRINT("\nLex: POW_ASSIGN: %s", yytext); 		return BINOP; }
+"%="					{ DEBUGPRINT("\nLex: MODULO_ASSIGN: %s", yytext);   return BINOP; }
+
+
+"=="					{ DEBUGPRINT("\nLex: EQUALS: %s", yytext);      	return BINOP; } /* Logic binary operators */
+"<"						{ DEBUGPRINT("\nLex: LESS: %s", yytext);        	return BINOP; }
+"<="					{ DEBUGPRINT("\nLex: LESS_EQUALS: %s", yytext); 	return BINOP; }
+">"						{ DEBUGPRINT("\nLex: MORE: %s", yytext);        	return BINOP; }
+">="					{ DEBUGPRINT("\nLex: MORE_EQUALS: %s", yytext); 	return BINOP; }
+"and"					{ DEBUGPRINT("\nLex: AND: %s", yytext); 			return BINOP; }
+"or"					{ DEBUGPRINT("\nLex: OR: %s", yytext); 				return BINOP; }
+".."					{ DEBUGPRINT("\nLex: POINT_POINT: %s", yytext); 	return BINOP; }
+
+
+"&" 					{ DEBUGPRINT("\nLex: AND: %s", yytext); 			return BINOP; } /* Bitwise binary operators */
+"|"						{ DEBUGPRINT("\nLex: OR: %s", yytext); 				return BINOP; }
+"<<"					{ DEBUGPRINT("\nLex: SHIFT_RIGHT: %s", yytext); 	return BINOP; }
+">>"					{ DEBUGPRINT("\nLex: SHIFT_LEFT: %s", yytext); 		return BINOP; } /* XOR is already defined */
+
+
+"not" 					{ DEBUGPRINT("\nLex: NOT: %s", yytext); 			return UNOP; } /* Unary operators */
+"#"						{ DEBUGPRINT("\nLex: #: %s", yytext); 				return UNOP; }
+"~"						{ DEBUGPRINT("\nLex: MORE_EQUALS: %s", yytext); 	return UNOP; }
+
+
+"nil"					{ DEBUGPRINT("\nLex: operation NIL: %s", yytext); 	return NIL; } /* Keyworded values */
 "false"					{ DEBUGPRINT("\nLex: operation FALSE: %s", yytext); return FALSE; }
-"true"					{ DEBUGPRINT("\nLex: operation TRUE: %s", yytext); return TRUE; }
-{Digit}+				{ DEBUGPRINT("\nLex: Numeral INT: %s", yytext); return INT; }
-"0"[xX]{HexDigit}+		{ DEBUGPRINT("\nLex: Numeral HEX: %s", yytext); return HEX; }
+"true"					{ DEBUGPRINT("\nLex: operation TRUE: %s", yytext); 	return TRUE; }
+
+
+[a-zA-Z_][a-zA-Z_0-9]*	{ DEBUGPRINT("\nLex: NAME: %s", yytext); 			return NAME; }
+
+
+{Digit}+				{ DEBUGPRINT("\nLex: Numeral INT: %s", yytext);		 return INT; }
+"0"[xX]{HexDigit}+		{ DEBUGPRINT("\nLex: Numeral HEX: %s", yytext); 	 return HEX; }
 
 {Digit}+"."{Digit}*{Exponent}?						{ DEBUGPRINT("\nLex: Numeral FLOAT_1: %s", yytext); return FLOAT; }
 "."{Digit}+{Exponent}?								{ DEBUGPRINT("\nLex: Numeral FLOAT_2: %s", yytext); return FLOAT; }

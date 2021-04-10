@@ -20,13 +20,28 @@ extern void DEBUGPRINT(char* format, ...);
 
 %locations
 
-%token UNOP SUB
-%token BINOP
-%token NIL FALSE TRUE
 %token INT HEX FLOAT HEX_FLOAT
 %token VARARG //'...'
 %token TWOQ ONEQ ONEQSTRING TWOQSTRING LONGSTRING NESTED_STR
 %token NAME
+
+/* Keyworded values */
+%token NIL FALSE TRUE
+
+/* Operators */
+%token BINOP UNOP
+
+/* Looping */
+%token DO WHILE FOR UNTIL REPEAT END
+
+/* If/else statements */
+%token IF THEN ELSEIF ELSE
+
+/* Values */
+%token LOCAL
+
+/* Functions */
+%token FUNCTION BREAK RETURN
 
 
 /* SECTION OF WHAT WE SHOULD TEST */
@@ -67,7 +82,7 @@ exp: NIL
 	| SUB exp
 ;
 
-LiteralString:	ONEQSTRING 
+literalString:	ONEQSTRING 
 				| TWOQSTRING
 				//| LONGSTRING /* TODO */
 				//| LongString
@@ -87,7 +102,7 @@ NestedStr: NESTED_STR |
 			'=' NestedStr '='
 ;
 */
-Numeral: INT
+numeral: INT
 		| HEX
 		| FLOAT
 		| HEX_FLOAT
@@ -97,9 +112,11 @@ Numeral: INT
 int parser_main(int argc, char *argv[])
 {
 	FILE *fp = NULL;
+
 	if (argc == 2)
 	{
-		fopen_s(&fp, argv[1], "rb");
+		fp = fopen(argv[1], "rb");
+
 		if (fp == NULL)
 		{
 			perror("Failed to open file.");
@@ -122,6 +139,6 @@ int parser_main(int argc, char *argv[])
 
 int yyerror(const char *p)
 { 
-	printf("%s in line %d. Location: first line: %d, first column: %d, last line: %d,  last column: %d\n", p, yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
+	printf("%s in line %d. %d:%d - %d:%d\n", p, yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
 	return 0;
 }
