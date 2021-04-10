@@ -100,7 +100,7 @@ var:  NAME
 
 literalString:	ONEQSTRING 
 				| TWOQSTRING
-				//| LONGSTRING /* TODO */
+				| LONGSTRING /* TODO */
 				//| LongString
 ;
 
@@ -130,11 +130,9 @@ NestedStr: NESTED_STR |
 int parser_main(int argc, char *argv[])
 {
 	FILE *fp = NULL;
-
 	if (argc == 2)
 	{
 		fp = fopen(argv[1], "rb");
-
 		if (fp == NULL)
 		{
 			perror("Failed to open file.");

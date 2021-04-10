@@ -1,1 +1,4 @@
-value = 2
+[=[fdgsdg
+fdgsfd
+fff
+]=]

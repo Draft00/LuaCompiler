@@ -1,11 +1,11 @@
 %{
-
 #include "Parser.tab.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h> //va_list
 
+#define fileno _fileno
 #define noyywrap
 #define DEBUG
 
@@ -33,6 +33,8 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 	}
 
 
+int left_side = 0;
+int right_side = 0;
 /* TEST IT SECTION */
 
 //UtfEscape
@@ -165,6 +167,11 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "'"([^\\\']|{EscapeSequence})*"'"					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }
 "--"(.*|EOF)										{ /* one line comment */}
 
+"["(=)*"["											{ left_side = strlen(yytext);  DEBUGPRINT("\nLex: LONG_STR count left: %d, %s", left_side, yytext); BEGIN(NESTEDSTR1);}
+<NESTEDSTR1>.										{ }
+<NESTEDSTR1>\n										{ }
+<NESTEDSTR1>"]"(=)*"]"								{right_side = strlen(yytext);  DEBUGPRINT("\nLex: LONG_STR count right: %d, %s", right_side, yytext); BEGIN(INITIAL); 
+													if (right_side == left_side) return LONGSTRING;}
 .						{
 							DEBUGPRINT("\nLex: unknown: %s", yytext);
 							return yytext[0]; 
