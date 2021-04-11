@@ -1,4 +1,5 @@
 msg="a test message"
 myint=123
+a.val = b.val
 print(myint)
 print(msg)

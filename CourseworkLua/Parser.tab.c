@@ -1612,7 +1612,7 @@ yyreduce:
   case 9:
 /* Line 1802 of yacc.c  */
 #line 81 "Parser.y"
-    { DEBUGPRINT("\nFUNCTION_CALL: function_call definition"); }
+    { DEBUGPRINT("\nFUNCTION_CALL: NAME '(' exp ')'"); }
     break;
 
   case 10:
