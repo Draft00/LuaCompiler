@@ -66,17 +66,23 @@ extern void DEBUGPRINT(char* format, ...);
 %%
 /*================ 2. The Grammar Section ================================*/
 
-main: exp 				{ printf("1\n"); }
-	| chunk				{ printf("2\n"); }
-	| args 				{ printf("3\n"); }
+main: exp
+	| chunk				{ printf("\n1"); }
+	| args 				{ printf("\n2"); }
+;
+
+function: FUNCTION NAME '(' args ')' END
+;
+
+function_call: NAME '(' exp ')'
 ;
 
 chunk: var '=' exp
 ;
 
-args:  '(' args  ')'	{ printf("4\n"); }
-	 | NAME				{ printf("5\n"); }
-	 | NAME ',' NAME	{ printf("6\n"); }
+args: NAME			{ printf("\n5"); }
+	| NAME ',' NAME	{ printf("\n6"); }
+	| args ',' NAME	{ printf("\n7"); }
 ;
 
 exp:  NIL

@@ -5,7 +5,6 @@
 #include <string.h>
 #include <stdarg.h> //va_list
 
-#define fileno _fileno
 #define noyywrap
 #define DEBUG
 
