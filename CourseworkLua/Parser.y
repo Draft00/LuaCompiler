@@ -9,6 +9,7 @@ FILE *yyin;
 int yyerror();
 extern int yylex();
 
+extern char* yytext;
 extern int brackets;
 extern int yylineno;
 extern void DEBUGPRINT(char* format, ...);
@@ -66,47 +67,53 @@ extern void DEBUGPRINT(char* format, ...);
 %%
 /*================ 2. The Grammar Section ================================*/
 
-main: exp
-	| chunk				{ printf("\n1"); }
-	| args 				{ printf("\n2"); }
+main: chunk				{ DEBUGPRINT("\nMAIN: chunk"); }
 ;
 
-function: FUNCTION NAME '(' args ')' END
+chunk: chunk chunk 		{ DEBUGPRINT("\nCHUNK: chunk chunk"); }
+	 | var '=' exp 		{ DEBUGPRINT("\nCHUNK: var = exp"); }
+	 | RETURN exp 		{ DEBUGPRINT("\nCHUNK: RETURN exp"); }
+	 | exp 				{ DEBUGPRINT("\nCHUNK: exp"); }
+	 | function 		{ DEBUGPRINT("\nCHUNK: function"); }
+	 | function_call	{ DEBUGPRINT("\nCHUNK: function_call"); }
 ;
 
-function_call: NAME '(' exp ')'
+function_call: NAME '(' exp ')' 	{ DEBUGPRINT("\nFUNCTION_CALL: NAME '(' exp ')'"); }
 ;
 
-chunk: var '=' exp
+function: FUNCTION NAME '(' args ')' chunk END 	{ DEBUGPRINT("\nFUNCTION: FUNCTION NAME ( args ) chunk END "); }
+		| FUNCTION NAME '(' args ')' END 		{ DEBUGPRINT("\nFUNCTION: FUNCTION NAME ( args ) EMPTY_BODY END "); } // Function with empty body
 ;
 
-args: NAME			{ printf("\n5"); }
-	| NAME ',' NAME	{ printf("\n6"); }
-	| args ',' NAME	{ printf("\n7"); }
+args: exp			{ DEBUGPRINT("\nARGS: exp"); }
+	| args ',' exp	{ DEBUGPRINT("\nARGS: arg , exp"); }
 ;
 
-exp:  NIL
-	| FALSE
-	| TRUE
-	| DOTS
+exp:  NIL 			{ DEBUGPRINT("\nEXP: NIL"); }
+	| FALSE 		{ DEBUGPRINT("\nEXP: FALSE"); }
+	| TRUE			{ DEBUGPRINT("\nEXP: TRUE"); }
+	| DOTS			{ DEBUGPRINT("\nEXP: DOTS"); }
 	/*| functiondef 
 	| prefixexp 
 	| tableconstructor */
-	| '(' exp ')'
-	| exp BINOP exp
-	| exp MINUS exp 
-	| UNOP exp 
-	| MINUS exp
-	| numeral
-	| literalString
+	| '(' exp ')'	{ DEBUGPRINT("\nEXP: ( exp )"); }
+	| exp BINOP exp { DEBUGPRINT("\nEXP: exp BINOP exp"); }
+	| exp MINUS exp { DEBUGPRINT("\nEXP: exp MINUS exp"); }
+	| UNOP exp 		{ DEBUGPRINT("\nEXP: UNOP exp"); }
+	| MINUS exp 	{ DEBUGPRINT("\nEXP: MINUS exp"); }
+	| numeral		{ DEBUGPRINT("\nEXP: numeral"); }
+	| literalString { DEBUGPRINT("\nEXP: literalString"); }
+	| var 			{ DEBUGPRINT("\nEXP: var"); } // Fuck!
 ;
 
-var:  NAME
+var:  NAME 				{ DEBUGPRINT("\nVAR: NAME"); }
+	| NAME '.' NAME 	{ DEBUGPRINT("\nVAR: NAME . NAME"); }
+	| NAME '[' exp ']' 	{ DEBUGPRINT("\nVAR: NAME [ NAME ]"); }
 ;
 
-literalString:	ONEQSTRING 
-				| TWOQSTRING
-				| LONGSTRING /* TODO */
+literalString:	ONEQSTRING 		{ DEBUGPRINT("\nVAR: ONEQSTRING"); }
+				| TWOQSTRING	{ DEBUGPRINT("\nVAR: TWOQSTRING"); }
+				| LONGSTRING 	{ DEBUGPRINT("\nVAR: LONGSTRING"); }/* TODO */
 				//| LongString
 ;
 

@@ -8,593 +8,999 @@ Terminals unused in grammar
    FOR
    UNTIL
    REPEAT
-   END
    IF
    THEN
    ELSEIF
    ELSE
    LOCAL
-   FUNCTION
    BREAK
-   RETURN
 
 
-Состояние 25 конфликты: 2 сдвига/вывода
-Состояние 26 конфликты: 2 сдвига/вывода
-Состояние 37 конфликты: 2 сдвига/вывода
-Состояние 38 конфликты: 2 сдвига/вывода
+State 8 conflicts: 1 shift/reduce
+State 22 conflicts: 1 shift/reduce
+State 30 conflicts: 2 shift/reduce
+State 32 conflicts: 2 shift/reduce
+State 34 conflicts: 1 shift/reduce
+State 37 conflicts: 17 shift/reduce
+State 46 conflicts: 2 shift/reduce
+State 47 conflicts: 2 shift/reduce
+State 48 conflicts: 1 shift/reduce
 
 
-Грамматика
+Grammar
 
     0 $accept: main $end
 
-    1 main: exp
-    2     | chunk
-    3     | args
+    1 main: chunk
 
-    4 chunk: var '=' exp
+    2 chunk: chunk chunk
+    3      | var '=' exp
+    4      | RETURN exp
+    5      | exp
+    6      | function
+    7      | function_call
 
-    5 args: '(' args ')'
-    6     | NAME
-    7     | NAME ',' NAME
+    8 function_call: NAME '(' exp ')'
 
-    8 exp: NIL
-    9    | FALSE
-   10    | TRUE
-   11    | DOTS
-   12    | '(' exp ')'
-   13    | exp BINOP exp
-   14    | exp MINUS exp
-   15    | UNOP exp
-   16    | MINUS exp
-   17    | numeral
-   18    | literalString
+    9 function: FUNCTION NAME '(' args ')' chunk END
+   10         | FUNCTION NAME '(' args ')' END
 
-   19 var: NAME
+   11 args: exp
+   12     | args ',' exp
 
-   20 literalString: ONEQSTRING
-   21              | TWOQSTRING
-   22              | LONGSTRING
+   13 exp: NIL
+   14    | FALSE
+   15    | TRUE
+   16    | DOTS
+   17    | '(' exp ')'
+   18    | exp BINOP exp
+   19    | exp MINUS exp
+   20    | UNOP exp
+   21    | MINUS exp
+   22    | numeral
+   23    | literalString
+   24    | var
 
-   23 numeral: INT
-   24        | HEX
-   25        | FLOAT
-   26        | HEX_FLOAT
+   25 var: NAME
+   26    | NAME '.' NAME
+   27    | NAME '[' exp ']'
+
+   28 literalString: ONEQSTRING
+   29              | TWOQSTRING
+   30              | LONGSTRING
+
+   31 numeral: INT
+   32        | HEX
+   33        | FLOAT
+   34        | HEX_FLOAT
 
 
-Терминальные символы с правилами, в которых они появляются
+Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 5 12
-')' (41) 5 12
-',' (44) 7
-'=' (61) 4
+'(' (40) 8 9 10 17
+')' (41) 8 9 10 17
+',' (44) 12
+'.' (46) 26
+'=' (61) 3
+'[' (91) 27
+']' (93) 27
 error (256)
-INT (258) 23
-HEX (259) 24
-FLOAT (260) 25
-HEX_FLOAT (261) 26
+INT (258) 31
+HEX (259) 32
+FLOAT (260) 33
+HEX_FLOAT (261) 34
 TWOQ (262)
 ONEQ (263)
-ONEQSTRING (264) 20
-TWOQSTRING (265) 21
-LONGSTRING (266) 22
+ONEQSTRING (264) 28
+TWOQSTRING (265) 29
+LONGSTRING (266) 30
 NESTED_STR (267)
-NAME (268) 6 7 19
-DOTS (269) 11
-NIL (270) 8
-FALSE (271) 9
-TRUE (272) 10
-BINOP (273) 13
-UNOP (274) 15
-MINUS (275) 14 16
+NAME (268) 8 9 10 25 26 27
+DOTS (269) 16
+NIL (270) 13
+FALSE (271) 14
+TRUE (272) 15
+BINOP (273) 18
+UNOP (274) 20
+MINUS (275) 19 21
 DO (276)
 WHILE (277)
 FOR (278)
 UNTIL (279)
 REPEAT (280)
-END (281)
+END (281) 9 10
 IF (282)
 THEN (283)
 ELSEIF (284)
 ELSE (285)
 LOCAL (286)
-FUNCTION (287)
+FUNCTION (287) 9 10
 BREAK (288)
-RETURN (289)
+RETURN (289) 4
 
 
-Нетерминальные символы с правилами, в которых они появляются
+Nonterminals, with rules where they appear
 
-$accept (39)
-    налево: 0
-main (40)
-    налево: 1 2 3, направо: 0
-chunk (41)
-    налево: 4, направо: 2
-args (42)
-    налево: 5 6 7, направо: 3 5
-exp (43)
-    налево: 8 9 10 11 12 13 14 15 16 17 18, направо: 1 4 12 13 14 15
-    16
-var (44)
-    налево: 19, направо: 4
-literalString (45)
-    налево: 20 21 22, направо: 18
-numeral (46)
-    налево: 23 24 25 26, направо: 17
+$accept (42)
+    on left: 0
+main (43)
+    on left: 1, on right: 0
+chunk (44)
+    on left: 2 3 4 5 6 7, on right: 1 2 9
+function_call (45)
+    on left: 8, on right: 7
+function (46)
+    on left: 9 10, on right: 6
+args (47)
+    on left: 11 12, on right: 9 10 12
+exp (48)
+    on left: 13 14 15 16 17 18 19 20 21 22 23 24, on right: 3 4 5 8
+    11 12 17 18 19 20 21 27
+var (49)
+    on left: 25 26 27, on right: 3 24
+literalString (50)
+    on left: 28 29 30, on right: 23
+numeral (51)
+    on left: 31 32 33 34, on right: 22
 
 
-состояние 0
+State 0
 
     0 $accept: . main $end
 
-    INT         сдвиг, и переход в состояние 1
-    HEX         сдвиг, и переход в состояние 2
-    FLOAT       сдвиг, и переход в состояние 3
-    HEX_FLOAT   сдвиг, и переход в состояние 4
-    ONEQSTRING  сдвиг, и переход в состояние 5
-    TWOQSTRING  сдвиг, и переход в состояние 6
-    LONGSTRING  сдвиг, и переход в состояние 7
-    NAME        сдвиг, и переход в состояние 8
-    DOTS        сдвиг, и переход в состояние 9
-    NIL         сдвиг, и переход в состояние 10
-    FALSE       сдвиг, и переход в состояние 11
-    TRUE        сдвиг, и переход в состояние 12
-    UNOP        сдвиг, и переход в состояние 13
-    MINUS       сдвиг, и переход в состояние 14
-    '('         сдвиг, и переход в состояние 15
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 8
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    FUNCTION    shift, and go to state 15
+    RETURN      shift, and go to state 16
+    '('         shift, and go to state 17
 
-    main           переход в состояние 16
-    chunk          переход в состояние 17
-    args           переход в состояние 18
-    exp            переход в состояние 19
-    var            переход в состояние 20
-    literalString  переход в состояние 21
-    numeral        переход в состояние 22
+    main           go to state 18
+    chunk          go to state 19
+    function_call  go to state 20
+    function       go to state 21
+    exp            go to state 22
+    var            go to state 23
+    literalString  go to state 24
+    numeral        go to state 25
 
 
-состояние 1
+State 1
 
-   23 numeral: INT .
+   31 numeral: INT .
 
-    $default  вывод с использованием правила 23 (numeral)
+    $default  reduce using rule 31 (numeral)
 
 
-состояние 2
+State 2
 
-   24 numeral: HEX .
+   32 numeral: HEX .
 
-    $default  вывод с использованием правила 24 (numeral)
+    $default  reduce using rule 32 (numeral)
 
 
-состояние 3
+State 3
 
-   25 numeral: FLOAT .
+   33 numeral: FLOAT .
 
-    $default  вывод с использованием правила 25 (numeral)
+    $default  reduce using rule 33 (numeral)
 
 
-состояние 4
+State 4
 
-   26 numeral: HEX_FLOAT .
+   34 numeral: HEX_FLOAT .
 
-    $default  вывод с использованием правила 26 (numeral)
+    $default  reduce using rule 34 (numeral)
 
 
-состояние 5
+State 5
 
-   20 literalString: ONEQSTRING .
+   28 literalString: ONEQSTRING .
 
-    $default  вывод с использованием правила 20 (literalString)
+    $default  reduce using rule 28 (literalString)
 
 
-состояние 6
+State 6
 
-   21 literalString: TWOQSTRING .
+   29 literalString: TWOQSTRING .
 
-    $default  вывод с использованием правила 21 (literalString)
+    $default  reduce using rule 29 (literalString)
 
 
-состояние 7
+State 7
 
-   22 literalString: LONGSTRING .
+   30 literalString: LONGSTRING .
 
-    $default  вывод с использованием правила 22 (literalString)
+    $default  reduce using rule 30 (literalString)
 
 
-состояние 8
+State 8
 
-    6 args: NAME .
-    7     | NAME . ',' NAME
-   19 var: NAME .
+    8 function_call: NAME . '(' exp ')'
+   25 var: NAME .
+   26    | NAME . '.' NAME
+   27    | NAME . '[' exp ']'
 
-    ','  сдвиг, и переход в состояние 23
+    '('  shift, and go to state 26
+    '.'  shift, and go to state 27
+    '['  shift, and go to state 28
 
-    '='       вывод с использованием правила 19 (var)
-    $default  вывод с использованием правила 6 (args)
+    '('       [reduce using rule 25 (var)]
+    $default  reduce using rule 25 (var)
 
 
-состояние 9
+State 9
 
-   11 exp: DOTS .
+   16 exp: DOTS .
 
-    $default  вывод с использованием правила 11 (exp)
+    $default  reduce using rule 16 (exp)
 
 
-состояние 10
+State 10
 
-    8 exp: NIL .
+   13 exp: NIL .
 
-    $default  вывод с использованием правила 8 (exp)
+    $default  reduce using rule 13 (exp)
 
 
-состояние 11
+State 11
 
-    9 exp: FALSE .
+   14 exp: FALSE .
 
-    $default  вывод с использованием правила 9 (exp)
+    $default  reduce using rule 14 (exp)
 
 
-состояние 12
+State 12
 
-   10 exp: TRUE .
+   15 exp: TRUE .
 
-    $default  вывод с использованием правила 10 (exp)
+    $default  reduce using rule 15 (exp)
 
 
-состояние 13
+State 13
 
-   15 exp: UNOP . exp
+   20 exp: UNOP . exp
 
-    INT         сдвиг, и переход в состояние 1
-    HEX         сдвиг, и переход в состояние 2
-    FLOAT       сдвиг, и переход в состояние 3
-    HEX_FLOAT   сдвиг, и переход в состояние 4
-    ONEQSTRING  сдвиг, и переход в состояние 5
-    TWOQSTRING  сдвиг, и переход в состояние 6
-    LONGSTRING  сдвиг, и переход в состояние 7
-    DOTS        сдвиг, и переход в состояние 9
-    NIL         сдвиг, и переход в состояние 10
-    FALSE       сдвиг, и переход в состояние 11
-    TRUE        сдвиг, и переход в состояние 12
-    UNOP        сдвиг, и переход в состояние 13
-    MINUS       сдвиг, и переход в состояние 14
-    '('         сдвиг, и переход в состояние 24
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
 
-    exp            переход в состояние 25
-    literalString  переход в состояние 21
-    numeral        переход в состояние 22
+    exp            go to state 30
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
 
 
-состояние 14
+State 14
 
-   16 exp: MINUS . exp
+   21 exp: MINUS . exp
 
-    INT         сдвиг, и переход в состояние 1
-    HEX         сдвиг, и переход в состояние 2
-    FLOAT       сдвиг, и переход в состояние 3
-    HEX_FLOAT   сдвиг, и переход в состояние 4
-    ONEQSTRING  сдвиг, и переход в состояние 5
-    TWOQSTRING  сдвиг, и переход в состояние 6
-    LONGSTRING  сдвиг, и переход в состояние 7
-    DOTS        сдвиг, и переход в состояние 9
-    NIL         сдвиг, и переход в состояние 10
-    FALSE       сдвиг, и переход в состояние 11
-    TRUE        сдвиг, и переход в состояние 12
-    UNOP        сдвиг, и переход в состояние 13
-    MINUS       сдвиг, и переход в состояние 14
-    '('         сдвиг, и переход в состояние 24
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
 
-    exp            переход в состояние 26
-    literalString  переход в состояние 21
-    numeral        переход в состояние 22
+    exp            go to state 32
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
 
 
-состояние 15
+State 15
 
-    5 args: '(' . args ')'
-   12 exp: '(' . exp ')'
+    9 function: FUNCTION . NAME '(' args ')' chunk END
+   10         | FUNCTION . NAME '(' args ')' END
 
-    INT         сдвиг, и переход в состояние 1
-    HEX         сдвиг, и переход в состояние 2
-    FLOAT       сдвиг, и переход в состояние 3
-    HEX_FLOAT   сдвиг, и переход в состояние 4
-    ONEQSTRING  сдвиг, и переход в состояние 5
-    TWOQSTRING  сдвиг, и переход в состояние 6
-    LONGSTRING  сдвиг, и переход в состояние 7
-    NAME        сдвиг, и переход в состояние 27
-    DOTS        сдвиг, и переход в состояние 9
-    NIL         сдвиг, и переход в состояние 10
-    FALSE       сдвиг, и переход в состояние 11
-    TRUE        сдвиг, и переход в состояние 12
-    UNOP        сдвиг, и переход в состояние 13
-    MINUS       сдвиг, и переход в состояние 14
-    '('         сдвиг, и переход в состояние 15
+    NAME  shift, and go to state 33
 
-    args           переход в состояние 28
-    exp            переход в состояние 29
-    literalString  переход в состояние 21
-    numeral        переход в состояние 22
 
+State 16
 
-состояние 16
+    4 chunk: RETURN . exp
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
+
+    exp            go to state 34
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 17
+
+   17 exp: '(' . exp ')'
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
+
+    exp            go to state 35
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 18
 
     0 $accept: main . $end
 
-    $end  сдвиг, и переход в состояние 30
+    $end  shift, and go to state 36
 
 
-состояние 17
+State 19
 
-    2 main: chunk .
+    1 main: chunk .
+    2 chunk: chunk . chunk
 
-    $default  вывод с использованием правила 2 (main)
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 8
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    FUNCTION    shift, and go to state 15
+    RETURN      shift, and go to state 16
+    '('         shift, and go to state 17
 
+    $default  reduce using rule 1 (main)
 
-состояние 18
-
-    3 main: args .
-
-    $default  вывод с использованием правила 3 (main)
-
-
-состояние 19
-
-    1 main: exp .
-   13 exp: exp . BINOP exp
-   14    | exp . MINUS exp
-
-    BINOP  сдвиг, и переход в состояние 31
-    MINUS  сдвиг, и переход в состояние 32
-
-    $default  вывод с использованием правила 1 (main)
-
-
-состояние 20
-
-    4 chunk: var . '=' exp
-
-    '='  сдвиг, и переход в состояние 33
-
-
-состояние 21
-
-   18 exp: literalString .
-
-    $default  вывод с использованием правила 18 (exp)
+    chunk          go to state 37
+    function_call  go to state 20
+    function       go to state 21
+    exp            go to state 22
+    var            go to state 23
+    literalString  go to state 24
+    numeral        go to state 25
 
 
-состояние 22
+State 20
 
-   17 exp: numeral .
+    7 chunk: function_call .
 
-    $default  вывод с использованием правила 17 (exp)
-
-
-состояние 23
-
-    7 args: NAME ',' . NAME
-
-    NAME  сдвиг, и переход в состояние 34
+    $default  reduce using rule 7 (chunk)
 
 
-состояние 24
+State 21
 
-   12 exp: '(' . exp ')'
+    6 chunk: function .
 
-    INT         сдвиг, и переход в состояние 1
-    HEX         сдвиг, и переход в состояние 2
-    FLOAT       сдвиг, и переход в состояние 3
-    HEX_FLOAT   сдвиг, и переход в состояние 4
-    ONEQSTRING  сдвиг, и переход в состояние 5
-    TWOQSTRING  сдвиг, и переход в состояние 6
-    LONGSTRING  сдвиг, и переход в состояние 7
-    DOTS        сдвиг, и переход в состояние 9
-    NIL         сдвиг, и переход в состояние 10
-    FALSE       сдвиг, и переход в состояние 11
-    TRUE        сдвиг, и переход в состояние 12
-    UNOP        сдвиг, и переход в состояние 13
-    MINUS       сдвиг, и переход в состояние 14
-    '('         сдвиг, и переход в состояние 24
-
-    exp            переход в состояние 29
-    literalString  переход в состояние 21
-    numeral        переход в состояние 22
+    $default  reduce using rule 6 (chunk)
 
 
-состояние 25
+State 22
 
-   13 exp: exp . BINOP exp
-   14    | exp . MINUS exp
-   15    | UNOP exp .
+    5 chunk: exp .
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
 
-    BINOP  сдвиг, и переход в состояние 31
-    MINUS  сдвиг, и переход в состояние 32
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
 
-    BINOP     [вывод с использованием правила 15 (exp)]
-    MINUS     [вывод с использованием правила 15 (exp)]
-    $default  вывод с использованием правила 15 (exp)
-
-
-состояние 26
-
-   13 exp: exp . BINOP exp
-   14    | exp . MINUS exp
-   16    | MINUS exp .
-
-    BINOP  сдвиг, и переход в состояние 31
-    MINUS  сдвиг, и переход в состояние 32
-
-    BINOP     [вывод с использованием правила 16 (exp)]
-    MINUS     [вывод с использованием правила 16 (exp)]
-    $default  вывод с использованием правила 16 (exp)
+    MINUS     [reduce using rule 5 (chunk)]
+    $default  reduce using rule 5 (chunk)
 
 
-состояние 27
+State 23
 
-    6 args: NAME .
-    7     | NAME . ',' NAME
+    3 chunk: var . '=' exp
+   24 exp: var .
 
-    ','  сдвиг, и переход в состояние 23
+    '='  shift, and go to state 40
 
-    $default  вывод с использованием правила 6 (args)
-
-
-состояние 28
-
-    5 args: '(' args . ')'
-
-    ')'  сдвиг, и переход в состояние 35
+    $default  reduce using rule 24 (exp)
 
 
-состояние 29
+State 24
 
-   12 exp: '(' exp . ')'
-   13    | exp . BINOP exp
-   14    | exp . MINUS exp
+   23 exp: literalString .
 
-    BINOP  сдвиг, и переход в состояние 31
-    MINUS  сдвиг, и переход в состояние 32
-    ')'    сдвиг, и переход в состояние 36
+    $default  reduce using rule 23 (exp)
 
 
-состояние 30
+State 25
+
+   22 exp: numeral .
+
+    $default  reduce using rule 22 (exp)
+
+
+State 26
+
+    8 function_call: NAME '(' . exp ')'
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
+
+    exp            go to state 41
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 27
+
+   26 var: NAME '.' . NAME
+
+    NAME  shift, and go to state 42
+
+
+State 28
+
+   27 var: NAME '[' . exp ']'
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
+
+    exp            go to state 43
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 29
+
+   25 var: NAME .
+   26    | NAME . '.' NAME
+   27    | NAME . '[' exp ']'
+
+    '.'  shift, and go to state 27
+    '['  shift, and go to state 28
+
+    $default  reduce using rule 25 (var)
+
+
+State 30
+
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+   20    | UNOP exp .
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+
+    BINOP     [reduce using rule 20 (exp)]
+    MINUS     [reduce using rule 20 (exp)]
+    $default  reduce using rule 20 (exp)
+
+
+State 31
+
+   24 exp: var .
+
+    $default  reduce using rule 24 (exp)
+
+
+State 32
+
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+   21    | MINUS exp .
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+
+    BINOP     [reduce using rule 21 (exp)]
+    MINUS     [reduce using rule 21 (exp)]
+    $default  reduce using rule 21 (exp)
+
+
+State 33
+
+    9 function: FUNCTION NAME . '(' args ')' chunk END
+   10         | FUNCTION NAME . '(' args ')' END
+
+    '('  shift, and go to state 44
+
+
+State 34
+
+    4 chunk: RETURN exp .
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+
+    MINUS     [reduce using rule 4 (chunk)]
+    $default  reduce using rule 4 (chunk)
+
+
+State 35
+
+   17 exp: '(' exp . ')'
+   18    | exp . BINOP exp
+   19    | exp . MINUS exp
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+    ')'    shift, and go to state 45
+
+
+State 36
 
     0 $accept: main $end .
 
     $default  accept
 
 
-состояние 31
+State 37
 
-   13 exp: exp BINOP . exp
+    2 chunk: chunk . chunk
+    2      | chunk chunk .
 
-    INT         сдвиг, и переход в состояние 1
-    HEX         сдвиг, и переход в состояние 2
-    FLOAT       сдвиг, и переход в состояние 3
-    HEX_FLOAT   сдвиг, и переход в состояние 4
-    ONEQSTRING  сдвиг, и переход в состояние 5
-    TWOQSTRING  сдвиг, и переход в состояние 6
-    LONGSTRING  сдвиг, и переход в состояние 7
-    DOTS        сдвиг, и переход в состояние 9
-    NIL         сдвиг, и переход в состояние 10
-    FALSE       сдвиг, и переход в состояние 11
-    TRUE        сдвиг, и переход в состояние 12
-    UNOP        сдвиг, и переход в состояние 13
-    MINUS       сдвиг, и переход в состояние 14
-    '('         сдвиг, и переход в состояние 24
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 8
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    FUNCTION    shift, and go to state 15
+    RETURN      shift, and go to state 16
+    '('         shift, and go to state 17
 
-    exp            переход в состояние 37
-    literalString  переход в состояние 21
-    numeral        переход в состояние 22
+    INT         [reduce using rule 2 (chunk)]
+    HEX         [reduce using rule 2 (chunk)]
+    FLOAT       [reduce using rule 2 (chunk)]
+    HEX_FLOAT   [reduce using rule 2 (chunk)]
+    ONEQSTRING  [reduce using rule 2 (chunk)]
+    TWOQSTRING  [reduce using rule 2 (chunk)]
+    LONGSTRING  [reduce using rule 2 (chunk)]
+    NAME        [reduce using rule 2 (chunk)]
+    DOTS        [reduce using rule 2 (chunk)]
+    NIL         [reduce using rule 2 (chunk)]
+    FALSE       [reduce using rule 2 (chunk)]
+    TRUE        [reduce using rule 2 (chunk)]
+    UNOP        [reduce using rule 2 (chunk)]
+    MINUS       [reduce using rule 2 (chunk)]
+    FUNCTION    [reduce using rule 2 (chunk)]
+    RETURN      [reduce using rule 2 (chunk)]
+    '('         [reduce using rule 2 (chunk)]
+    $default    reduce using rule 2 (chunk)
 
-
-состояние 32
-
-   14 exp: exp MINUS . exp
-
-    INT         сдвиг, и переход в состояние 1
-    HEX         сдвиг, и переход в состояние 2
-    FLOAT       сдвиг, и переход в состояние 3
-    HEX_FLOAT   сдвиг, и переход в состояние 4
-    ONEQSTRING  сдвиг, и переход в состояние 5
-    TWOQSTRING  сдвиг, и переход в состояние 6
-    LONGSTRING  сдвиг, и переход в состояние 7
-    DOTS        сдвиг, и переход в состояние 9
-    NIL         сдвиг, и переход в состояние 10
-    FALSE       сдвиг, и переход в состояние 11
-    TRUE        сдвиг, и переход в состояние 12
-    UNOP        сдвиг, и переход в состояние 13
-    MINUS       сдвиг, и переход в состояние 14
-    '('         сдвиг, и переход в состояние 24
-
-    exp            переход в состояние 38
-    literalString  переход в состояние 21
-    numeral        переход в состояние 22
-
-
-состояние 33
-
-    4 chunk: var '=' . exp
-
-    INT         сдвиг, и переход в состояние 1
-    HEX         сдвиг, и переход в состояние 2
-    FLOAT       сдвиг, и переход в состояние 3
-    HEX_FLOAT   сдвиг, и переход в состояние 4
-    ONEQSTRING  сдвиг, и переход в состояние 5
-    TWOQSTRING  сдвиг, и переход в состояние 6
-    LONGSTRING  сдвиг, и переход в состояние 7
-    DOTS        сдвиг, и переход в состояние 9
-    NIL         сдвиг, и переход в состояние 10
-    FALSE       сдвиг, и переход в состояние 11
-    TRUE        сдвиг, и переход в состояние 12
-    UNOP        сдвиг, и переход в состояние 13
-    MINUS       сдвиг, и переход в состояние 14
-    '('         сдвиг, и переход в состояние 24
-
-    exp            переход в состояние 39
-    literalString  переход в состояние 21
-    numeral        переход в состояние 22
+    chunk          go to state 37
+    function_call  go to state 20
+    function       go to state 21
+    exp            go to state 22
+    var            go to state 23
+    literalString  go to state 24
+    numeral        go to state 25
 
 
-состояние 34
+State 38
 
-    7 args: NAME ',' NAME .
+   18 exp: exp BINOP . exp
 
-    $default  вывод с использованием правила 7 (args)
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
 
-
-состояние 35
-
-    5 args: '(' args ')' .
-
-    $default  вывод с использованием правила 5 (args)
-
-
-состояние 36
-
-   12 exp: '(' exp ')' .
-
-    $default  вывод с использованием правила 12 (exp)
-
-
-состояние 37
-
-   13 exp: exp . BINOP exp
-   13    | exp BINOP exp .
-   14    | exp . MINUS exp
-
-    BINOP  сдвиг, и переход в состояние 31
-    MINUS  сдвиг, и переход в состояние 32
-
-    BINOP     [вывод с использованием правила 13 (exp)]
-    MINUS     [вывод с использованием правила 13 (exp)]
-    $default  вывод с использованием правила 13 (exp)
+    exp            go to state 46
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
 
 
-состояние 38
+State 39
 
-   13 exp: exp . BINOP exp
-   14    | exp . MINUS exp
-   14    | exp MINUS exp .
+   19 exp: exp MINUS . exp
 
-    BINOP  сдвиг, и переход в состояние 31
-    MINUS  сдвиг, и переход в состояние 32
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
 
-    BINOP     [вывод с использованием правила 14 (exp)]
-    MINUS     [вывод с использованием правила 14 (exp)]
-    $default  вывод с использованием правила 14 (exp)
+    exp            go to state 47
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
 
 
-состояние 39
+State 40
 
-    4 chunk: var '=' exp .
-   13 exp: exp . BINOP exp
-   14    | exp . MINUS exp
+    3 chunk: var '=' . exp
 
-    BINOP  сдвиг, и переход в состояние 31
-    MINUS  сдвиг, и переход в состояние 32
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
 
-    $default  вывод с использованием правила 4 (chunk)
+    exp            go to state 48
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 41
+
+    8 function_call: NAME '(' exp . ')'
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+    ')'    shift, and go to state 49
+
+
+State 42
+
+   26 var: NAME '.' NAME .
+
+    $default  reduce using rule 26 (var)
+
+
+State 43
+
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+   27 var: NAME '[' exp . ']'
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+    ']'    shift, and go to state 50
+
+
+State 44
+
+    9 function: FUNCTION NAME '(' . args ')' chunk END
+   10         | FUNCTION NAME '(' . args ')' END
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
+
+    args           go to state 51
+    exp            go to state 52
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 45
+
+   17 exp: '(' exp ')' .
+
+    $default  reduce using rule 17 (exp)
+
+
+State 46
+
+   18 exp: exp . BINOP exp
+   18    | exp BINOP exp .
+   19    | exp . MINUS exp
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+
+    BINOP     [reduce using rule 18 (exp)]
+    MINUS     [reduce using rule 18 (exp)]
+    $default  reduce using rule 18 (exp)
+
+
+State 47
+
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+   19    | exp MINUS exp .
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+
+    BINOP     [reduce using rule 19 (exp)]
+    MINUS     [reduce using rule 19 (exp)]
+    $default  reduce using rule 19 (exp)
+
+
+State 48
+
+    3 chunk: var '=' exp .
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+
+    MINUS     [reduce using rule 3 (chunk)]
+    $default  reduce using rule 3 (chunk)
+
+
+State 49
+
+    8 function_call: NAME '(' exp ')' .
+
+    $default  reduce using rule 8 (function_call)
+
+
+State 50
+
+   27 var: NAME '[' exp ']' .
+
+    $default  reduce using rule 27 (var)
+
+
+State 51
+
+    9 function: FUNCTION NAME '(' args . ')' chunk END
+   10         | FUNCTION NAME '(' args . ')' END
+   12 args: args . ',' exp
+
+    ')'  shift, and go to state 53
+    ','  shift, and go to state 54
+
+
+State 52
+
+   11 args: exp .
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+
+    $default  reduce using rule 11 (args)
+
+
+State 53
+
+    9 function: FUNCTION NAME '(' args ')' . chunk END
+   10         | FUNCTION NAME '(' args ')' . END
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 8
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    END         shift, and go to state 55
+    FUNCTION    shift, and go to state 15
+    RETURN      shift, and go to state 16
+    '('         shift, and go to state 17
+
+    chunk          go to state 56
+    function_call  go to state 20
+    function       go to state 21
+    exp            go to state 22
+    var            go to state 23
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 54
+
+   12 args: args ',' . exp
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 29
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '('         shift, and go to state 17
+
+    exp            go to state 57
+    var            go to state 31
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 55
+
+   10 function: FUNCTION NAME '(' args ')' END .
+
+    $default  reduce using rule 10 (function)
+
+
+State 56
+
+    2 chunk: chunk . chunk
+    9 function: FUNCTION NAME '(' args ')' chunk . END
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 8
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    END         shift, and go to state 58
+    FUNCTION    shift, and go to state 15
+    RETURN      shift, and go to state 16
+    '('         shift, and go to state 17
+
+    chunk          go to state 37
+    function_call  go to state 20
+    function       go to state 21
+    exp            go to state 22
+    var            go to state 23
+    literalString  go to state 24
+    numeral        go to state 25
+
+
+State 57
+
+   12 args: args ',' exp .
+   18 exp: exp . BINOP exp
+   19    | exp . MINUS exp
+
+    BINOP  shift, and go to state 38
+    MINUS  shift, and go to state 39
+
+    $default  reduce using rule 12 (args)
+
+
+State 58
+
+    9 function: FUNCTION NAME '(' args ')' chunk END .
+
+    $default  reduce using rule 9 (function)
