@@ -6,7 +6,7 @@
 #include <stdarg.h> //va_list
 
 #define noyywrap
-#define DEBUG
+//#define DEBUG
 
 #define YY_USER_ACTION \
 yylloc.first_line = yylloc.last_line; \
@@ -22,14 +22,14 @@ yylloc.last_column++; \
 }
 
 void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
-	{
-#ifdef DEBUG 
+{
+	#ifdef DEBUG 
 		va_list args;
-		va_start(args, format);
+		va_start(args, format);		
 		vprintf(format, args);
 		va_end(args);
-#endif
-	}
+	#endif
+}
 
 
 int left_side = 0;

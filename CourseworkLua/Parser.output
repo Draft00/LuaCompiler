@@ -1,3 +1,8 @@
+Nonterminals useless in grammar
+
+   statement
+
+
 Terminals unused in grammar
 
    TWOQ
@@ -14,6 +19,12 @@ Terminals unused in grammar
    ELSE
    LOCAL
    BREAK
+
+
+Rules useless in grammar
+
+   35 statement: IF chunk END
+   36          | IF chunk THEN chunk END
 
 
 State 8 conflicts: 1 shift/reduce

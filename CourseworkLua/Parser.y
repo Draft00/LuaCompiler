@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdarg.h> //va_list
 
 FILE *yyin;
 int yyerror();
@@ -15,6 +16,17 @@ extern int yylineno;
 extern void DEBUGPRINT(char* format, ...);
 
 #define YYERROR_VERBOSE 1
+#define DEBUG_BISON
+
+void DEBUGPRINT_BISON(char* format, ...)
+{
+	#ifdef DEBUG_BISON
+		va_list args;
+		va_start(args, format);
+		vprintf(format, args);
+		va_end(args);
+	#endif
+}
 
 
 %}
@@ -67,53 +79,57 @@ extern void DEBUGPRINT(char* format, ...);
 %%
 /*================ 2. The Grammar Section ================================*/
 
-main: chunk				{ DEBUGPRINT("\nMAIN: chunk"); }
+main: chunk				{ DEBUGPRINT_BISON("\nMAIN: chunk"); }
 ;
 
-chunk: chunk chunk 		{ DEBUGPRINT("\nCHUNK: chunk chunk"); }
-	 | var '=' exp 		{ DEBUGPRINT("\nCHUNK: var = exp"); }
-	 | RETURN exp 		{ DEBUGPRINT("\nCHUNK: RETURN exp"); }
-	 | exp 				{ DEBUGPRINT("\nCHUNK: exp"); }
-	 | function 		{ DEBUGPRINT("\nCHUNK: function"); }
-	 | function_call	{ DEBUGPRINT("\nCHUNK: function_call"); }
+statement: IF chunk END
+		 | IF chunk THEN chunk END
 ;
 
-function_call: NAME '(' exp ')' 	{ DEBUGPRINT("\nFUNCTION_CALL: NAME '(' exp ')'"); }
+chunk: chunk chunk 		{ DEBUGPRINT_BISON("\nCHUNK: chunk chunk"); }
+	 | var '=' exp 		{ DEBUGPRINT_BISON("\nCHUNK: var = exp"); }
+	 | RETURN exp 		{ DEBUGPRINT_BISON("\nCHUNK: RETURN exp"); }
+	 | exp 				{ DEBUGPRINT_BISON("\nCHUNK: exp"); }
+	 | function 		{ DEBUGPRINT_BISON("\nCHUNK: function"); }
+	 | function_call	{ DEBUGPRINT_BISON("\nCHUNK: function_call"); }
 ;
 
-function: FUNCTION NAME '(' args ')' chunk END 	{ DEBUGPRINT("\nFUNCTION: FUNCTION NAME ( args ) chunk END "); }
-		| FUNCTION NAME '(' args ')' END 		{ DEBUGPRINT("\nFUNCTION: FUNCTION NAME ( args ) EMPTY_BODY END "); } // Function with empty body
+function_call: NAME '(' exp ')' 	{ DEBUGPRINT_BISON("\nFUNCTION_CALL: NAME ( exp )"); }
 ;
 
-args: exp			{ DEBUGPRINT("\nARGS: exp"); }
-	| args ',' exp	{ DEBUGPRINT("\nARGS: arg , exp"); }
+function: FUNCTION NAME '(' args ')' chunk END 	{ DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) chunk END "); }
+		| FUNCTION NAME '(' args ')' END 		{ DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) EMPTY_BODY END "); } // Function with empty body
 ;
 
-exp:  NIL 			{ DEBUGPRINT("\nEXP: NIL"); }
-	| FALSE 		{ DEBUGPRINT("\nEXP: FALSE"); }
-	| TRUE			{ DEBUGPRINT("\nEXP: TRUE"); }
-	| DOTS			{ DEBUGPRINT("\nEXP: DOTS"); }
+args: exp			{ DEBUGPRINT_BISON("\nARGS: exp"); }
+	| args ',' exp	{ DEBUGPRINT_BISON("\nARGS: arg , exp"); }
+;
+
+exp:  NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
+	| FALSE 		{ DEBUGPRINT_BISON("\nEXP: FALSE"); }
+	| TRUE			{ DEBUGPRINT_BISON("\nEXP: TRUE"); }
+	| DOTS			{ DEBUGPRINT_BISON("\nEXP: DOTS"); }
 	/*| functiondef 
 	| prefixexp 
 	| tableconstructor */
-	| '(' exp ')'	{ DEBUGPRINT("\nEXP: ( exp )"); }
-	| exp BINOP exp { DEBUGPRINT("\nEXP: exp BINOP exp"); }
-	| exp MINUS exp { DEBUGPRINT("\nEXP: exp MINUS exp"); }
-	| UNOP exp 		{ DEBUGPRINT("\nEXP: UNOP exp"); }
-	| MINUS exp 	{ DEBUGPRINT("\nEXP: MINUS exp"); }
-	| numeral		{ DEBUGPRINT("\nEXP: numeral"); }
-	| literalString { DEBUGPRINT("\nEXP: literalString"); }
-	| var 			{ DEBUGPRINT("\nEXP: var"); } // Fuck!
+	| '(' exp ')'	{ DEBUGPRINT_BISON("\nEXP: ( exp )"); }
+	| exp BINOP exp { DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
+	| exp MINUS exp { DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
+	| UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }
+	| MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }
+	| numeral		{ DEBUGPRINT_BISON("\nEXP: numeral"); }
+	| literalString { DEBUGPRINT_BISON("\nEXP: literalString"); }
+	| var 			{ DEBUGPRINT_BISON("\nEXP: var"); } // Fuck!
 ;
 
-var:  NAME 				{ DEBUGPRINT("\nVAR: NAME"); }
-	| NAME '.' NAME 	{ DEBUGPRINT("\nVAR: NAME . NAME"); }
-	| NAME '[' exp ']' 	{ DEBUGPRINT("\nVAR: NAME [ NAME ]"); }
+var:  NAME 				{ DEBUGPRINT_BISON("\nVAR: NAME"); }
+	| NAME '.' NAME 	{ DEBUGPRINT_BISON("\nVAR: NAME . NAME"); }
+	| NAME '[' exp ']' 	{ DEBUGPRINT_BISON("\nVAR: NAME [ NAME ]"); }
 ;
 
-literalString:	ONEQSTRING 		{ DEBUGPRINT("\nVAR: ONEQSTRING"); }
-				| TWOQSTRING	{ DEBUGPRINT("\nVAR: TWOQSTRING"); }
-				| LONGSTRING 	{ DEBUGPRINT("\nVAR: LONGSTRING"); }/* TODO */
+literalString:	ONEQSTRING 		{ DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
+				| TWOQSTRING	{ DEBUGPRINT_BISON("\nVAR: TWOQSTRING"); }
+				| LONGSTRING 	{ DEBUGPRINT_BISON("\nVAR: LONGSTRING"); }/* TODO */
 				//| LongString
 ;
 

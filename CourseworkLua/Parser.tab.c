@@ -70,6 +70,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdarg.h> //va_list
 
 FILE *yyin;
 int yyerror();
@@ -81,11 +82,22 @@ extern int yylineno;
 extern void DEBUGPRINT(char* format, ...);
 
 #define YYERROR_VERBOSE 1
+#define DEBUG_BISON
+
+void DEBUGPRINT_BISON(char* format, ...)
+{
+	#ifdef DEBUG_BISON
+		va_list args;
+		va_start(args, format);
+		vprintf(format, args);
+		va_end(args);
+	#endif
+}
 
 
 
 /* Line 371 of yacc.c  */
-#line 89 "Parser.tab.c"
+#line 101 "Parser.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -198,7 +210,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 202 "Parser.tab.c"
+#line 214 "Parser.tab.c"
 
 #ifdef short
 # undef short
@@ -511,10 +523,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    70,    70,    73,    74,    75,    76,    77,    78,    81,
-      84,    85,    88,    89,    92,    93,    94,    95,    99,   100,
-     101,   102,   103,   104,   105,   106,   109,   110,   111,   114,
-     115,   116,   120,   121,   122,   123
+       0,    82,    82,    89,    90,    91,    92,    93,    94,    97,
+     100,   101,   104,   105,   108,   109,   110,   111,   115,   116,
+     117,   118,   119,   120,   121,   122,   125,   126,   127,   130,
+     131,   132,   136,   137,   138,   139
 };
 #endif
 
@@ -1569,187 +1581,187 @@ yyreduce:
     {
         case 2:
 /* Line 1802 of yacc.c  */
-#line 70 "Parser.y"
-    { DEBUGPRINT("\nMAIN: chunk"); }
+#line 82 "Parser.y"
+    { DEBUGPRINT_BISON("\nMAIN: chunk"); }
     break;
 
   case 3:
 /* Line 1802 of yacc.c  */
-#line 73 "Parser.y"
-    { DEBUGPRINT("\nCHUNK: chunk chunk"); }
+#line 89 "Parser.y"
+    { DEBUGPRINT_BISON("\nCHUNK: chunk chunk"); }
     break;
 
   case 4:
 /* Line 1802 of yacc.c  */
-#line 74 "Parser.y"
-    { DEBUGPRINT("\nCHUNK: var = exp"); }
+#line 90 "Parser.y"
+    { DEBUGPRINT_BISON("\nCHUNK: var = exp"); }
     break;
 
   case 5:
 /* Line 1802 of yacc.c  */
-#line 75 "Parser.y"
-    { DEBUGPRINT("\nCHUNK: RETURN exp"); }
+#line 91 "Parser.y"
+    { DEBUGPRINT_BISON("\nCHUNK: RETURN exp"); }
     break;
 
   case 6:
 /* Line 1802 of yacc.c  */
-#line 76 "Parser.y"
-    { DEBUGPRINT("\nCHUNK: exp"); }
+#line 92 "Parser.y"
+    { DEBUGPRINT_BISON("\nCHUNK: exp"); }
     break;
 
   case 7:
 /* Line 1802 of yacc.c  */
-#line 77 "Parser.y"
-    { DEBUGPRINT("\nCHUNK: function"); }
+#line 93 "Parser.y"
+    { DEBUGPRINT_BISON("\nCHUNK: function"); }
     break;
 
   case 8:
 /* Line 1802 of yacc.c  */
-#line 78 "Parser.y"
-    { DEBUGPRINT("\nCHUNK: function_call"); }
+#line 94 "Parser.y"
+    { DEBUGPRINT_BISON("\nCHUNK: function_call"); }
     break;
 
   case 9:
 /* Line 1802 of yacc.c  */
-#line 81 "Parser.y"
-    { DEBUGPRINT("\nFUNCTION_CALL: NAME '(' exp ')'"); }
+#line 97 "Parser.y"
+    { DEBUGPRINT_BISON("\nFUNCTION_CALL: NAME ( exp )"); }
     break;
 
   case 10:
 /* Line 1802 of yacc.c  */
-#line 84 "Parser.y"
-    { DEBUGPRINT("\nFUNCTION: FUNCTION NAME ( args ) chunk END "); }
+#line 100 "Parser.y"
+    { DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) chunk END "); }
     break;
 
   case 11:
 /* Line 1802 of yacc.c  */
-#line 85 "Parser.y"
-    { DEBUGPRINT("\nFUNCTION: FUNCTION NAME ( args ) EMPTY_BODY END "); }
+#line 101 "Parser.y"
+    { DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) EMPTY_BODY END "); }
     break;
 
   case 12:
 /* Line 1802 of yacc.c  */
-#line 88 "Parser.y"
-    { DEBUGPRINT("\nARGS: exp"); }
+#line 104 "Parser.y"
+    { DEBUGPRINT_BISON("\nARGS: exp"); }
     break;
 
   case 13:
 /* Line 1802 of yacc.c  */
-#line 89 "Parser.y"
-    { DEBUGPRINT("\nARGS: arg , exp"); }
+#line 105 "Parser.y"
+    { DEBUGPRINT_BISON("\nARGS: arg , exp"); }
     break;
 
   case 14:
 /* Line 1802 of yacc.c  */
-#line 92 "Parser.y"
-    { DEBUGPRINT("\nEXP: NIL"); }
+#line 108 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: NIL"); }
     break;
 
   case 15:
 /* Line 1802 of yacc.c  */
-#line 93 "Parser.y"
-    { DEBUGPRINT("\nEXP: FALSE"); }
+#line 109 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: FALSE"); }
     break;
 
   case 16:
 /* Line 1802 of yacc.c  */
-#line 94 "Parser.y"
-    { DEBUGPRINT("\nEXP: TRUE"); }
+#line 110 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: TRUE"); }
     break;
 
   case 17:
 /* Line 1802 of yacc.c  */
-#line 95 "Parser.y"
-    { DEBUGPRINT("\nEXP: DOTS"); }
+#line 111 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: DOTS"); }
     break;
 
   case 18:
 /* Line 1802 of yacc.c  */
-#line 99 "Parser.y"
-    { DEBUGPRINT("\nEXP: ( exp )"); }
+#line 115 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: ( exp )"); }
     break;
 
   case 19:
 /* Line 1802 of yacc.c  */
-#line 100 "Parser.y"
-    { DEBUGPRINT("\nEXP: exp BINOP exp"); }
+#line 116 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
     break;
 
   case 20:
 /* Line 1802 of yacc.c  */
-#line 101 "Parser.y"
-    { DEBUGPRINT("\nEXP: exp MINUS exp"); }
+#line 117 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
     break;
 
   case 21:
 /* Line 1802 of yacc.c  */
-#line 102 "Parser.y"
-    { DEBUGPRINT("\nEXP: UNOP exp"); }
+#line 118 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: UNOP exp"); }
     break;
 
   case 22:
 /* Line 1802 of yacc.c  */
-#line 103 "Parser.y"
-    { DEBUGPRINT("\nEXP: MINUS exp"); }
+#line 119 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: MINUS exp"); }
     break;
 
   case 23:
 /* Line 1802 of yacc.c  */
-#line 104 "Parser.y"
-    { DEBUGPRINT("\nEXP: numeral"); }
+#line 120 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: numeral"); }
     break;
 
   case 24:
 /* Line 1802 of yacc.c  */
-#line 105 "Parser.y"
-    { DEBUGPRINT("\nEXP: literalString"); }
+#line 121 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: literalString"); }
     break;
 
   case 25:
 /* Line 1802 of yacc.c  */
-#line 106 "Parser.y"
-    { DEBUGPRINT("\nEXP: var"); }
+#line 122 "Parser.y"
+    { DEBUGPRINT_BISON("\nEXP: var"); }
     break;
 
   case 26:
 /* Line 1802 of yacc.c  */
-#line 109 "Parser.y"
-    { DEBUGPRINT("\nVAR: NAME"); }
+#line 125 "Parser.y"
+    { DEBUGPRINT_BISON("\nVAR: NAME"); }
     break;
 
   case 27:
 /* Line 1802 of yacc.c  */
-#line 110 "Parser.y"
-    { DEBUGPRINT("\nVAR: NAME . NAME"); }
+#line 126 "Parser.y"
+    { DEBUGPRINT_BISON("\nVAR: NAME . NAME"); }
     break;
 
   case 28:
 /* Line 1802 of yacc.c  */
-#line 111 "Parser.y"
-    { DEBUGPRINT("\nVAR: NAME [ NAME ]"); }
+#line 127 "Parser.y"
+    { DEBUGPRINT_BISON("\nVAR: NAME [ NAME ]"); }
     break;
 
   case 29:
 /* Line 1802 of yacc.c  */
-#line 114 "Parser.y"
-    { DEBUGPRINT("\nVAR: ONEQSTRING"); }
+#line 130 "Parser.y"
+    { DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
     break;
 
   case 30:
 /* Line 1802 of yacc.c  */
-#line 115 "Parser.y"
-    { DEBUGPRINT("\nVAR: TWOQSTRING"); }
+#line 131 "Parser.y"
+    { DEBUGPRINT_BISON("\nVAR: TWOQSTRING"); }
     break;
 
   case 31:
 /* Line 1802 of yacc.c  */
-#line 116 "Parser.y"
-    { DEBUGPRINT("\nVAR: LONGSTRING"); }
+#line 132 "Parser.y"
+    { DEBUGPRINT_BISON("\nVAR: LONGSTRING"); }
     break;
 
 
 /* Line 1802 of yacc.c  */
-#line 1753 "Parser.tab.c"
+#line 1765 "Parser.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1988,7 +2000,7 @@ yyreturn:
 
 
 /* Line 2050 of yacc.c  */
-#line 141 "Parser.y"
+#line 157 "Parser.y"
 
 
 int parser_main(int argc, char *argv[])
