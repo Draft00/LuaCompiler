@@ -94,15 +94,27 @@ chunk: chunk chunk 		{ DEBUGPRINT_BISON("\nCHUNK: chunk chunk"); }
 	 | function_call	{ DEBUGPRINT_BISON("\nCHUNK: function_call"); }
 ;
 
-function_call: NAME '(' exp ')' 	{ DEBUGPRINT_BISON("\nFUNCTION_CALL: NAME ( exp )"); }
+function_call: NAME all_args 					{ DEBUGPRINT_BISON("\nFUNCTION_CALL: NAME ( exp )"); }
 ;
 
-function: FUNCTION NAME '(' args ')' chunk END 	{ DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) chunk END "); }
-		| FUNCTION NAME '(' args ')' END 		{ DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) EMPTY_BODY END "); } // Function with empty body
+function: FUNCTION NAME simple_args chunk END 	{ DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) chunk END "); }
+		| FUNCTION NAME simple_args END 		{ DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) EMPTY_BODY END "); } // Function with empty body
 ;
 
-args: exp			{ DEBUGPRINT_BISON("\nARGS: exp"); }
-	| args ',' exp	{ DEBUGPRINT_BISON("\nARGS: arg , exp"); }
+simple_args: '(' simple_args_part ')'
+		   | '(' NAME ')'
+;
+
+simple_args_part: simple_args_part ',' NAME 	{ DEBUGPRINT_BISON("\nSIMPLE_ARGS_PART: simple_args_part , NAME"); }
+				| NAME ',' NAME 				{ DEBUGPRINT_BISON("\nSIMPLE_ARGS_PART: NAME , NAME "); }
+;
+
+all_args: '(' all_args_part ')' 				{ DEBUGPRINT_BISON("\nALL_ARGS: ( all_args_part )"); }
+		| '(' exp ')' 							{ DEBUGPRINT_BISON("\nALL_ARGS: ( exp )"); }
+;
+
+all_args_part: simple_args_part ',' exp			{ DEBUGPRINT_BISON("\nALL_ARGS_PART: simple_args_part , exp"); }
+			 | exp ',' exp	 					{ DEBUGPRINT_BISON("\nALL_ARGS_PART: exp , exp"); }
 ;
 
 exp:  NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
