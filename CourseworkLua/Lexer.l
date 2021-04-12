@@ -51,7 +51,7 @@ int right_side = 0;
 %}
 
 %option noyywrap yylineno
-%x NESTEDSTR1
+%x NESTEDSTR1, MANYLINESCOMMENT
 
 Digit					[0-9]
 HexDigit				[0-9a-fA-F]
@@ -166,11 +166,32 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "'"([^\\\']|{EscapeSequence})*"'"					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }
 "--"(.*|EOF)										{ /* one line comment */}
 
-"["(=)*"["											{ left_side = strlen(yytext);  DEBUGPRINT("\nLex: LONG_STR count left: %d, %s", left_side, yytext); BEGIN(NESTEDSTR1);}
+"["(=)*"["											{	left_side = strlen(yytext);  
+														DEBUGPRINT("\nLex: LONG_STR count left: %d, %s", left_side, yytext); 
+														BEGIN(NESTEDSTR1);
+													}
 <NESTEDSTR1>.										{ }
 <NESTEDSTR1>\n										{ }
-<NESTEDSTR1>"]"(=)*"]"								{right_side = strlen(yytext);  DEBUGPRINT("\nLex: LONG_STR count right: %d, %s", right_side, yytext); BEGIN(INITIAL); 
-													if (right_side == left_side) return LONGSTRING;}
+<NESTEDSTR1>"]"(=)*"]"								{	right_side = strlen(yytext);  
+														DEBUGPRINT("\nLex: LONG_STR count right: %d, %s", right_side, yytext); 
+														BEGIN(INITIAL); 
+														if (right_side == left_side) return LONGSTRING;
+													}
+
+
+"--["(=)*"["										{	left_side = strlen(yytext) - 2;  
+														DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); 
+														BEGIN(MANYLINESCOMMENT);
+													}
+<MANYLINESCOMMENT>.									{ }
+<MANYLINESCOMMENT>\n								{ }
+<MANYLINESCOMMENT>"]"(=)*"]"						{	right_side = strlen(yytext);
+														DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext); 
+														BEGIN(INITIAL); 
+														if (right_side == left_side)
+														{ /* ignore */} 
+														else { DEBUGPRINT("\nLex: incorrect many_lines_comment); exit(-20); }
+													}		
 .						{
 							DEBUGPRINT("\nLex: unknown: %s", yytext);
 							return yytext[0]; 
