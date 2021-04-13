@@ -44,7 +44,7 @@ void DEBUGPRINT_BISON(char* format, ...)
 %token NIL FALSE TRUE
 
 /* Operators */
-%token BINOP UNOP MINUS
+%token BINOP UNOP MINUS ASSIGN
 
 /* Looping */
 %token DO WHILE FOR UNTIL REPEAT END
@@ -79,65 +79,60 @@ void DEBUGPRINT_BISON(char* format, ...)
 %%
 /*================ 2. The Grammar Section ================================*/
 
-main: chunk				{ DEBUGPRINT_BISON("\nMAIN: chunk"); }
+main: field_list			{ DEBUGPRINT_BISON("\nMAIN: field_list"); }
+	| name_list 			{ DEBUGPRINT_BISON("\nMAIN: name_list"); }
 ;
 
-statement: IF chunk END
-		 | IF chunk THEN chunk END
+name_list: name_list ',' NAME 			{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: name_list ',' NAME"); }
+		 | NAME ',' NAME 				{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: NAME ',' NAME"); }
+		 | NAME 						{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: NAME"); }
+
+body_constructor: '{' field_list '}'	{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: '{' field_list '}'"); }
+				| '{' '}' 				{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: '{' '}'"); }
 ;
 
-chunk: chunk chunk 		{ DEBUGPRINT_BISON("\nCHUNK: chunk chunk"); }
-	 | var '=' exp 		{ DEBUGPRINT_BISON("\nCHUNK: var = exp"); }
-	 | RETURN exp 		{ DEBUGPRINT_BISON("\nCHUNK: RETURN exp"); }
-	 | exp 				{ DEBUGPRINT_BISON("\nCHUNK: exp"); }
-	 | function 		{ DEBUGPRINT_BISON("\nCHUNK: function"); }
-	 | function_call	{ DEBUGPRINT_BISON("\nCHUNK: function_call"); }
+
+field_list: field_list field_sep  		{ DEBUGPRINT_BISON("\nFIELD_LIST: field_list field_sep"); }
+		  /* Recursion element collector */
+		  | field_list field_sep field 	{ DEBUGPRINT_BISON("\nFIELD_LIST: field_list field_sep field"); }
+
+		  /* This line is the start point element list collector */
+		  | field field_sep field 		{ DEBUGPRINT_BISON("\nFIELD_LIST: field field_sep field"); }
+
+		  /* Single element collector */
+		  | field  						{ DEBUGPRINT_BISON("\nFIELD_LIST: field"); }
+
+		  /* Resolve [field ,] .field->field_list then field_list->field can't resolve =() */
+		  | field field_sep 			{ DEBUGPRINT_BISON("\nFIELD_LIST: field field_sep"); }
 ;
 
-function_call: NAME all_args 					{ DEBUGPRINT_BISON("\nFUNCTION_CALL: NAME ( exp )"); }
+
+field: '[' exp ']' '=' exp 	{ DEBUGPRINT_BISON("\nFIELD: '[' exp ']' '=' exp"); }
+	 | NAME '=' exp 		{ DEBUGPRINT_BISON("\nFIELD: NAME '=' exp"); }
+	 | exp 					{ DEBUGPRINT_BISON("\nFIELD: exp"); }
 ;
 
-function: FUNCTION NAME simple_args chunk END 	{ DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) chunk END "); }
-		| FUNCTION NAME simple_args END 		{ DEBUGPRINT_BISON("\nFUNCTION: FUNCTION NAME ( args ) EMPTY_BODY END "); } // Function with empty body
+
+field_sep: ','
+		 | ';'
 ;
 
-simple_args: '(' simple_args_part ')'
-		   | '(' NAME ')'
-;
-
-simple_args_part: simple_args_part ',' NAME 	{ DEBUGPRINT_BISON("\nSIMPLE_ARGS_PART: simple_args_part , NAME"); }
-				| NAME ',' NAME 				{ DEBUGPRINT_BISON("\nSIMPLE_ARGS_PART: NAME , NAME "); }
-;
-
-all_args: '(' all_args_part ')' 				{ DEBUGPRINT_BISON("\nALL_ARGS: ( all_args_part )"); }
-		| '(' exp ')' 							{ DEBUGPRINT_BISON("\nALL_ARGS: ( exp )"); }
-;
-
-all_args_part: simple_args_part ',' exp			{ DEBUGPRINT_BISON("\nALL_ARGS_PART: simple_args_part , exp"); }
-			 | exp ',' exp	 					{ DEBUGPRINT_BISON("\nALL_ARGS_PART: exp , exp"); }
-;
 
 exp:  NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
 	| FALSE 		{ DEBUGPRINT_BISON("\nEXP: FALSE"); }
 	| TRUE			{ DEBUGPRINT_BISON("\nEXP: TRUE"); }
 	| DOTS			{ DEBUGPRINT_BISON("\nEXP: DOTS"); }
-	/*| functiondef 
-	| prefixexp 
-	| tableconstructor */
-	| '(' exp ')'	{ DEBUGPRINT_BISON("\nEXP: ( exp )"); }
+
+	//| '(' exp ')'	{ DEBUGPRINT_BISON("\nEXP: ( exp )"); }
 	| exp BINOP exp { DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
 	| exp MINUS exp { DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
 	| UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }
 	| MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }
+
 	| numeral		{ DEBUGPRINT_BISON("\nEXP: numeral"); }
 	| literalString { DEBUGPRINT_BISON("\nEXP: literalString"); }
-	| var 			{ DEBUGPRINT_BISON("\nEXP: var"); } // Fuck!
 ;
 
-var:  NAME 				{ DEBUGPRINT_BISON("\nVAR: NAME"); }
-	| NAME '.' NAME 	{ DEBUGPRINT_BISON("\nVAR: NAME . NAME"); }
-	| NAME '[' exp ']' 	{ DEBUGPRINT_BISON("\nVAR: NAME [ NAME ]"); }
-;
 
 literalString:	ONEQSTRING 		{ DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
 				| TWOQSTRING	{ DEBUGPRINT_BISON("\nVAR: TWOQSTRING"); }
@@ -145,10 +140,11 @@ literalString:	ONEQSTRING 		{ DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
 				//| LongString
 ;
 
-numeral:  INT
-		| HEX
-		| FLOAT
-		| HEX_FLOAT
+
+numeral:  INT 					{ DEBUGPRINT_BISON("\nNUMERAL: INT"); }
+		| HEX 					{ DEBUGPRINT_BISON("\nNUMERAL: HEX"); }
+		| FLOAT 				{ DEBUGPRINT_BISON("\nNUMERAL: FLOAT"); }
+		| HEX_FLOAT 			{ DEBUGPRINT_BISON("\nNUMERAL: HEX_FLOAT"); }
 ;
 
 /*
@@ -196,6 +192,6 @@ int parser_main(int argc, char *argv[])
 
 int yyerror(const char *p)
 { 
-	printf("%s in line %d. %d:%d - %d:%d\n", p, yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
+	printf("\n%s in line %d. %d:%d - %d:%d\n", p, yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
 	return 0;
 }

@@ -1,6 +1,6 @@
 Nonterminals useless in grammar
 
-   statement
+   body_constructor
 
 
 Terminals unused in grammar
@@ -8,168 +8,151 @@ Terminals unused in grammar
    TWOQ
    ONEQ
    NESTED_STR
+   ASSIGN
    DO
    WHILE
    FOR
    UNTIL
    REPEAT
+   END
    IF
    THEN
    ELSEIF
    ELSE
    LOCAL
+   FUNCTION
    BREAK
+   RETURN
+   '{'
+   '}'
 
 
 Rules useless in grammar
 
-   41 statement: IF chunk END
-   42          | IF chunk THEN chunk END
+   33 body_constructor: '{' field_list '}'
+   34                 | '{' '}'
 
 
 State 8 conflicts: 1 shift/reduce
-State 22 conflicts: 1 shift/reduce
-State 31 conflicts: 2 shift/reduce
-State 33 conflicts: 2 shift/reduce
-State 35 conflicts: 1 shift/reduce
-State 38 conflicts: 17 shift/reduce
-State 42 conflicts: 1 shift/reduce
-State 51 conflicts: 2 shift/reduce
-State 52 conflicts: 2 shift/reduce
-State 53 conflicts: 1 shift/reduce
+State 19 conflicts: 2 shift/reduce
+State 25 conflicts: 2 shift/reduce
+State 26 conflicts: 2 shift/reduce
+State 43 conflicts: 2 shift/reduce
+State 44 conflicts: 2 shift/reduce
 
 
 Grammar
 
     0 $accept: main $end
 
-    1 main: chunk
+    1 main: field_list
+    2     | name_list
 
-    2 chunk: chunk chunk
-    3      | var '=' exp
-    4      | RETURN exp
-    5      | exp
-    6      | function
-    7      | function_call
+    3 name_list: name_list ',' NAME
+    4          | NAME ',' NAME
+    5          | NAME
 
-    8 function_call: NAME all_args
+    6 field_list: field_list field_sep
+    7           | field_list field_sep field
+    8           | field field_sep field
+    9           | field
+   10           | field field_sep
 
-    9 function: FUNCTION NAME simple_args chunk END
-   10         | FUNCTION NAME simple_args END
+   11 field: '[' exp ']' '=' exp
+   12      | NAME '=' exp
+   13      | exp
 
-   11 simple_args: '(' simple_args_part ')'
-   12            | '(' NAME ')'
+   14 field_sep: ','
+   15          | ';'
 
-   13 simple_args_part: simple_args_part ',' NAME
-   14                 | NAME ',' NAME
+   16 exp: NIL
+   17    | FALSE
+   18    | TRUE
+   19    | DOTS
+   20    | exp BINOP exp
+   21    | exp MINUS exp
+   22    | UNOP exp
+   23    | MINUS exp
+   24    | numeral
+   25    | literalString
 
-   15 all_args: '(' all_args_part ')'
-   16         | '(' exp ')'
+   26 literalString: ONEQSTRING
+   27              | TWOQSTRING
+   28              | LONGSTRING
 
-   17 all_args_part: simple_args_part ',' exp
-   18              | exp ',' exp
-
-   19 exp: NIL
-   20    | FALSE
-   21    | TRUE
-   22    | DOTS
-   23    | '(' exp ')'
-   24    | exp BINOP exp
-   25    | exp MINUS exp
-   26    | UNOP exp
-   27    | MINUS exp
-   28    | numeral
-   29    | literalString
-   30    | var
-
-   31 var: NAME
-   32    | NAME '.' NAME
-   33    | NAME '[' exp ']'
-
-   34 literalString: ONEQSTRING
-   35              | TWOQSTRING
-   36              | LONGSTRING
-
-   37 numeral: INT
-   38        | HEX
-   39        | FLOAT
-   40        | HEX_FLOAT
+   29 numeral: INT
+   30        | HEX
+   31        | FLOAT
+   32        | HEX_FLOAT
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 11 12 15 16 23
-')' (41) 11 12 15 16 23
-',' (44) 13 14 17 18
-'.' (46) 32
-'=' (61) 3
-'[' (91) 33
-']' (93) 33
+',' (44) 3 4 14
+';' (59) 15
+'=' (61) 11 12
+'[' (91) 11
+']' (93) 11
+'{' (123)
+'}' (125)
 error (256)
-INT (258) 37
-HEX (259) 38
-FLOAT (260) 39
-HEX_FLOAT (261) 40
+INT (258) 29
+HEX (259) 30
+FLOAT (260) 31
+HEX_FLOAT (261) 32
 TWOQ (262)
 ONEQ (263)
-ONEQSTRING (264) 34
-TWOQSTRING (265) 35
-LONGSTRING (266) 36
+ONEQSTRING (264) 26
+TWOQSTRING (265) 27
+LONGSTRING (266) 28
 NESTED_STR (267)
-NAME (268) 8 9 10 12 13 14 31 32 33
-DOTS (269) 22
-NIL (270) 19
-FALSE (271) 20
-TRUE (272) 21
-BINOP (273) 24
-UNOP (274) 26
-MINUS (275) 25 27
-DO (276)
-WHILE (277)
-FOR (278)
-UNTIL (279)
-REPEAT (280)
-END (281) 9 10
-IF (282)
-THEN (283)
-ELSEIF (284)
-ELSE (285)
-LOCAL (286)
-FUNCTION (287) 9 10
-BREAK (288)
-RETURN (289) 4
+NAME (268) 3 4 5 12
+DOTS (269) 19
+NIL (270) 16
+FALSE (271) 17
+TRUE (272) 18
+BINOP (273) 20
+UNOP (274) 22
+MINUS (275) 21 23
+ASSIGN (276)
+DO (277)
+WHILE (278)
+FOR (279)
+UNTIL (280)
+REPEAT (281)
+END (282)
+IF (283)
+THEN (284)
+ELSEIF (285)
+ELSE (286)
+LOCAL (287)
+FUNCTION (288)
+BREAK (289)
+RETURN (290)
 
 
 Nonterminals, with rules where they appear
 
-$accept (42)
+$accept (43)
     on left: 0
-main (43)
-    on left: 1, on right: 0
-chunk (44)
-    on left: 2 3 4 5 6 7, on right: 1 2 9
-function_call (45)
-    on left: 8, on right: 7
-function (46)
-    on left: 9 10, on right: 6
-simple_args (47)
-    on left: 11 12, on right: 9 10
-simple_args_part (48)
-    on left: 13 14, on right: 11 13 17
-all_args (49)
-    on left: 15 16, on right: 8
-all_args_part (50)
-    on left: 17 18, on right: 15
-exp (51)
-    on left: 19 20 21 22 23 24 25 26 27 28 29 30, on right: 3 4 5 16
-    17 18 23 24 25 26 27 33
-var (52)
-    on left: 31 32 33, on right: 3 30
-literalString (53)
-    on left: 34 35 36, on right: 29
-numeral (54)
-    on left: 37 38 39 40, on right: 28
+main (44)
+    on left: 1 2, on right: 0
+name_list (45)
+    on left: 3 4 5, on right: 2 3
+field_list (46)
+    on left: 6 7 8 9 10, on right: 1 6 7
+field (47)
+    on left: 11 12 13, on right: 7 8 9 10
+field_sep (48)
+    on left: 14 15, on right: 6 7 8 10
+exp (49)
+    on left: 16 17 18 19 20 21 22 23 24 25, on right: 11 12 13 20 21
+    22 23
+literalString (50)
+    on left: 26 27 28, on right: 25
+numeral (51)
+    on left: 29 30 31 32, on right: 24
 
 
 State 0
@@ -190,117 +173,110 @@ State 0
     TRUE        shift, and go to state 12
     UNOP        shift, and go to state 13
     MINUS       shift, and go to state 14
-    FUNCTION    shift, and go to state 15
-    RETURN      shift, and go to state 16
-    '('         shift, and go to state 17
+    '['         shift, and go to state 15
 
-    main           go to state 18
-    chunk          go to state 19
-    function_call  go to state 20
-    function       go to state 21
-    exp            go to state 22
-    var            go to state 23
-    literalString  go to state 24
-    numeral        go to state 25
+    main           go to state 16
+    name_list      go to state 17
+    field_list     go to state 18
+    field          go to state 19
+    exp            go to state 20
+    literalString  go to state 21
+    numeral        go to state 22
 
 
 State 1
 
-   37 numeral: INT .
+   29 numeral: INT .
 
-    $default  reduce using rule 37 (numeral)
+    $default  reduce using rule 29 (numeral)
 
 
 State 2
 
-   38 numeral: HEX .
+   30 numeral: HEX .
 
-    $default  reduce using rule 38 (numeral)
+    $default  reduce using rule 30 (numeral)
 
 
 State 3
 
-   39 numeral: FLOAT .
+   31 numeral: FLOAT .
 
-    $default  reduce using rule 39 (numeral)
+    $default  reduce using rule 31 (numeral)
 
 
 State 4
 
-   40 numeral: HEX_FLOAT .
+   32 numeral: HEX_FLOAT .
 
-    $default  reduce using rule 40 (numeral)
+    $default  reduce using rule 32 (numeral)
 
 
 State 5
 
-   34 literalString: ONEQSTRING .
+   26 literalString: ONEQSTRING .
 
-    $default  reduce using rule 34 (literalString)
+    $default  reduce using rule 26 (literalString)
 
 
 State 6
 
-   35 literalString: TWOQSTRING .
+   27 literalString: TWOQSTRING .
 
-    $default  reduce using rule 35 (literalString)
+    $default  reduce using rule 27 (literalString)
 
 
 State 7
 
-   36 literalString: LONGSTRING .
+   28 literalString: LONGSTRING .
 
-    $default  reduce using rule 36 (literalString)
+    $default  reduce using rule 28 (literalString)
 
 
 State 8
 
-    8 function_call: NAME . all_args
-   31 var: NAME .
-   32    | NAME . '.' NAME
-   33    | NAME . '[' exp ']'
+    4 name_list: NAME . ',' NAME
+    5          | NAME .
+   12 field: NAME . '=' exp
 
-    '('  shift, and go to state 26
-    '.'  shift, and go to state 27
-    '['  shift, and go to state 28
+    ','  shift, and go to state 23
+    '='  shift, and go to state 24
 
-    '('       [reduce using rule 31 (var)]
-    $default  reduce using rule 31 (var)
-
-    all_args  go to state 29
+    ','       [reduce using rule 5 (name_list)]
+    $default  reduce using rule 5 (name_list)
 
 
 State 9
 
-   22 exp: DOTS .
-
-    $default  reduce using rule 22 (exp)
-
-
-State 10
-
-   19 exp: NIL .
+   19 exp: DOTS .
 
     $default  reduce using rule 19 (exp)
 
 
+State 10
+
+   16 exp: NIL .
+
+    $default  reduce using rule 16 (exp)
+
+
 State 11
 
-   20 exp: FALSE .
+   17 exp: FALSE .
 
-    $default  reduce using rule 20 (exp)
+    $default  reduce using rule 17 (exp)
 
 
 State 12
 
-   21 exp: TRUE .
+   18 exp: TRUE .
 
-    $default  reduce using rule 21 (exp)
+    $default  reduce using rule 18 (exp)
 
 
 State 13
 
-   26 exp: UNOP . exp
+   22 exp: UNOP . exp
 
     INT         shift, and go to state 1
     HEX         shift, and go to state 2
@@ -309,24 +285,21 @@ State 13
     ONEQSTRING  shift, and go to state 5
     TWOQSTRING  shift, and go to state 6
     LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
     DOTS        shift, and go to state 9
     NIL         shift, and go to state 10
     FALSE       shift, and go to state 11
     TRUE        shift, and go to state 12
     UNOP        shift, and go to state 13
     MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
 
-    exp            go to state 31
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
+    exp            go to state 25
+    literalString  go to state 21
+    numeral        go to state 22
 
 
 State 14
 
-   27 exp: MINUS . exp
+   23 exp: MINUS . exp
 
     INT         shift, and go to state 1
     HEX         shift, and go to state 2
@@ -335,334 +308,215 @@ State 14
     ONEQSTRING  shift, and go to state 5
     TWOQSTRING  shift, and go to state 6
     LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
     DOTS        shift, and go to state 9
     NIL         shift, and go to state 10
     FALSE       shift, and go to state 11
     TRUE        shift, and go to state 12
     UNOP        shift, and go to state 13
     MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
 
-    exp            go to state 33
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
+    exp            go to state 26
+    literalString  go to state 21
+    numeral        go to state 22
 
 
 State 15
 
-    9 function: FUNCTION . NAME simple_args chunk END
-   10         | FUNCTION . NAME simple_args END
+   11 field: '[' . exp ']' '=' exp
 
-    NAME  shift, and go to state 34
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+
+    exp            go to state 27
+    literalString  go to state 21
+    numeral        go to state 22
 
 
 State 16
 
-    4 chunk: RETURN . exp
+    0 $accept: main . $end
 
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
-
-    exp            go to state 35
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
+    $end  shift, and go to state 28
 
 
 State 17
 
-   23 exp: '(' . exp ')'
+    2 main: name_list .
+    3 name_list: name_list . ',' NAME
 
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
+    ','  shift, and go to state 29
 
-    exp            go to state 36
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
+    $default  reduce using rule 2 (main)
 
 
 State 18
 
-    0 $accept: main . $end
+    1 main: field_list .
+    6 field_list: field_list . field_sep
+    7           | field_list . field_sep field
 
-    $end  shift, and go to state 37
+    ','  shift, and go to state 30
+    ';'  shift, and go to state 31
+
+    $default  reduce using rule 1 (main)
+
+    field_sep  go to state 32
 
 
 State 19
 
-    1 main: chunk .
-    2 chunk: chunk . chunk
+    8 field_list: field . field_sep field
+    9           | field .
+   10           | field . field_sep
 
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 8
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    FUNCTION    shift, and go to state 15
-    RETURN      shift, and go to state 16
-    '('         shift, and go to state 17
+    ','  shift, and go to state 30
+    ';'  shift, and go to state 31
 
-    $default  reduce using rule 1 (main)
+    ','       [reduce using rule 9 (field_list)]
+    ';'       [reduce using rule 9 (field_list)]
+    $default  reduce using rule 9 (field_list)
 
-    chunk          go to state 38
-    function_call  go to state 20
-    function       go to state 21
-    exp            go to state 22
-    var            go to state 23
-    literalString  go to state 24
-    numeral        go to state 25
+    field_sep  go to state 33
 
 
 State 20
 
-    7 chunk: function_call .
+   13 field: exp .
+   20 exp: exp . BINOP exp
+   21    | exp . MINUS exp
 
-    $default  reduce using rule 7 (chunk)
+    BINOP  shift, and go to state 34
+    MINUS  shift, and go to state 35
+
+    $default  reduce using rule 13 (field)
 
 
 State 21
 
-    6 chunk: function .
+   25 exp: literalString .
 
-    $default  reduce using rule 6 (chunk)
+    $default  reduce using rule 25 (exp)
 
 
 State 22
 
-    5 chunk: exp .
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
+   24 exp: numeral .
 
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    MINUS     [reduce using rule 5 (chunk)]
-    $default  reduce using rule 5 (chunk)
+    $default  reduce using rule 24 (exp)
 
 
 State 23
 
-    3 chunk: var . '=' exp
-   30 exp: var .
+    4 name_list: NAME ',' . NAME
 
-    '='  shift, and go to state 41
-
-    $default  reduce using rule 30 (exp)
+    NAME  shift, and go to state 36
 
 
 State 24
 
-   29 exp: literalString .
+   12 field: NAME '=' . exp
 
-    $default  reduce using rule 29 (exp)
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+
+    exp            go to state 37
+    literalString  go to state 21
+    numeral        go to state 22
 
 
 State 25
 
-   28 exp: numeral .
+   20 exp: exp . BINOP exp
+   21    | exp . MINUS exp
+   22    | UNOP exp .
 
-    $default  reduce using rule 28 (exp)
+    BINOP  shift, and go to state 34
+    MINUS  shift, and go to state 35
+
+    BINOP     [reduce using rule 22 (exp)]
+    MINUS     [reduce using rule 22 (exp)]
+    $default  reduce using rule 22 (exp)
 
 
 State 26
 
-   15 all_args: '(' . all_args_part ')'
-   16         | '(' . exp ')'
+   20 exp: exp . BINOP exp
+   21    | exp . MINUS exp
+   23    | MINUS exp .
 
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 42
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
+    BINOP  shift, and go to state 34
+    MINUS  shift, and go to state 35
 
-    simple_args_part  go to state 43
-    all_args_part     go to state 44
-    exp               go to state 45
-    var               go to state 32
-    literalString     go to state 24
-    numeral           go to state 25
+    BINOP     [reduce using rule 23 (exp)]
+    MINUS     [reduce using rule 23 (exp)]
+    $default  reduce using rule 23 (exp)
 
 
 State 27
 
-   32 var: NAME '.' . NAME
+   11 field: '[' exp . ']' '=' exp
+   20 exp: exp . BINOP exp
+   21    | exp . MINUS exp
 
-    NAME  shift, and go to state 46
+    BINOP  shift, and go to state 34
+    MINUS  shift, and go to state 35
+    ']'    shift, and go to state 38
 
 
 State 28
-
-   33 var: NAME '[' . exp ']'
-
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
-
-    exp            go to state 47
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
-
-
-State 29
-
-    8 function_call: NAME all_args .
-
-    $default  reduce using rule 8 (function_call)
-
-
-State 30
-
-   31 var: NAME .
-   32    | NAME . '.' NAME
-   33    | NAME . '[' exp ']'
-
-    '.'  shift, and go to state 27
-    '['  shift, and go to state 28
-
-    $default  reduce using rule 31 (var)
-
-
-State 31
-
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
-   26    | UNOP exp .
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    BINOP     [reduce using rule 26 (exp)]
-    MINUS     [reduce using rule 26 (exp)]
-    $default  reduce using rule 26 (exp)
-
-
-State 32
-
-   30 exp: var .
-
-    $default  reduce using rule 30 (exp)
-
-
-State 33
-
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
-   27    | MINUS exp .
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    BINOP     [reduce using rule 27 (exp)]
-    MINUS     [reduce using rule 27 (exp)]
-    $default  reduce using rule 27 (exp)
-
-
-State 34
-
-    9 function: FUNCTION NAME . simple_args chunk END
-   10         | FUNCTION NAME . simple_args END
-
-    '('  shift, and go to state 48
-
-    simple_args  go to state 49
-
-
-State 35
-
-    4 chunk: RETURN exp .
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    MINUS     [reduce using rule 4 (chunk)]
-    $default  reduce using rule 4 (chunk)
-
-
-State 36
-
-   23 exp: '(' exp . ')'
-   24    | exp . BINOP exp
-   25    | exp . MINUS exp
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-    ')'    shift, and go to state 50
-
-
-State 37
 
     0 $accept: main $end .
 
     $default  accept
 
 
-State 38
+State 29
 
-    2 chunk: chunk . chunk
-    2      | chunk chunk .
+    3 name_list: name_list ',' . NAME
+
+    NAME  shift, and go to state 39
+
+
+State 30
+
+   14 field_sep: ',' .
+
+    $default  reduce using rule 14 (field_sep)
+
+
+State 31
+
+   15 field_sep: ';' .
+
+    $default  reduce using rule 15 (field_sep)
+
+
+State 32
+
+    6 field_list: field_list field_sep .
+    7           | field_list field_sep . field
 
     INT         shift, and go to state 1
     HEX         shift, and go to state 2
@@ -671,489 +525,210 @@ State 38
     ONEQSTRING  shift, and go to state 5
     TWOQSTRING  shift, and go to state 6
     LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 8
+    NAME        shift, and go to state 40
     DOTS        shift, and go to state 9
     NIL         shift, and go to state 10
     FALSE       shift, and go to state 11
     TRUE        shift, and go to state 12
     UNOP        shift, and go to state 13
     MINUS       shift, and go to state 14
-    FUNCTION    shift, and go to state 15
-    RETURN      shift, and go to state 16
-    '('         shift, and go to state 17
+    '['         shift, and go to state 15
 
-    INT         [reduce using rule 2 (chunk)]
-    HEX         [reduce using rule 2 (chunk)]
-    FLOAT       [reduce using rule 2 (chunk)]
-    HEX_FLOAT   [reduce using rule 2 (chunk)]
-    ONEQSTRING  [reduce using rule 2 (chunk)]
-    TWOQSTRING  [reduce using rule 2 (chunk)]
-    LONGSTRING  [reduce using rule 2 (chunk)]
-    NAME        [reduce using rule 2 (chunk)]
-    DOTS        [reduce using rule 2 (chunk)]
-    NIL         [reduce using rule 2 (chunk)]
-    FALSE       [reduce using rule 2 (chunk)]
-    TRUE        [reduce using rule 2 (chunk)]
-    UNOP        [reduce using rule 2 (chunk)]
-    MINUS       [reduce using rule 2 (chunk)]
-    FUNCTION    [reduce using rule 2 (chunk)]
-    RETURN      [reduce using rule 2 (chunk)]
-    '('         [reduce using rule 2 (chunk)]
-    $default    reduce using rule 2 (chunk)
+    $default  reduce using rule 6 (field_list)
 
-    chunk          go to state 38
-    function_call  go to state 20
-    function       go to state 21
-    exp            go to state 22
-    var            go to state 23
-    literalString  go to state 24
-    numeral        go to state 25
+    field          go to state 41
+    exp            go to state 20
+    literalString  go to state 21
+    numeral        go to state 22
+
+
+State 33
+
+    8 field_list: field field_sep . field
+   10           | field field_sep .
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    NAME        shift, and go to state 40
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+    '['         shift, and go to state 15
+
+    $default  reduce using rule 10 (field_list)
+
+    field          go to state 42
+    exp            go to state 20
+    literalString  go to state 21
+    numeral        go to state 22
+
+
+State 34
+
+   20 exp: exp BINOP . exp
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+
+    exp            go to state 43
+    literalString  go to state 21
+    numeral        go to state 22
+
+
+State 35
+
+   21 exp: exp MINUS . exp
+
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+
+    exp            go to state 44
+    literalString  go to state 21
+    numeral        go to state 22
+
+
+State 36
+
+    4 name_list: NAME ',' NAME .
+
+    $default  reduce using rule 4 (name_list)
+
+
+State 37
+
+   12 field: NAME '=' exp .
+   20 exp: exp . BINOP exp
+   21    | exp . MINUS exp
+
+    BINOP  shift, and go to state 34
+    MINUS  shift, and go to state 35
+
+    $default  reduce using rule 12 (field)
+
+
+State 38
+
+   11 field: '[' exp ']' . '=' exp
+
+    '='  shift, and go to state 45
 
 
 State 39
 
-   24 exp: exp BINOP . exp
+    3 name_list: name_list ',' NAME .
 
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
-
-    exp            go to state 51
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
+    $default  reduce using rule 3 (name_list)
 
 
 State 40
 
-   25 exp: exp MINUS . exp
+   12 field: NAME . '=' exp
 
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
-
-    exp            go to state 52
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
+    '='  shift, and go to state 24
 
 
 State 41
 
-    3 chunk: var '=' . exp
+    7 field_list: field_list field_sep field .
 
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
-
-    exp            go to state 53
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
+    $default  reduce using rule 7 (field_list)
 
 
 State 42
 
-   14 simple_args_part: NAME . ',' NAME
-   31 var: NAME .
-   32    | NAME . '.' NAME
-   33    | NAME . '[' exp ']'
+    8 field_list: field field_sep field .
 
-    ','  shift, and go to state 54
-    '.'  shift, and go to state 27
-    '['  shift, and go to state 28
-
-    ','       [reduce using rule 31 (var)]
-    $default  reduce using rule 31 (var)
+    $default  reduce using rule 8 (field_list)
 
 
 State 43
 
-   13 simple_args_part: simple_args_part . ',' NAME
-   17 all_args_part: simple_args_part . ',' exp
+   20 exp: exp . BINOP exp
+   20    | exp BINOP exp .
+   21    | exp . MINUS exp
 
-    ','  shift, and go to state 55
+    BINOP  shift, and go to state 34
+    MINUS  shift, and go to state 35
+
+    BINOP     [reduce using rule 20 (exp)]
+    MINUS     [reduce using rule 20 (exp)]
+    $default  reduce using rule 20 (exp)
 
 
 State 44
 
-   15 all_args: '(' all_args_part . ')'
+   20 exp: exp . BINOP exp
+   21    | exp . MINUS exp
+   21    | exp MINUS exp .
 
-    ')'  shift, and go to state 56
+    BINOP  shift, and go to state 34
+    MINUS  shift, and go to state 35
+
+    BINOP     [reduce using rule 21 (exp)]
+    MINUS     [reduce using rule 21 (exp)]
+    $default  reduce using rule 21 (exp)
 
 
 State 45
 
-   16 all_args: '(' exp . ')'
-   18 all_args_part: exp . ',' exp
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
+   11 field: '[' exp ']' '=' . exp
 
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-    ')'    shift, and go to state 57
-    ','    shift, and go to state 58
+    INT         shift, and go to state 1
+    HEX         shift, and go to state 2
+    FLOAT       shift, and go to state 3
+    HEX_FLOAT   shift, and go to state 4
+    ONEQSTRING  shift, and go to state 5
+    TWOQSTRING  shift, and go to state 6
+    LONGSTRING  shift, and go to state 7
+    DOTS        shift, and go to state 9
+    NIL         shift, and go to state 10
+    FALSE       shift, and go to state 11
+    TRUE        shift, and go to state 12
+    UNOP        shift, and go to state 13
+    MINUS       shift, and go to state 14
+
+    exp            go to state 46
+    literalString  go to state 21
+    numeral        go to state 22
 
 
 State 46
 
-   32 var: NAME '.' NAME .
+   11 field: '[' exp ']' '=' exp .
+   20 exp: exp . BINOP exp
+   21    | exp . MINUS exp
 
-    $default  reduce using rule 32 (var)
+    BINOP  shift, and go to state 34
+    MINUS  shift, and go to state 35
 
-
-State 47
-
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
-   33 var: NAME '[' exp . ']'
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-    ']'    shift, and go to state 59
-
-
-State 48
-
-   11 simple_args: '(' . simple_args_part ')'
-   12            | '(' . NAME ')'
-
-    NAME  shift, and go to state 60
-
-    simple_args_part  go to state 61
-
-
-State 49
-
-    9 function: FUNCTION NAME simple_args . chunk END
-   10         | FUNCTION NAME simple_args . END
-
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 8
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    END         shift, and go to state 62
-    FUNCTION    shift, and go to state 15
-    RETURN      shift, and go to state 16
-    '('         shift, and go to state 17
-
-    chunk          go to state 63
-    function_call  go to state 20
-    function       go to state 21
-    exp            go to state 22
-    var            go to state 23
-    literalString  go to state 24
-    numeral        go to state 25
-
-
-State 50
-
-   23 exp: '(' exp ')' .
-
-    $default  reduce using rule 23 (exp)
-
-
-State 51
-
-   24 exp: exp . BINOP exp
-   24    | exp BINOP exp .
-   25    | exp . MINUS exp
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    BINOP     [reduce using rule 24 (exp)]
-    MINUS     [reduce using rule 24 (exp)]
-    $default  reduce using rule 24 (exp)
-
-
-State 52
-
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
-   25    | exp MINUS exp .
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    BINOP     [reduce using rule 25 (exp)]
-    MINUS     [reduce using rule 25 (exp)]
-    $default  reduce using rule 25 (exp)
-
-
-State 53
-
-    3 chunk: var '=' exp .
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    MINUS     [reduce using rule 3 (chunk)]
-    $default  reduce using rule 3 (chunk)
-
-
-State 54
-
-   14 simple_args_part: NAME ',' . NAME
-
-    NAME  shift, and go to state 64
-
-
-State 55
-
-   13 simple_args_part: simple_args_part ',' . NAME
-   17 all_args_part: simple_args_part ',' . exp
-
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 65
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
-
-    exp            go to state 66
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
-
-
-State 56
-
-   15 all_args: '(' all_args_part ')' .
-
-    $default  reduce using rule 15 (all_args)
-
-
-State 57
-
-   16 all_args: '(' exp ')' .
-
-    $default  reduce using rule 16 (all_args)
-
-
-State 58
-
-   18 all_args_part: exp ',' . exp
-
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 30
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    '('         shift, and go to state 17
-
-    exp            go to state 67
-    var            go to state 32
-    literalString  go to state 24
-    numeral        go to state 25
-
-
-State 59
-
-   33 var: NAME '[' exp ']' .
-
-    $default  reduce using rule 33 (var)
-
-
-State 60
-
-   12 simple_args: '(' NAME . ')'
-   14 simple_args_part: NAME . ',' NAME
-
-    ')'  shift, and go to state 68
-    ','  shift, and go to state 54
-
-
-State 61
-
-   11 simple_args: '(' simple_args_part . ')'
-   13 simple_args_part: simple_args_part . ',' NAME
-
-    ')'  shift, and go to state 69
-    ','  shift, and go to state 70
-
-
-State 62
-
-   10 function: FUNCTION NAME simple_args END .
-
-    $default  reduce using rule 10 (function)
-
-
-State 63
-
-    2 chunk: chunk . chunk
-    9 function: FUNCTION NAME simple_args chunk . END
-
-    INT         shift, and go to state 1
-    HEX         shift, and go to state 2
-    FLOAT       shift, and go to state 3
-    HEX_FLOAT   shift, and go to state 4
-    ONEQSTRING  shift, and go to state 5
-    TWOQSTRING  shift, and go to state 6
-    LONGSTRING  shift, and go to state 7
-    NAME        shift, and go to state 8
-    DOTS        shift, and go to state 9
-    NIL         shift, and go to state 10
-    FALSE       shift, and go to state 11
-    TRUE        shift, and go to state 12
-    UNOP        shift, and go to state 13
-    MINUS       shift, and go to state 14
-    END         shift, and go to state 71
-    FUNCTION    shift, and go to state 15
-    RETURN      shift, and go to state 16
-    '('         shift, and go to state 17
-
-    chunk          go to state 38
-    function_call  go to state 20
-    function       go to state 21
-    exp            go to state 22
-    var            go to state 23
-    literalString  go to state 24
-    numeral        go to state 25
-
-
-State 64
-
-   14 simple_args_part: NAME ',' NAME .
-
-    $default  reduce using rule 14 (simple_args_part)
-
-
-State 65
-
-   13 simple_args_part: simple_args_part ',' NAME .
-   31 var: NAME .
-   32    | NAME . '.' NAME
-   33    | NAME . '[' exp ']'
-
-    '.'  shift, and go to state 27
-    '['  shift, and go to state 28
-
-    ','       reduce using rule 13 (simple_args_part)
-    $default  reduce using rule 31 (var)
-
-
-State 66
-
-   17 all_args_part: simple_args_part ',' exp .
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    $default  reduce using rule 17 (all_args_part)
-
-
-State 67
-
-   18 all_args_part: exp ',' exp .
-   24 exp: exp . BINOP exp
-   25    | exp . MINUS exp
-
-    BINOP  shift, and go to state 39
-    MINUS  shift, and go to state 40
-
-    $default  reduce using rule 18 (all_args_part)
-
-
-State 68
-
-   12 simple_args: '(' NAME ')' .
-
-    $default  reduce using rule 12 (simple_args)
-
-
-State 69
-
-   11 simple_args: '(' simple_args_part ')' .
-
-    $default  reduce using rule 11 (simple_args)
-
-
-State 70
-
-   13 simple_args_part: simple_args_part ',' . NAME
-
-    NAME  shift, and go to state 72
-
-
-State 71
-
-    9 function: FUNCTION NAME simple_args chunk END .
-
-    $default  reduce using rule 9 (function)
-
-
-State 72
-
-   13 simple_args_part: simple_args_part ',' NAME .
-
-    $default  reduce using rule 13 (simple_args_part)
+    $default  reduce using rule 11 (field)

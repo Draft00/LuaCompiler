@@ -6,7 +6,7 @@
 #include <stdarg.h> //va_list
 
 #define noyywrap
-//#define DEBUG
+#define DEBUG
 
 #define YY_USER_ACTION \
 yylloc.first_line = yylloc.last_line; \
@@ -51,7 +51,7 @@ int right_side = 0;
 %}
 
 %option noyywrap yylineno
-%x NESTEDSTR1, MANYLINESCOMMENT
+%x NESTEDSTR1 MANYLINESCOMMENT
 
 Digit					[0-9]
 HexDigit				[0-9a-fA-F]
@@ -78,8 +78,10 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "."						{ DEBUGPRINT("\nLex: DOT: %s", yytext); 		return *yytext; }
 
 
-"..."					{ DEBUGPRINT("\nLex: DOTS: %s", yytext);        return DOTS; } /* Args */
+"..."					{ DEBUGPRINT("\nLex: DOTS: %s", yytext);        return DOTS; } /* Args and separators */
 ","						{ DEBUGPRINT("\nLex: COMMA: %s", yytext);       return *yytext; }
+";" 					{ DEBUGPRINT("\nLex: SEMICOLON: %s", yytext);   return *yytext; }
+":" 					{ DEBUGPRINT("\nLex: COLON: %s", yytext);   	return *yytext; }
 
 
 "do"            		{ DEBUGPRINT("\nLex: DO: %s", yytext); 			return DO; }	/* Looping */
@@ -189,8 +191,8 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 														DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext); 
 														BEGIN(INITIAL); 
 														if (right_side == left_side)
-														{ /* ignore */} 
-														else { DEBUGPRINT("\nLex: incorrect many_lines_comment); exit(-20); }
+															{ /* ignore */ } 
+														else { DEBUGPRINT("\nLex: incorrect many_lines_comment"); exit(-20); }
 													}		
 .						{
 							DEBUGPRINT("\nLex: unknown: %s", yytext);
