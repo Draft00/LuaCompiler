@@ -56,7 +56,7 @@ void DEBUGPRINT_BISON(char* format, ...)
 %token LOCAL
 
 /* Functions */
-%token FUNCTION BREAK RETURN
+%token FUNCTION BREAK RETURN LABEL_DEF
 
 
 /* SECTION OF WHAT WE SHOULD TEST */
@@ -73,22 +73,84 @@ void DEBUGPRINT_BISON(char* format, ...)
 %right	EXP
 %left	UMINUS
 */
+%left NAME
+%right '<' '>'
 
 %start main
 
 %%
 /*================ 2. The Grammar Section ================================*/
 
-main: field_list			{ DEBUGPRINT_BISON("\nMAIN: field_list"); }
-	| name_list 			{ DEBUGPRINT_BISON("\nMAIN: name_list"); }
+main: func_call				{ DEBUGPRINT_BISON("\nMAIN: attribute_list"); }
 ;
 
-name_list: name_list ',' NAME 			{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: name_list ',' NAME"); }
-		 | NAME ',' NAME 				{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: NAME ',' NAME"); }
-		 | NAME 						{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: NAME"); }
+var: NAME '.' NAME 		{ DEBUGPRINT_BISON("\nPREFIX_EXP: NAME '.' NAME"); }
+   | var '.' NAME 		{ DEBUGPRINT_BISON("\nPREFIX_EXP: var '.' NAME"); }
+   | var '[' exp ']' 	{ DEBUGPRINT_BISON("\nPREFIX_EXP: var '[' exp ']'"); }
+   | var '[' NAME ']' 	{ DEBUGPRINT_BISON("\nPREFIX_EXP: var '[' NAME ']'"); }
+   | NAME '[' exp ']' 	{ DEBUGPRINT_BISON("\nPREFIX_EXP: NAME '[' exp ']'"); }
+   | NAME '[' NAME ']' 	{ DEBUGPRINT_BISON("\nPREFIX_EXP: NAME '[' exp ']'"); }
+;
+
+func_call: args_call ')' 		{ DEBUGPRINT_BISON("\nFUNC_CALL: args_part ')'"); }
+;
+
+args_call: func_call_part 		{ DEBUGPRINT_BISON("\nARGS_CALL: func_call_part "); }
+		 | args_call ',' exp 	{ DEBUGPRINT_BISON("\nARGS_CALL: args_part ',' exp"); }
+		 | args_call ',' NAME 	{ DEBUGPRINT_BISON("\nARGS_CALL: args_part ',' NAME"); }
+;
+
+
+func_call_part: var '(' 			{ DEBUGPRINT_BISON("\nFUNC_CALL_PART: var '('"); }
+			  | var ':' NAME '(' 	{ DEBUGPRINT_BISON("\nFUNC_CALL_PART: var ':' NAME "); }
+			  | var ':' NAME '(' NAME 	{ DEBUGPRINT_BISON("\nFUNC_CALL_PART: var ':' NAME "); }
+;
+
+
+ret_stat: ret_stat_part 		{ DEBUGPRINT_BISON("\nRET_STAT: ret_stat_part"); }
+		| RETURN 				{ DEBUGPRINT_BISON("\nRET_STAT: RETURN"); }
+;
+
+
+ret_stat_part: ret_stat_part ',' exp  	{ DEBUGPRINT_BISON("\nRET_STAT_PART: ret_stat ',' exp"); }
+			 | ret_stat_part ',' NAME  	{ DEBUGPRINT_BISON("\nRET_STAT_PART: ret_stat ',' NAME"); }
+			 | RETURN exp 				{ DEBUGPRINT_BISON("\nRET_STAT_PART: RETURN exp"); }
+			 | RETURN NAME 				{ DEBUGPRINT_BISON("\nRET_STAT_PART: RETURN exp"); }
+;
+
+
+attribute_list: attribute_list ',' attribute 	{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: attribute_list ',' attribute"); }
+			  | attribute_list ',' NAME 		{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: attribute_list ',' NAME"); }
+			  | attribute 						{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: attribute"); }
+			  | name_list ',' attribute 		{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: name_list ',' attribute"); }
+			  | attribute ',' NAME 				{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: attribute ',' NAME"); }
+;
+
+
+attribute: NAME '<' NAME '>' 	{ DEBUGPRINT_BISON("\nATTRIBUTE: NAME '<' NAME '>'"); }
+		 | NAME '<' '>' 		{ DEBUGPRINT_BISON("\nATTRIBUTE: NAME '<' '>'"); }
+;
+
+
+par_list: name_list				{ DEBUGPRINT_BISON("\nPAR_LIST: name_list"); }
+
+		/* With rule makes ... available only be single or last token*/
+		| name_list ',' DOTS 	{ DEBUGPRINT_BISON("\nPAR_LIST: name_list ',' DOTS"); }
+		| DOTS 					{ DEBUGPRINT_BISON("\nPAR_LIST: DOTS"); }
+;
+
+
+name_list: name_list ',' NAME 	{ DEBUGPRINT_BISON("\nNAME_LIST: name_list ',' name_list"); }
+		 | NAME 				{ DEBUGPRINT_BISON("\nNAME_LIST: NAME"); }
+;
+
 
 body_constructor: '{' field_list '}'	{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: '{' field_list '}'"); }
 				| '{' '}' 				{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: '{' '}'"); }
+;
+
+
+label: LABEL_DEF NAME LABEL_DEF 		{ DEBUGPRINT_BISON("\nLABEL: '::' NAME '::' "); }
 ;
 
 
@@ -113,8 +175,8 @@ field: '[' exp ']' '=' exp 	{ DEBUGPRINT_BISON("\nFIELD: '[' exp ']' '=' exp"); 
 ;
 
 
-field_sep: ','
-		 | ';'
+field_sep: ',' 				{ DEBUGPRINT_BISON("\nFIELD_SEP: ','"); }
+		 | ';' 				{ DEBUGPRINT_BISON("\nFIELD_SEP: ';'"); }
 ;
 
 
@@ -126,8 +188,17 @@ exp:  NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
 	//| '(' exp ')'	{ DEBUGPRINT_BISON("\nEXP: ( exp )"); }
 	| exp BINOP exp { DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
 	| exp MINUS exp { DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
-	| UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }
+	/* Unary and binary */
 	| MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }
+
+	| UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }
+
+	| NAME BINOP exp 	{ DEBUGPRINT_BISON("\nEXP: NAME BINOP exp"); }
+	| exp BINOP NAME 	{ DEBUGPRINT_BISON("\nEXP: exp BINOP NAME"); }
+
+	/* Because '<' NAME '>' is attribute */
+	| exp '<' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
+	| exp '>' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
 
 	| numeral		{ DEBUGPRINT_BISON("\nEXP: numeral"); }
 	| literalString { DEBUGPRINT_BISON("\nEXP: literalString"); }

@@ -78,7 +78,8 @@ extern int yydebug;
      LOCAL = 287,
      FUNCTION = 288,
      BREAK = 289,
-     RETURN = 290
+     RETURN = 290,
+     LABEL_DEF = 291
    };
 #endif
 

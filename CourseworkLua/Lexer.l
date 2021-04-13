@@ -75,6 +75,8 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 
 "["						{ DEBUGPRINT("\nLex: ELEM_BLOCK: %s", yytext); 	return *yytext; } /* Element */
 "]"						{ DEBUGPRINT("\nLex: ELEM_BLOCK: %s", yytext); 	return *yytext; }
+"<" 					{ DEBUGPRINT("\nLex: MORE & ATTR: %s", yytext); return *yytext; }
+">"						{ DEBUGPRINT("\nLex: LESS & ATTR: %s", yytext); return *yytext; }
 "."						{ DEBUGPRINT("\nLex: DOT: %s", yytext); 		return *yytext; }
 
 
@@ -82,6 +84,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 ","						{ DEBUGPRINT("\nLex: COMMA: %s", yytext);       return *yytext; }
 ";" 					{ DEBUGPRINT("\nLex: SEMICOLON: %s", yytext);   return *yytext; }
 ":" 					{ DEBUGPRINT("\nLex: COLON: %s", yytext);   	return *yytext; }
+"::" 					{ DEBUGPRINT("\nLex: LABEL_DFE: %s", yytext);   return LABEL_DEF; }
 
 
 "do"            		{ DEBUGPRINT("\nLex: DO: %s", yytext); 			return DO; }	/* Looping */
@@ -125,9 +128,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 
 
 "=="					{ DEBUGPRINT("\nLex: EQUALS: %s", yytext);      	return BINOP; } /* Logic binary operators */
-"<"						{ DEBUGPRINT("\nLex: LESS: %s", yytext);        	return BINOP; }
 "<="					{ DEBUGPRINT("\nLex: LESS_EQUALS: %s", yytext); 	return BINOP; }
-">"						{ DEBUGPRINT("\nLex: MORE: %s", yytext);        	return BINOP; }
 ">="					{ DEBUGPRINT("\nLex: MORE_EQUALS: %s", yytext); 	return BINOP; }
 "and"					{ DEBUGPRINT("\nLex: AND: %s", yytext); 			return BINOP; }
 "or"					{ DEBUGPRINT("\nLex: OR: %s", yytext); 				return BINOP; }
