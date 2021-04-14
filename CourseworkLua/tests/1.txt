@@ -1,1 +1,1 @@
-Am, ad, bb<Nn>
+comp(t[middle], t[low])

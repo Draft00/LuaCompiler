@@ -236,11 +236,10 @@ function_call: prefix_exp args 				{ DEBUGPRINT_BISON("\nFUNCTION_CALL: prefix_e
 
 
 /* ===> Args block */
-args: '(' ')' 			{ DEBUGPRINT_BISON("\nARGS: '(' ')'"); }
-	| '(' exp_list ')' 	{ DEBUGPRINT_BISON("\nARGS: '(' exp_list ')'"); }
-	| '(' name_list ')' { DEBUGPRINT_BISON("\nARGS: '(' exp_list ')'"); }
-	| table_body 		{ DEBUGPRINT_BISON("\nARGS: '(' name_list ')'"); }
-	| literalString 	{ DEBUGPRINT_BISON("\nARGS: literalString"); }
+args: '(' ')' 				{ DEBUGPRINT_BISON("\nARGS: '(' ')'"); }
+	| '(' exp_list ')' 		{ DEBUGPRINT_BISON("\nARGS: '(' exp_list ')'"); }
+	| table_body 			{ DEBUGPRINT_BISON("\nARGS: '(' name_list ')'"); }
+	| literalString 		{ DEBUGPRINT_BISON("\nARGS: literalString"); }
 ;
 /* <=== Args block */
 
@@ -303,7 +302,9 @@ exp:  NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
 	| FALSE 		{ DEBUGPRINT_BISON("\nEXP: FALSE"); }
 	| TRUE			{ DEBUGPRINT_BISON("\nEXP: TRUE"); }
 	| DOTS			{ DEBUGPRINT_BISON("\nEXP: DOTS"); }
-
+	| NAME 			{ DEBUGPRINT_BISON("\nEXP: NAME"); }
+	
+	| '(' exp ')' 	{ DEBUGPRINT_BISON("\nEXP: '(' exp ')' "); }
 	| exp BINOP exp { DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
 	| exp MINUS exp { DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
 
@@ -321,6 +322,7 @@ exp:  NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
 	| table_body 	{ DEBUGPRINT_BISON("\nEXP: table_body"); }
 
 	| function_def 	{ DEBUGPRINT_BISON("\nEXP: function_def"); }
+	| function_call { DEBUGPRINT_BISON("\nEXP: function_call"); }
 ;
 
 
