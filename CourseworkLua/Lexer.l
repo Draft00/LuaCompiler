@@ -8,6 +8,8 @@
 #define noyywrap
 #define DEBUG
 
+#define fileno _fileno
+
 #define YY_USER_ACTION \
 yylloc.first_line = yylloc.last_line; \
 yylloc.first_column = yylloc.last_column; \
@@ -168,7 +170,22 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 
 "\""([^\\\"]|{EscapeSequence})*"\""					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
 "'"([^\\\']|{EscapeSequence})*"'"					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; }
-"--"(.*|EOF)										{ /* one line comment */}
+
+"--["(=)*"["										{	left_side = strlen(yytext) - 2;
+														DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext);
+														BEGIN(MANYLINESCOMMENT); 
+													}
+<MANYLINESCOMMENT>.									{ DEBUGPRINT("\nLex: In_comment1 %s", yytext);   }
+<MANYLINESCOMMENT>\n								{ DEBUGPRINT("\nLex: In_comment2 %s", yytext);   }
+<MANYLINESCOMMENT>"]"(=)*"]"						{	right_side = strlen(yytext);
+														DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext);
+														BEGIN(INITIAL);
+														if (right_side == left_side)
+														{ /* ignore */ }
+														else { DEBUGPRINT("\nLex: incorrect many_lines_comment"); exit(-20); }  
+													}		
+
+"--"([^[]*|EOF)										{ DEBUGPRINT("\nLex: ONELINE_comment: %s", yytext);/* one line comment */}
 
 "["(=)*"["											{	left_side = strlen(yytext);  
 														DEBUGPRINT("\nLex: LONG_STR count left: %d, %s", left_side, yytext); 
@@ -181,21 +198,6 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 														BEGIN(INITIAL); 
 														if (right_side == left_side) return LONGSTRING;
 													}
-
-
-"--["(=)*"["										{	left_side = strlen(yytext) - 2;  
-														DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); 
-														BEGIN(MANYLINESCOMMENT);
-													}
-<MANYLINESCOMMENT>.									{ }
-<MANYLINESCOMMENT>\n								{ }
-<MANYLINESCOMMENT>"]"(=)*"]"						{	right_side = strlen(yytext);
-														DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext); 
-														BEGIN(INITIAL); 
-														if (right_side == left_side)
-															{ /* ignore */ } 
-														else { DEBUGPRINT("\nLex: incorrect many_lines_comment"); exit(-20); }
-													}		
 .						{
 							DEBUGPRINT("\nLex: unknown: %s", yytext);
 							return yytext[0]; 

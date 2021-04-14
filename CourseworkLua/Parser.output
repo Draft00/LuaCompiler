@@ -6,27 +6,27 @@ Terminals unused in grammar
    ELSE
 
 
-State 0 conflicts: 13 shift/reduce
-State 2 conflicts: 13 shift/reduce
-State 5 conflicts: 13 shift/reduce
-State 16 conflicts: 14 shift/reduce, 4 reduce/reduce
-State 27 conflicts: 1 reduce/reduce
-State 75 conflicts: 4 shift/reduce
-State 76 conflicts: 4 shift/reduce
-State 88 conflicts: 13 shift/reduce
-State 93 conflicts: 13 shift/reduce
-State 118 conflicts: 13 shift/reduce
-State 127 conflicts: 4 shift/reduce
-State 128 conflicts: 4 shift/reduce
-State 130 conflicts: 4 shift/reduce
-State 131 conflicts: 4 shift/reduce
-State 150 conflicts: 13 shift/reduce
-State 156 conflicts: 13 shift/reduce
-State 179 conflicts: 13 shift/reduce
-State 182 conflicts: 13 shift/reduce
+Состояние 0 конфликты: 13 сдвига/вывода
+Состояние 2 конфликты: 13 сдвига/вывода
+Состояние 5 конфликты: 13 сдвига/вывода
+Состояние 16 конфликты: 14 сдвига/вывода, 4 вывода/вывода
+Состояние 27 конфликты: 1 вывода/вывода
+Состояние 75 конфликты: 4 сдвига/вывода
+Состояние 76 конфликты: 4 сдвига/вывода
+Состояние 88 конфликты: 13 сдвига/вывода
+Состояние 93 конфликты: 13 сдвига/вывода
+Состояние 117 конфликты: 13 сдвига/вывода
+Состояние 126 конфликты: 4 сдвига/вывода
+Состояние 127 конфликты: 4 сдвига/вывода
+Состояние 129 конфликты: 4 сдвига/вывода
+Состояние 130 конфликты: 4 сдвига/вывода
+Состояние 147 конфликты: 13 сдвига/вывода
+Состояние 153 конфликты: 13 сдвига/вывода
+Состояние 176 конфликты: 13 сдвига/вывода
+Состояние 179 конфликты: 13 сдвига/вывода
 
 
-Grammar
+Грамматика
 
     0 $accept: main $end
 
@@ -39,7 +39,7 @@ Grammar
     5          | opt_stat
 
     6 opt_stat: stat
-    7         | /* empty */
+    7         | /* пусто */
 
     8 stat: ';'
     9     | var_list '=' exp_list
@@ -76,7 +76,7 @@ Grammar
    33          | NAME attr
 
    34 attr: '<' NAME '>'
-   35     | /* empty */
+   35     | /* пусто */
 
    36 ret: RETURN
    37    | RETURN ';'
@@ -112,96 +112,95 @@ Grammar
 
    58 args: '(' ')'
    59     | '(' exp_list ')'
-   60     | '(' name_list ')'
-   61     | table_body
-   62     | literalString
+   60     | table_body
+   61     | literalString
 
-   63 par_list: name_list
-   64         | name_list ',' DOTS
-   65         | DOTS
+   62 par_list: name_list
+   63         | name_list ',' DOTS
+   64         | DOTS
 
-   66 exp_list: exp_list ',' exp
-   67         | exp
+   65 exp_list: exp_list ',' exp
+   66         | exp
 
-   68 name_list: name_list ',' NAME
-   69          | NAME
+   67 name_list: name_list ',' NAME
+   68          | NAME
 
-   70 table_body: '{' '}'
-   71           | '{' field_list '}'
+   69 table_body: '{' '}'
+   70           | '{' field_list '}'
 
-   72 field_list: field_list_part field_sep
-   73           | field_list_part
+   71 field_list: field_list_part field_sep
+   72           | field_list_part
 
-   74 field_list_part: field_list_part field_sep field
-   75                | field
+   73 field_list_part: field_list_part field_sep field
+   74                | field
 
-   76 field: '[' exp ']' '=' exp
-   77      | NAME '=' exp
-   78      | exp
+   75 field: '[' exp ']' '=' exp
+   76      | NAME '=' exp
+   77      | exp
 
-   79 field_sep: ','
-   80          | ';'
+   78 field_sep: ','
+   79          | ';'
 
-   81 exp: NIL
-   82    | FALSE
-   83    | TRUE
-   84    | DOTS
-   85    | exp BINOP exp
-   86    | exp MINUS exp
-   87    | exp '<' exp
-   88    | exp '>' exp
-   89    | MINUS exp
-   90    | UNOP exp
-   91    | numeral
-   92    | literalString
-   93    | table_body
-   94    | function_def
+   80 exp: NIL
+   81    | FALSE
+   82    | TRUE
+   83    | DOTS
+   84    | exp BINOP exp
+   85    | exp MINUS exp
+   86    | exp '<' exp
+   87    | exp '>' exp
+   88    | MINUS exp
+   89    | UNOP exp
+   90    | numeral
+   91    | literalString
+   92    | table_body
+   93    | function_def
 
-   95 literalString: ONEQSTRING
-   96              | TWOQSTRING
-   97              | LONGSTRING
+   94 literalString: ONEQSTRING
+   95              | TWOQSTRING
+   96              | LONGSTRING
 
-   98 numeral: INT
-   99        | HEX
-  100        | FLOAT
-  101        | HEX_FLOAT
+   97 numeral: INT
+   98        | HEX
+   99        | FLOAT
+  100        | HEX_FLOAT
 
 
-Terminals, with rules where they appear
+Терминальные символы с правилами, в которых они появляются
 
 $end (0) 0
-'(' (40) 52 54 55 58 59 60
-')' (41) 52 54 55 58 59 60
-',' (44) 26 27 32 45 64 66 68 79
+'(' (40) 52 54 55 58 59
+')' (41) 52 54 55 58 59
+',' (44) 26 27 32 45 63 65 67 78
 '.' (46) 43 49
 ':' (58) 42 57
-';' (59) 8 37 39 80
-'<' (60) 34 87
-'=' (61) 9 24 25 76 77
-'>' (62) 34 88
-'[' (91) 48 76
-']' (93) 48 76
-'{' (123) 70 71
-'}' (125) 70 71
+';' (59) 8 37 39 79
+'<' (60) 34 86
+'=' (61) 9 24 25 75 76
+'>' (62) 34 87
+'[' (91) 48 75
+']' (93) 48 75
+'{' (123) 69 70
+'}' (125) 69 70
 error (256)
-INT (258) 98
-HEX (259) 99
-FLOAT (260) 100
-HEX_FLOAT (261) 101
+INT (258) 97
+HEX (259) 98
+FLOAT (260) 99
+HEX_FLOAT (261) 100
 TWOQ (262)
 ONEQ (263)
-ONEQSTRING (264) 95
-TWOQSTRING (265) 96
-LONGSTRING (266) 97
+ONEQSTRING (264) 94
+TWOQSTRING (265) 95
+LONGSTRING (266) 96
 NESTED_STR (267)
-NAME (268) 13 22 25 32 33 34 40 42 43 44 47 49 57 68 69 77
-DOTS (269) 64 65 84
-NIL (270) 81
-FALSE (271) 82
-TRUE (272) 83
-BINOP (273) 85
-UNOP (274) 90
-MINUS (275) 86 89
+NAME (268) 13 22 25 32 33 34 40 42 43 44 47 49 57 67 68 76
+DOTS (269) 63 64 83
+NIL (270) 80
+FALSE (271) 81
+TRUE (272) 82
+BINOP (273) 84
+UNOP (274) 89
+MINUS (275) 85 88
 DO (276) 19 20 25
 WHILE (277) 20
 FOR (278) 25
@@ -220,2714 +219,2688 @@ RETURN (290) 36 37 38 39
 LABEL_DEF (291) 40
 
 
-Nonterminals, with rules where they appear
+Нетерминальные символы с правилами, в которых они появляются
 
 $accept (50)
-    on left: 0
+    налево: 0
 main (51)
-    on left: 1, on right: 0
+    налево: 1, направо: 0
 block (52)
-    on left: 2 3, on right: 1 19 20 21 25 28 29 30 31 54 55
+    налево: 2 3, направо: 1 19 20 21 25 28 29 30 31 54 55
 stat_list (53)
-    on left: 4 5, on right: 2 3 4
+    налево: 4 5, направо: 2 3 4
 opt_stat (54)
-    on left: 6 7, on right: 4 5
+    налево: 6 7, направо: 4 5
 stat (55)
-    on left: 8 9 10 11 12 13 14 15 16 17 18, on right: 6
+    налево: 8 9 10 11 12 13 14 15 16 17 18, направо: 6
 while_do (56)
-    on left: 19 20 21, on right: 14
+    налево: 19 20 21, направо: 14
 locals (57)
-    on left: 22 23 24, on right: 18
+    налево: 22 23 24, направо: 18
 for_cycle (58)
-    on left: 25, on right: 16
+    налево: 25, направо: 16
 cycle_exp_list (59)
-    on left: 26 27, on right: 25 26
+    налево: 26 27, направо: 25 26
 statement (60)
-    on left: 28 29, on right: 15
+    налево: 28 29, направо: 15
 else_if (61)
-    on left: 30 31, on right: 29 30
+    налево: 30 31, направо: 29 30
 attr_list (62)
-    on left: 32 33, on right: 23 24 32
+    налево: 32 33, направо: 23 24 32
 attr (63)
-    on left: 34 35, on right: 32 33
+    налево: 34 35, направо: 32 33
 ret (64)
-    on left: 36 37 38 39, on right: 3
+    налево: 36 37 38 39, направо: 3
 label (65)
-    on left: 40, on right: 11
+    налево: 40, направо: 11
 function_name (66)
-    on left: 41 42, on right: 17
+    налево: 41 42, направо: 17
 function_name_part (67)
-    on left: 43 44, on right: 41 42 43
+    налево: 43 44, направо: 41 42 43
 var_list (68)
-    on left: 45 46, on right: 9 45
+    налево: 45 46, направо: 9 45
 var (69)
-    on left: 47 48 49, on right: 45 46 50
+    налево: 47 48 49, направо: 45 46 50
 prefix_exp (70)
-    on left: 50 51 52, on right: 48 49 56 57
+    налево: 50 51 52, направо: 48 49 56 57
 function_def (71)
-    on left: 53, on right: 94
+    налево: 53, направо: 93
 function_body (72)
-    on left: 54 55, on right: 17 22 53
+    налево: 54 55, направо: 17 22 53
 function_call (73)
-    on left: 56 57, on right: 10 51
+    налево: 56 57, направо: 10 51
 args (74)
-    on left: 58 59 60 61 62, on right: 56 57
+    налево: 58 59 60 61, направо: 56 57
 par_list (75)
-    on left: 63 64 65, on right: 55
+    налево: 62 63 64, направо: 55
 exp_list (76)
-    on left: 66 67, on right: 9 24 38 39 59 66
+    налево: 65 66, направо: 9 24 38 39 59 65
 name_list (77)
-    on left: 68 69, on right: 60 63 64 68
+    налево: 67 68, направо: 62 63 67
 table_body (78)
-    on left: 70 71, on right: 61 93
+    налево: 69 70, направо: 60 92
 field_list (79)
-    on left: 72 73, on right: 71
+    налево: 71 72, направо: 70
 field_list_part (80)
-    on left: 74 75, on right: 72 73 74
+    налево: 73 74, направо: 71 72 73
 field (81)
-    on left: 76 77 78, on right: 74 75
+    налево: 75 76 77, направо: 73 74
 field_sep (82)
-    on left: 79 80, on right: 72 74
+    налево: 78 79, направо: 71 73
 exp (83)
-    on left: 81 82 83 84 85 86 87 88 89 90 91 92 93 94, on right: 20
-    21 26 27 28 29 30 31 48 52 66 67 76 77 78 85 86 87 88 89 90
+    налево: 80 81 82 83 84 85 86 87 88 89 90 91 92 93, направо: 20
+    21 26 27 28 29 30 31 48 52 65 66 75 76 77 84 85 86 87 88 89
 literalString (84)
-    on left: 95 96 97, on right: 62 92
+    налево: 94 95 96, направо: 61 91
 numeral (85)
-    on left: 98 99 100 101, on right: 91
+    налево: 97 98 99 100, направо: 90
 
 
-State 0
+состояние 0
 
     0 $accept: . main $end
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    main           go to state 14
-    block          go to state 15
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    main           переход в состояние 14
+    block          переход в состояние 15
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 1
+состояние 1
 
    47 var: NAME .
 
-    $default  reduce using rule 47 (var)
+    $default  вывод с использованием правила 47 (var)
 
 
-State 2
+состояние 2
 
    19 while_do: DO . block END
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 28
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    block          переход в состояние 28
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 3
+состояние 3
 
    20 while_do: WHILE . exp DO block END
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 46
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 46
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 4
+состояние 4
 
    25 for_cycle: FOR . NAME '=' cycle_exp_list DO block END
 
-    NAME  shift, and go to state 49
+    NAME  сдвиг, и переход в состояние 49
 
 
-State 5
+состояние 5
 
    21 while_do: REPEAT . block UNTIL exp
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 50
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    block          переход в состояние 50
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 6
+состояние 6
 
    13 stat: GOTO . NAME
 
-    NAME  shift, and go to state 51
+    NAME  сдвиг, и переход в состояние 51
 
 
-State 7
+состояние 7
 
    28 statement: IF . exp THEN block END
    29          | IF . exp THEN block else_if END
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 52
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 52
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 8
+состояние 8
 
    22 locals: LOCAL . FUNCTION NAME function_body
    23       | LOCAL . attr_list
    24       | LOCAL . attr_list '=' exp_list
 
-    NAME      shift, and go to state 53
-    FUNCTION  shift, and go to state 54
+    NAME      сдвиг, и переход в состояние 53
+    FUNCTION  сдвиг, и переход в состояние 54
 
-    attr_list  go to state 55
+    attr_list  переход в состояние 55
 
 
-State 9
+состояние 9
 
    17 stat: FUNCTION . function_name function_body
 
-    NAME  shift, and go to state 56
+    NAME  сдвиг, и переход в состояние 56
 
-    function_name       go to state 57
-    function_name_part  go to state 58
+    function_name       переход в состояние 57
+    function_name_part  переход в состояние 58
 
 
-State 10
+состояние 10
 
    12 stat: BREAK .
 
-    $default  reduce using rule 12 (stat)
+    $default  вывод с использованием правила 12 (stat)
 
 
-State 11
+состояние 11
 
    40 label: LABEL_DEF . NAME LABEL_DEF
 
-    NAME  shift, and go to state 59
+    NAME  сдвиг, и переход в состояние 59
 
 
-State 12
+состояние 12
 
     8 stat: ';' .
 
-    $default  reduce using rule 8 (stat)
+    $default  вывод с использованием правила 8 (stat)
 
 
-State 13
+состояние 13
 
    52 prefix_exp: '(' . exp ')'
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 60
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 60
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 14
+состояние 14
 
     0 $accept: main . $end
 
-    $end  shift, and go to state 61
+    $end  сдвиг, и переход в состояние 61
 
 
-State 15
+состояние 15
 
     1 main: block .
 
-    $default  reduce using rule 1 (main)
+    $default  вывод с использованием правила 1 (main)
 
 
-State 16
+состояние 16
 
     2 block: stat_list .
     3      | stat_list . ret
     4 stat_list: stat_list . opt_stat
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    RETURN     shift, and go to state 62
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    RETURN     сдвиг, и переход в состояние 62
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    $end       reduce using rule 2 (block)
-    $end       [reduce using rule 7 (opt_stat)]
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    UNTIL      reduce using rule 2 (block)
-    UNTIL      [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    END        reduce using rule 2 (block)
-    END        [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    ELSEIF     reduce using rule 2 (block)
-    ELSEIF     [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    RETURN     [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 2 (block)
+    $end       вывод с использованием правила 2 (block)
+    $end       [вывод с использованием правила 7 (opt_stat)]
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    UNTIL      вывод с использованием правила 2 (block)
+    UNTIL      [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    END        вывод с использованием правила 2 (block)
+    END        [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    ELSEIF     вывод с использованием правила 2 (block)
+    ELSEIF     [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    RETURN     [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 2 (block)
 
-    opt_stat       go to state 63
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    ret            go to state 64
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    opt_stat       переход в состояние 63
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    ret            переход в состояние 64
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 17
+состояние 17
 
     5 stat_list: opt_stat .
 
-    $default  reduce using rule 5 (stat_list)
+    $default  вывод с использованием правила 5 (stat_list)
 
 
-State 18
+состояние 18
 
     6 opt_stat: stat .
 
-    $default  reduce using rule 6 (opt_stat)
+    $default  вывод с использованием правила 6 (opt_stat)
 
 
-State 19
+состояние 19
 
    14 stat: while_do .
 
-    $default  reduce using rule 14 (stat)
+    $default  вывод с использованием правила 14 (stat)
 
 
-State 20
+состояние 20
 
    18 stat: locals .
 
-    $default  reduce using rule 18 (stat)
+    $default  вывод с использованием правила 18 (stat)
 
 
-State 21
+состояние 21
 
    16 stat: for_cycle .
 
-    $default  reduce using rule 16 (stat)
+    $default  вывод с использованием правила 16 (stat)
 
 
-State 22
+состояние 22
 
    15 stat: statement .
 
-    $default  reduce using rule 15 (stat)
+    $default  вывод с использованием правила 15 (stat)
 
 
-State 23
+состояние 23
 
    11 stat: label .
 
-    $default  reduce using rule 11 (stat)
+    $default  вывод с использованием правила 11 (stat)
 
 
-State 24
+состояние 24
 
     9 stat: var_list . '=' exp_list
    45 var_list: var_list . ',' var
 
-    '='  shift, and go to state 65
-    ','  shift, and go to state 66
+    '='  сдвиг, и переход в состояние 65
+    ','  сдвиг, и переход в состояние 66
 
 
-State 25
+состояние 25
 
    46 var_list: var .
    50 prefix_exp: var .
 
-    '='       reduce using rule 46 (var_list)
-    ','       reduce using rule 46 (var_list)
-    $default  reduce using rule 50 (prefix_exp)
+    '='       вывод с использованием правила 46 (var_list)
+    ','       вывод с использованием правила 46 (var_list)
+    $default  вывод с использованием правила 50 (prefix_exp)
 
 
-State 26
+состояние 26
 
    48 var: prefix_exp . '[' exp ']'
    49    | prefix_exp . '.' NAME
    56 function_call: prefix_exp . args
    57              | prefix_exp . ':' NAME args
 
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    ':'         shift, and go to state 67
-    '.'         shift, and go to state 68
-    '['         shift, and go to state 69
-    '('         shift, and go to state 70
-    '{'         shift, and go to state 43
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    ':'         сдвиг, и переход в состояние 67
+    '.'         сдвиг, и переход в состояние 68
+    '['         сдвиг, и переход в состояние 69
+    '('         сдвиг, и переход в состояние 70
+    '{'         сдвиг, и переход в состояние 43
 
-    args           go to state 71
-    table_body     go to state 72
-    literalString  go to state 73
+    args           переход в состояние 71
+    table_body     переход в состояние 72
+    literalString  переход в состояние 73
 
 
-State 27
+состояние 27
 
    10 stat: function_call .
    51 prefix_exp: function_call .
 
-    ONEQSTRING  reduce using rule 51 (prefix_exp)
-    TWOQSTRING  reduce using rule 51 (prefix_exp)
-    LONGSTRING  reduce using rule 51 (prefix_exp)
-    ':'         reduce using rule 51 (prefix_exp)
-    '.'         reduce using rule 51 (prefix_exp)
-    '['         reduce using rule 51 (prefix_exp)
-    '('         reduce using rule 10 (stat)
-    '('         [reduce using rule 51 (prefix_exp)]
-    '{'         reduce using rule 51 (prefix_exp)
-    $default    reduce using rule 10 (stat)
+    ONEQSTRING  вывод с использованием правила 51 (prefix_exp)
+    TWOQSTRING  вывод с использованием правила 51 (prefix_exp)
+    LONGSTRING  вывод с использованием правила 51 (prefix_exp)
+    ':'         вывод с использованием правила 51 (prefix_exp)
+    '.'         вывод с использованием правила 51 (prefix_exp)
+    '['         вывод с использованием правила 51 (prefix_exp)
+    '('         вывод с использованием правила 10 (stat)
+    '('         [вывод с использованием правила 51 (prefix_exp)]
+    '{'         вывод с использованием правила 51 (prefix_exp)
+    $default    вывод с использованием правила 10 (stat)
 
 
-State 28
+состояние 28
 
    19 while_do: DO block . END
 
-    END  shift, and go to state 74
+    END  сдвиг, и переход в состояние 74
 
 
-State 29
+состояние 29
 
-   98 numeral: INT .
+   97 numeral: INT .
 
-    $default  reduce using rule 98 (numeral)
-
-
-State 30
-
-   99 numeral: HEX .
-
-    $default  reduce using rule 99 (numeral)
+    $default  вывод с использованием правила 97 (numeral)
 
 
-State 31
+состояние 30
 
-  100 numeral: FLOAT .
+   98 numeral: HEX .
 
-    $default  reduce using rule 100 (numeral)
-
-
-State 32
-
-  101 numeral: HEX_FLOAT .
-
-    $default  reduce using rule 101 (numeral)
+    $default  вывод с использованием правила 98 (numeral)
 
 
-State 33
+состояние 31
 
-   95 literalString: ONEQSTRING .
+   99 numeral: FLOAT .
 
-    $default  reduce using rule 95 (literalString)
-
-
-State 34
-
-   96 literalString: TWOQSTRING .
-
-    $default  reduce using rule 96 (literalString)
+    $default  вывод с использованием правила 99 (numeral)
 
 
-State 35
+состояние 32
 
-   97 literalString: LONGSTRING .
+  100 numeral: HEX_FLOAT .
 
-    $default  reduce using rule 97 (literalString)
-
-
-State 36
-
-   84 exp: DOTS .
-
-    $default  reduce using rule 84 (exp)
+    $default  вывод с использованием правила 100 (numeral)
 
 
-State 37
+состояние 33
 
-   81 exp: NIL .
+   94 literalString: ONEQSTRING .
 
-    $default  reduce using rule 81 (exp)
-
-
-State 38
-
-   82 exp: FALSE .
-
-    $default  reduce using rule 82 (exp)
+    $default  вывод с использованием правила 94 (literalString)
 
 
-State 39
+состояние 34
 
-   83 exp: TRUE .
+   95 literalString: TWOQSTRING .
 
-    $default  reduce using rule 83 (exp)
-
-
-State 40
-
-   90 exp: UNOP . exp
-
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
-
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 75
-    literalString  go to state 47
-    numeral        go to state 48
+    $default  вывод с использованием правила 95 (literalString)
 
 
-State 41
+состояние 35
 
-   89 exp: MINUS . exp
+   96 literalString: LONGSTRING .
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
-
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 76
-    literalString  go to state 47
-    numeral        go to state 48
+    $default  вывод с использованием правила 96 (literalString)
 
 
-State 42
+состояние 36
+
+   83 exp: DOTS .
+
+    $default  вывод с использованием правила 83 (exp)
+
+
+состояние 37
+
+   80 exp: NIL .
+
+    $default  вывод с использованием правила 80 (exp)
+
+
+состояние 38
+
+   81 exp: FALSE .
+
+    $default  вывод с использованием правила 81 (exp)
+
+
+состояние 39
+
+   82 exp: TRUE .
+
+    $default  вывод с использованием правила 82 (exp)
+
+
+состояние 40
+
+   89 exp: UNOP . exp
+
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
+
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 75
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
+
+
+состояние 41
+
+   88 exp: MINUS . exp
+
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
+
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 76
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
+
+
+состояние 42
 
    53 function_def: FUNCTION . function_body
 
-    '('  shift, and go to state 77
+    '('  сдвиг, и переход в состояние 77
 
-    function_body  go to state 78
-
-
-State 43
-
-   70 table_body: '{' . '}'
-   71           | '{' . field_list '}'
-
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    NAME        shift, and go to state 79
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '['         shift, and go to state 80
-    '{'         shift, and go to state 43
-    '}'         shift, and go to state 81
-
-    function_def     go to state 44
-    table_body       go to state 45
-    field_list       go to state 82
-    field_list_part  go to state 83
-    field            go to state 84
-    exp              go to state 85
-    literalString    go to state 47
-    numeral          go to state 48
+    function_body  переход в состояние 78
 
 
-State 44
+состояние 43
 
-   94 exp: function_def .
+   69 table_body: '{' . '}'
+   70           | '{' . field_list '}'
 
-    $default  reduce using rule 94 (exp)
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    NAME        сдвиг, и переход в состояние 79
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '['         сдвиг, и переход в состояние 80
+    '{'         сдвиг, и переход в состояние 43
+    '}'         сдвиг, и переход в состояние 81
+
+    function_def     переход в состояние 44
+    table_body       переход в состояние 45
+    field_list       переход в состояние 82
+    field_list_part  переход в состояние 83
+    field            переход в состояние 84
+    exp              переход в состояние 85
+    literalString    переход в состояние 47
+    numeral          переход в состояние 48
 
 
-State 45
+состояние 44
 
-   93 exp: table_body .
+   93 exp: function_def .
 
-    $default  reduce using rule 93 (exp)
+    $default  вывод с использованием правила 93 (exp)
 
 
-State 46
+состояние 45
+
+   92 exp: table_body .
+
+    $default  вывод с использованием правила 92 (exp)
+
+
+состояние 46
 
    20 while_do: WHILE exp . DO block END
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    DO     shift, and go to state 88
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-
-
-State 47
-
-   92 exp: literalString .
-
-    $default  reduce using rule 92 (exp)
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    DO     сдвиг, и переход в состояние 88
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
 
-State 48
+состояние 47
 
-   91 exp: numeral .
+   91 exp: literalString .
 
-    $default  reduce using rule 91 (exp)
+    $default  вывод с использованием правила 91 (exp)
 
 
-State 49
+состояние 48
+
+   90 exp: numeral .
+
+    $default  вывод с использованием правила 90 (exp)
+
+
+состояние 49
 
    25 for_cycle: FOR NAME . '=' cycle_exp_list DO block END
 
-    '='  shift, and go to state 91
+    '='  сдвиг, и переход в состояние 91
 
 
-State 50
+состояние 50
 
    21 while_do: REPEAT block . UNTIL exp
 
-    UNTIL  shift, and go to state 92
+    UNTIL  сдвиг, и переход в состояние 92
 
 
-State 51
+состояние 51
 
    13 stat: GOTO NAME .
 
-    $default  reduce using rule 13 (stat)
+    $default  вывод с использованием правила 13 (stat)
 
 
-State 52
+состояние 52
 
    28 statement: IF exp . THEN block END
    29          | IF exp . THEN block else_if END
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    THEN   shift, and go to state 93
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    THEN   сдвиг, и переход в состояние 93
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
 
-State 53
+состояние 53
 
    33 attr_list: NAME . attr
 
-    '<'  shift, and go to state 94
+    '<'  сдвиг, и переход в состояние 94
 
-    $default  reduce using rule 35 (attr)
+    $default  вывод с использованием правила 35 (attr)
 
-    attr  go to state 95
+    attr  переход в состояние 95
 
 
-State 54
+состояние 54
 
    22 locals: LOCAL FUNCTION . NAME function_body
 
-    NAME  shift, and go to state 96
+    NAME  сдвиг, и переход в состояние 96
 
 
-State 55
+состояние 55
 
    23 locals: LOCAL attr_list .
    24       | LOCAL attr_list . '=' exp_list
    32 attr_list: attr_list . ',' NAME attr
 
-    '='  shift, and go to state 97
-    ','  shift, and go to state 98
+    '='  сдвиг, и переход в состояние 97
+    ','  сдвиг, и переход в состояние 98
 
-    $default  reduce using rule 23 (locals)
+    $default  вывод с использованием правила 23 (locals)
 
 
-State 56
+состояние 56
 
    44 function_name_part: NAME .
 
-    $default  reduce using rule 44 (function_name_part)
+    $default  вывод с использованием правила 44 (function_name_part)
 
 
-State 57
+состояние 57
 
    17 stat: FUNCTION function_name . function_body
 
-    '('  shift, and go to state 77
+    '('  сдвиг, и переход в состояние 77
 
-    function_body  go to state 99
+    function_body  переход в состояние 99
 
 
-State 58
+состояние 58
 
    41 function_name: function_name_part .
    42              | function_name_part . ':' NAME
    43 function_name_part: function_name_part . '.' NAME
 
-    ':'  shift, and go to state 100
-    '.'  shift, and go to state 101
+    ':'  сдвиг, и переход в состояние 100
+    '.'  сдвиг, и переход в состояние 101
 
-    $default  reduce using rule 41 (function_name)
+    $default  вывод с использованием правила 41 (function_name)
 
 
-State 59
+состояние 59
 
    40 label: LABEL_DEF NAME . LABEL_DEF
 
-    LABEL_DEF  shift, and go to state 102
+    LABEL_DEF  сдвиг, и переход в состояние 102
 
 
-State 60
+состояние 60
 
    52 prefix_exp: '(' exp . ')'
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-    ')'    shift, and go to state 103
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+    ')'    сдвиг, и переход в состояние 103
 
 
-State 61
+состояние 61
 
     0 $accept: main $end .
 
     $default  accept
 
 
-State 62
+состояние 62
 
    36 ret: RETURN .
    37    | RETURN . ';'
    38    | RETURN . exp_list
    39    | RETURN . exp_list ';'
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    ';'         shift, and go to state 104
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    ';'         сдвиг, и переход в состояние 104
+    '{'         сдвиг, и переход в состояние 43
 
-    $default  reduce using rule 36 (ret)
+    $default  вывод с использованием правила 36 (ret)
 
-    function_def   go to state 44
-    exp_list       go to state 105
-    table_body     go to state 45
-    exp            go to state 106
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    exp_list       переход в состояние 105
+    table_body     переход в состояние 45
+    exp            переход в состояние 106
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 63
+состояние 63
 
     4 stat_list: stat_list opt_stat .
 
-    $default  reduce using rule 4 (stat_list)
+    $default  вывод с использованием правила 4 (stat_list)
 
 
-State 64
+состояние 64
 
     3 block: stat_list ret .
 
-    $default  reduce using rule 3 (block)
+    $default  вывод с использованием правила 3 (block)
 
 
-State 65
+состояние 65
 
     9 stat: var_list '=' . exp_list
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    exp_list       go to state 107
-    table_body     go to state 45
-    exp            go to state 106
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    exp_list       переход в состояние 107
+    table_body     переход в состояние 45
+    exp            переход в состояние 106
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 66
+состояние 66
 
    45 var_list: var_list ',' . var
 
-    NAME  shift, and go to state 1
-    '('   shift, and go to state 13
+    NAME  сдвиг, и переход в состояние 1
+    '('   сдвиг, и переход в состояние 13
 
-    var            go to state 108
-    prefix_exp     go to state 26
-    function_call  go to state 109
+    var            переход в состояние 108
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 109
 
 
-State 67
+состояние 67
 
    57 function_call: prefix_exp ':' . NAME args
 
-    NAME  shift, and go to state 110
+    NAME  сдвиг, и переход в состояние 110
 
 
-State 68
+состояние 68
 
    49 var: prefix_exp '.' . NAME
 
-    NAME  shift, and go to state 111
+    NAME  сдвиг, и переход в состояние 111
 
 
-State 69
+состояние 69
 
    48 var: prefix_exp '[' . exp ']'
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 112
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 112
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 70
+состояние 70
 
    58 args: '(' . ')'
    59     | '(' . exp_list ')'
-   60     | '(' . name_list ')'
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    NAME        shift, and go to state 113
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    ')'         shift, and go to state 114
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    ')'         сдвиг, и переход в состояние 113
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    exp_list       go to state 115
-    name_list      go to state 116
-    table_body     go to state 45
-    exp            go to state 106
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    exp_list       переход в состояние 114
+    table_body     переход в состояние 45
+    exp            переход в состояние 106
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 71
+состояние 71
 
    56 function_call: prefix_exp args .
 
-    $default  reduce using rule 56 (function_call)
+    $default  вывод с использованием правила 56 (function_call)
 
 
-State 72
+состояние 72
 
-   61 args: table_body .
+   60 args: table_body .
 
-    $default  reduce using rule 61 (args)
-
-
-State 73
-
-   62 args: literalString .
-
-    $default  reduce using rule 62 (args)
+    $default  вывод с использованием правила 60 (args)
 
 
-State 74
+состояние 73
+
+   61 args: literalString .
+
+    $default  вывод с использованием правила 61 (args)
+
+
+состояние 74
 
    19 while_do: DO block END .
 
-    $default  reduce using rule 19 (while_do)
+    $default  вывод с использованием правила 19 (while_do)
 
 
-State 75
+состояние 75
 
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-   90    | UNOP exp .
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
+   89    | UNOP exp .
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
-    BINOP     [reduce using rule 90 (exp)]
-    MINUS     [reduce using rule 90 (exp)]
-    '<'       [reduce using rule 90 (exp)]
-    '>'       [reduce using rule 90 (exp)]
-    $default  reduce using rule 90 (exp)
-
-
-State 76
-
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-   89    | MINUS exp .
-
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-
-    BINOP     [reduce using rule 89 (exp)]
-    MINUS     [reduce using rule 89 (exp)]
-    '<'       [reduce using rule 89 (exp)]
-    '>'       [reduce using rule 89 (exp)]
-    $default  reduce using rule 89 (exp)
+    BINOP     [вывод с использованием правила 89 (exp)]
+    MINUS     [вывод с использованием правила 89 (exp)]
+    '<'       [вывод с использованием правила 89 (exp)]
+    '>'       [вывод с использованием правила 89 (exp)]
+    $default  вывод с использованием правила 89 (exp)
 
 
-State 77
+состояние 76
+
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
+   88    | MINUS exp .
+
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+
+    BINOP     [вывод с использованием правила 88 (exp)]
+    MINUS     [вывод с использованием правила 88 (exp)]
+    '<'       [вывод с использованием правила 88 (exp)]
+    '>'       [вывод с использованием правила 88 (exp)]
+    $default  вывод с использованием правила 88 (exp)
+
+
+состояние 77
 
    54 function_body: '(' . ')' block END
    55              | '(' . par_list ')' block END
 
-    NAME  shift, and go to state 113
-    DOTS  shift, and go to state 117
-    ')'   shift, and go to state 118
+    NAME  сдвиг, и переход в состояние 115
+    DOTS  сдвиг, и переход в состояние 116
+    ')'   сдвиг, и переход в состояние 117
 
-    par_list   go to state 119
-    name_list  go to state 120
+    par_list   переход в состояние 118
+    name_list  переход в состояние 119
 
 
-State 78
+состояние 78
 
    53 function_def: FUNCTION function_body .
 
-    $default  reduce using rule 53 (function_def)
+    $default  вывод с использованием правила 53 (function_def)
 
 
-State 79
+состояние 79
 
-   77 field: NAME . '=' exp
+   76 field: NAME . '=' exp
 
-    '='  shift, and go to state 121
-
-
-State 80
-
-   76 field: '[' . exp ']' '=' exp
-
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
-
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 122
-    literalString  go to state 47
-    numeral        go to state 48
+    '='  сдвиг, и переход в состояние 120
 
 
-State 81
+состояние 80
 
-   70 table_body: '{' '}' .
+   75 field: '[' . exp ']' '=' exp
 
-    $default  reduce using rule 70 (table_body)
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-
-State 82
-
-   71 table_body: '{' field_list . '}'
-
-    '}'  shift, and go to state 123
-
-
-State 83
-
-   72 field_list: field_list_part . field_sep
-   73           | field_list_part .
-   74 field_list_part: field_list_part . field_sep field
-
-    ';'  shift, and go to state 124
-    ','  shift, and go to state 125
-
-    $default  reduce using rule 73 (field_list)
-
-    field_sep  go to state 126
-
-
-State 84
-
-   75 field_list_part: field .
-
-    $default  reduce using rule 75 (field_list_part)
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 121
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 85
+состояние 81
 
-   78 field: exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   69 table_body: '{' '}' .
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-
-    $default  reduce using rule 78 (field)
+    $default  вывод с использованием правила 69 (table_body)
 
 
-State 86
+состояние 82
 
-   85 exp: exp BINOP . exp
+   70 table_body: '{' field_list . '}'
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
-
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 127
-    literalString  go to state 47
-    numeral        go to state 48
+    '}'  сдвиг, и переход в состояние 122
 
 
-State 87
+состояние 83
 
-   86 exp: exp MINUS . exp
+   71 field_list: field_list_part . field_sep
+   72           | field_list_part .
+   73 field_list_part: field_list_part . field_sep field
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    ';'  сдвиг, и переход в состояние 123
+    ','  сдвиг, и переход в состояние 124
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 128
-    literalString  go to state 47
-    numeral        go to state 48
+    $default  вывод с использованием правила 72 (field_list)
+
+    field_sep  переход в состояние 125
 
 
-State 88
+состояние 84
+
+   74 field_list_part: field .
+
+    $default  вывод с использованием правила 74 (field_list_part)
+
+
+состояние 85
+
+   77 field: exp .
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
+
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+
+    $default  вывод с использованием правила 77 (field)
+
+
+состояние 86
+
+   84 exp: exp BINOP . exp
+
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
+
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 126
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
+
+
+состояние 87
+
+   85 exp: exp MINUS . exp
+
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
+
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 127
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
+
+
+состояние 88
 
    20 while_do: WHILE exp DO . block END
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 129
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
-
-
-State 89
-
-   87 exp: exp '<' . exp
-
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
-
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 130
-    literalString  go to state 47
-    numeral        go to state 48
+    block          переход в состояние 128
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 90
+состояние 89
 
-   88 exp: exp '>' . exp
+   86 exp: exp '<' . exp
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 131
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 129
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 91
+состояние 90
+
+   87 exp: exp '>' . exp
+
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
+
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 130
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
+
+
+состояние 91
 
    25 for_cycle: FOR NAME '=' . cycle_exp_list DO block END
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    cycle_exp_list  go to state 132
-    function_def    go to state 44
-    table_body      go to state 45
-    exp             go to state 133
-    literalString   go to state 47
-    numeral         go to state 48
+    cycle_exp_list  переход в состояние 131
+    function_def    переход в состояние 44
+    table_body      переход в состояние 45
+    exp             переход в состояние 132
+    literalString   переход в состояние 47
+    numeral         переход в состояние 48
 
 
-State 92
+состояние 92
 
    21 while_do: REPEAT block UNTIL . exp
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 134
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 133
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 93
+состояние 93
 
    28 statement: IF exp THEN . block END
    29          | IF exp THEN . block else_if END
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 135
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    block          переход в состояние 134
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 94
+состояние 94
 
    34 attr: '<' . NAME '>'
 
-    NAME  shift, and go to state 136
+    NAME  сдвиг, и переход в состояние 135
 
 
-State 95
+состояние 95
 
    33 attr_list: NAME attr .
 
-    $default  reduce using rule 33 (attr_list)
+    $default  вывод с использованием правила 33 (attr_list)
 
 
-State 96
+состояние 96
 
    22 locals: LOCAL FUNCTION NAME . function_body
 
-    '('  shift, and go to state 77
+    '('  сдвиг, и переход в состояние 77
 
-    function_body  go to state 137
+    function_body  переход в состояние 136
 
 
-State 97
+состояние 97
 
    24 locals: LOCAL attr_list '=' . exp_list
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    exp_list       go to state 138
-    table_body     go to state 45
-    exp            go to state 106
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    exp_list       переход в состояние 137
+    table_body     переход в состояние 45
+    exp            переход в состояние 106
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 98
+состояние 98
 
    32 attr_list: attr_list ',' . NAME attr
 
-    NAME  shift, and go to state 139
+    NAME  сдвиг, и переход в состояние 138
 
 
-State 99
+состояние 99
 
    17 stat: FUNCTION function_name function_body .
 
-    $default  reduce using rule 17 (stat)
+    $default  вывод с использованием правила 17 (stat)
 
 
-State 100
+состояние 100
 
    42 function_name: function_name_part ':' . NAME
 
-    NAME  shift, and go to state 140
+    NAME  сдвиг, и переход в состояние 139
 
 
-State 101
+состояние 101
 
    43 function_name_part: function_name_part '.' . NAME
 
-    NAME  shift, and go to state 141
+    NAME  сдвиг, и переход в состояние 140
 
 
-State 102
+состояние 102
 
    40 label: LABEL_DEF NAME LABEL_DEF .
 
-    $default  reduce using rule 40 (label)
+    $default  вывод с использованием правила 40 (label)
 
 
-State 103
+состояние 103
 
    52 prefix_exp: '(' exp ')' .
 
-    $default  reduce using rule 52 (prefix_exp)
+    $default  вывод с использованием правила 52 (prefix_exp)
 
 
-State 104
+состояние 104
 
    37 ret: RETURN ';' .
 
-    $default  reduce using rule 37 (ret)
+    $default  вывод с использованием правила 37 (ret)
 
 
-State 105
+состояние 105
 
    38 ret: RETURN exp_list .
    39    | RETURN exp_list . ';'
-   66 exp_list: exp_list . ',' exp
+   65 exp_list: exp_list . ',' exp
 
-    ';'  shift, and go to state 142
-    ','  shift, and go to state 143
+    ';'  сдвиг, и переход в состояние 141
+    ','  сдвиг, и переход в состояние 142
 
-    $default  reduce using rule 38 (ret)
-
-
-State 106
-
-   67 exp_list: exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-
-    $default  reduce using rule 67 (exp_list)
+    $default  вывод с использованием правила 38 (ret)
 
 
-State 107
+состояние 106
+
+   66 exp_list: exp .
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
+
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+
+    $default  вывод с использованием правила 66 (exp_list)
+
+
+состояние 107
 
     9 stat: var_list '=' exp_list .
-   66 exp_list: exp_list . ',' exp
+   65 exp_list: exp_list . ',' exp
 
-    ','  shift, and go to state 143
+    ','  сдвиг, и переход в состояние 142
 
-    $default  reduce using rule 9 (stat)
+    $default  вывод с использованием правила 9 (stat)
 
 
-State 108
+состояние 108
 
    45 var_list: var_list ',' var .
    50 prefix_exp: var .
 
-    '='       reduce using rule 45 (var_list)
-    ','       reduce using rule 45 (var_list)
-    $default  reduce using rule 50 (prefix_exp)
+    '='       вывод с использованием правила 45 (var_list)
+    ','       вывод с использованием правила 45 (var_list)
+    $default  вывод с использованием правила 50 (prefix_exp)
 
 
-State 109
+состояние 109
 
    51 prefix_exp: function_call .
 
-    $default  reduce using rule 51 (prefix_exp)
+    $default  вывод с использованием правила 51 (prefix_exp)
 
 
-State 110
+состояние 110
 
    57 function_call: prefix_exp ':' NAME . args
 
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    '('         shift, and go to state 70
-    '{'         shift, and go to state 43
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    '('         сдвиг, и переход в состояние 70
+    '{'         сдвиг, и переход в состояние 43
 
-    args           go to state 144
-    table_body     go to state 72
-    literalString  go to state 73
+    args           переход в состояние 143
+    table_body     переход в состояние 72
+    literalString  переход в состояние 73
 
 
-State 111
+состояние 111
 
    49 var: prefix_exp '.' NAME .
 
-    $default  reduce using rule 49 (var)
+    $default  вывод с использованием правила 49 (var)
 
 
-State 112
+состояние 112
 
    48 var: prefix_exp '[' exp . ']'
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-    ']'    shift, and go to state 145
-
-
-State 113
-
-   69 name_list: NAME .
-
-    $default  reduce using rule 69 (name_list)
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+    ']'    сдвиг, и переход в состояние 144
 
 
-State 114
+состояние 113
 
    58 args: '(' ')' .
 
-    $default  reduce using rule 58 (args)
+    $default  вывод с использованием правила 58 (args)
 
 
-State 115
+состояние 114
 
    59 args: '(' exp_list . ')'
-   66 exp_list: exp_list . ',' exp
+   65 exp_list: exp_list . ',' exp
 
-    ','  shift, and go to state 143
-    ')'  shift, and go to state 146
-
-
-State 116
-
-   60 args: '(' name_list . ')'
-   68 name_list: name_list . ',' NAME
-
-    ','  shift, and go to state 147
-    ')'  shift, and go to state 148
+    ','  сдвиг, и переход в состояние 142
+    ')'  сдвиг, и переход в состояние 145
 
 
-State 117
+состояние 115
 
-   65 par_list: DOTS .
+   68 name_list: NAME .
 
-    $default  reduce using rule 65 (par_list)
+    $default  вывод с использованием правила 68 (name_list)
 
 
-State 118
+состояние 116
+
+   64 par_list: DOTS .
+
+    $default  вывод с использованием правила 64 (par_list)
+
+
+состояние 117
 
    54 function_body: '(' ')' . block END
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 149
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    block          переход в состояние 146
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 119
+состояние 118
 
    55 function_body: '(' par_list . ')' block END
 
-    ')'  shift, and go to state 150
+    ')'  сдвиг, и переход в состояние 147
 
 
-State 120
+состояние 119
 
-   63 par_list: name_list .
-   64         | name_list . ',' DOTS
-   68 name_list: name_list . ',' NAME
+   62 par_list: name_list .
+   63         | name_list . ',' DOTS
+   67 name_list: name_list . ',' NAME
 
-    ','  shift, and go to state 151
+    ','  сдвиг, и переход в состояние 148
 
-    $default  reduce using rule 63 (par_list)
-
-
-State 121
-
-   77 field: NAME '=' . exp
-
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
-
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 152
-    literalString  go to state 47
-    numeral        go to state 48
+    $default  вывод с использованием правила 62 (par_list)
 
 
-State 122
+состояние 120
 
-   76 field: '[' exp . ']' '=' exp
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   76 field: NAME '=' . exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-    ']'    shift, and go to state 153
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-
-State 123
-
-   71 table_body: '{' field_list '}' .
-
-    $default  reduce using rule 71 (table_body)
-
-
-State 124
-
-   80 field_sep: ';' .
-
-    $default  reduce using rule 80 (field_sep)
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 149
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 125
+состояние 121
 
-   79 field_sep: ',' .
+   75 field: '[' exp . ']' '=' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    $default  reduce using rule 79 (field_sep)
-
-
-State 126
-
-   72 field_list: field_list_part field_sep .
-   74 field_list_part: field_list_part field_sep . field
-
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    NAME        shift, and go to state 79
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '['         shift, and go to state 80
-    '{'         shift, and go to state 43
-
-    $default  reduce using rule 72 (field_list)
-
-    function_def   go to state 44
-    table_body     go to state 45
-    field          go to state 154
-    exp            go to state 85
-    literalString  go to state 47
-    numeral        go to state 48
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+    ']'    сдвиг, и переход в состояние 150
 
 
-State 127
+состояние 122
 
-   85 exp: exp . BINOP exp
-   85    | exp BINOP exp .
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   70 table_body: '{' field_list '}' .
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-
-    BINOP     [reduce using rule 85 (exp)]
-    MINUS     [reduce using rule 85 (exp)]
-    '<'       [reduce using rule 85 (exp)]
-    '>'       [reduce using rule 85 (exp)]
-    $default  reduce using rule 85 (exp)
+    $default  вывод с использованием правила 70 (table_body)
 
 
-State 128
+состояние 123
 
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   86    | exp MINUS exp .
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   79 field_sep: ';' .
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-
-    BINOP     [reduce using rule 86 (exp)]
-    MINUS     [reduce using rule 86 (exp)]
-    '<'       [reduce using rule 86 (exp)]
-    '>'       [reduce using rule 86 (exp)]
-    $default  reduce using rule 86 (exp)
+    $default  вывод с использованием правила 79 (field_sep)
 
 
-State 129
+состояние 124
+
+   78 field_sep: ',' .
+
+    $default  вывод с использованием правила 78 (field_sep)
+
+
+состояние 125
+
+   71 field_list: field_list_part field_sep .
+   73 field_list_part: field_list_part field_sep . field
+
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    NAME        сдвиг, и переход в состояние 79
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '['         сдвиг, и переход в состояние 80
+    '{'         сдвиг, и переход в состояние 43
+
+    $default  вывод с использованием правила 71 (field_list)
+
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    field          переход в состояние 151
+    exp            переход в состояние 85
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
+
+
+состояние 126
+
+   84 exp: exp . BINOP exp
+   84    | exp BINOP exp .
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
+
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+
+    BINOP     [вывод с использованием правила 84 (exp)]
+    MINUS     [вывод с использованием правила 84 (exp)]
+    '<'       [вывод с использованием правила 84 (exp)]
+    '>'       [вывод с использованием правила 84 (exp)]
+    $default  вывод с использованием правила 84 (exp)
+
+
+состояние 127
+
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   85    | exp MINUS exp .
+   86    | exp . '<' exp
+   87    | exp . '>' exp
+
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+
+    BINOP     [вывод с использованием правила 85 (exp)]
+    MINUS     [вывод с использованием правила 85 (exp)]
+    '<'       [вывод с использованием правила 85 (exp)]
+    '>'       [вывод с использованием правила 85 (exp)]
+    $default  вывод с использованием правила 85 (exp)
+
+
+состояние 128
 
    20 while_do: WHILE exp DO block . END
 
-    END  shift, and go to state 155
+    END  сдвиг, и переход в состояние 152
 
 
-State 130
+состояние 129
 
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   87    | exp '<' exp .
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   86    | exp '<' exp .
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
-    BINOP     [reduce using rule 87 (exp)]
-    MINUS     [reduce using rule 87 (exp)]
-    '<'       [reduce using rule 87 (exp)]
-    '>'       [reduce using rule 87 (exp)]
-    $default  reduce using rule 87 (exp)
-
-
-State 131
-
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-   88    | exp '>' exp .
-
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-
-    BINOP     [reduce using rule 88 (exp)]
-    MINUS     [reduce using rule 88 (exp)]
-    '<'       [reduce using rule 88 (exp)]
-    '>'       [reduce using rule 88 (exp)]
-    $default  reduce using rule 88 (exp)
+    BINOP     [вывод с использованием правила 86 (exp)]
+    MINUS     [вывод с использованием правила 86 (exp)]
+    '<'       [вывод с использованием правила 86 (exp)]
+    '>'       [вывод с использованием правила 86 (exp)]
+    $default  вывод с использованием правила 86 (exp)
 
 
-State 132
+состояние 130
+
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
+   87    | exp '>' exp .
+
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+
+    BINOP     [вывод с использованием правила 87 (exp)]
+    MINUS     [вывод с использованием правила 87 (exp)]
+    '<'       [вывод с использованием правила 87 (exp)]
+    '>'       [вывод с использованием правила 87 (exp)]
+    $default  вывод с использованием правила 87 (exp)
+
+
+состояние 131
 
    25 for_cycle: FOR NAME '=' cycle_exp_list . DO block END
    26 cycle_exp_list: cycle_exp_list . ',' exp
 
-    DO   shift, and go to state 156
-    ','  shift, and go to state 157
+    DO   сдвиг, и переход в состояние 153
+    ','  сдвиг, и переход в состояние 154
 
 
-State 133
+состояние 132
 
    27 cycle_exp_list: exp . ',' exp
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    ','    shift, and go to state 158
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    ','    сдвиг, и переход в состояние 155
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
 
-State 134
+состояние 133
 
    21 while_do: REPEAT block UNTIL exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
-    $default  reduce using rule 21 (while_do)
+    $default  вывод с использованием правила 21 (while_do)
 
 
-State 135
+состояние 134
 
    28 statement: IF exp THEN block . END
    29          | IF exp THEN block . else_if END
 
-    END     shift, and go to state 159
-    ELSEIF  shift, and go to state 160
+    END     сдвиг, и переход в состояние 156
+    ELSEIF  сдвиг, и переход в состояние 157
 
-    else_if  go to state 161
+    else_if  переход в состояние 158
 
 
-State 136
+состояние 135
 
    34 attr: '<' NAME . '>'
 
-    '>'  shift, and go to state 162
+    '>'  сдвиг, и переход в состояние 159
 
 
-State 137
+состояние 136
 
    22 locals: LOCAL FUNCTION NAME function_body .
 
-    $default  reduce using rule 22 (locals)
+    $default  вывод с использованием правила 22 (locals)
 
 
-State 138
+состояние 137
 
    24 locals: LOCAL attr_list '=' exp_list .
-   66 exp_list: exp_list . ',' exp
+   65 exp_list: exp_list . ',' exp
 
-    ','  shift, and go to state 143
+    ','  сдвиг, и переход в состояние 142
 
-    $default  reduce using rule 24 (locals)
+    $default  вывод с использованием правила 24 (locals)
 
 
-State 139
+состояние 138
 
    32 attr_list: attr_list ',' NAME . attr
 
-    '<'  shift, and go to state 94
+    '<'  сдвиг, и переход в состояние 94
 
-    $default  reduce using rule 35 (attr)
+    $default  вывод с использованием правила 35 (attr)
 
-    attr  go to state 163
+    attr  переход в состояние 160
 
 
-State 140
+состояние 139
 
    42 function_name: function_name_part ':' NAME .
 
-    $default  reduce using rule 42 (function_name)
+    $default  вывод с использованием правила 42 (function_name)
 
 
-State 141
+состояние 140
 
    43 function_name_part: function_name_part '.' NAME .
 
-    $default  reduce using rule 43 (function_name_part)
+    $default  вывод с использованием правила 43 (function_name_part)
 
 
-State 142
+состояние 141
 
    39 ret: RETURN exp_list ';' .
 
-    $default  reduce using rule 39 (ret)
+    $default  вывод с использованием правила 39 (ret)
 
 
-State 143
+состояние 142
 
-   66 exp_list: exp_list ',' . exp
+   65 exp_list: exp_list ',' . exp
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 164
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 161
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 144
+состояние 143
 
    57 function_call: prefix_exp ':' NAME args .
 
-    $default  reduce using rule 57 (function_call)
+    $default  вывод с использованием правила 57 (function_call)
 
 
-State 145
+состояние 144
 
    48 var: prefix_exp '[' exp ']' .
 
-    $default  reduce using rule 48 (var)
+    $default  вывод с использованием правила 48 (var)
 
 
-State 146
+состояние 145
 
    59 args: '(' exp_list ')' .
 
-    $default  reduce using rule 59 (args)
+    $default  вывод с использованием правила 59 (args)
 
 
-State 147
-
-   68 name_list: name_list ',' . NAME
-
-    NAME  shift, and go to state 165
-
-
-State 148
-
-   60 args: '(' name_list ')' .
-
-    $default  reduce using rule 60 (args)
-
-
-State 149
+состояние 146
 
    54 function_body: '(' ')' block . END
 
-    END  shift, and go to state 166
+    END  сдвиг, и переход в состояние 162
 
 
-State 150
+состояние 147
 
    55 function_body: '(' par_list ')' . block END
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 167
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
-
-
-State 151
-
-   64 par_list: name_list ',' . DOTS
-   68 name_list: name_list ',' . NAME
-
-    NAME  shift, and go to state 165
-    DOTS  shift, and go to state 168
+    block          переход в состояние 163
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 152
+состояние 148
 
-   77 field: NAME '=' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   63 par_list: name_list ',' . DOTS
+   67 name_list: name_list ',' . NAME
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
-
-    $default  reduce using rule 77 (field)
+    NAME  сдвиг, и переход в состояние 164
+    DOTS  сдвиг, и переход в состояние 165
 
 
-State 153
+состояние 149
 
-   76 field: '[' exp ']' . '=' exp
+   76 field: NAME '=' exp .
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    '='  shift, and go to state 169
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
+
+    $default  вывод с использованием правила 76 (field)
 
 
-State 154
+состояние 150
 
-   74 field_list_part: field_list_part field_sep field .
+   75 field: '[' exp ']' . '=' exp
 
-    $default  reduce using rule 74 (field_list_part)
+    '='  сдвиг, и переход в состояние 166
 
 
-State 155
+состояние 151
+
+   73 field_list_part: field_list_part field_sep field .
+
+    $default  вывод с использованием правила 73 (field_list_part)
+
+
+состояние 152
 
    20 while_do: WHILE exp DO block END .
 
-    $default  reduce using rule 20 (while_do)
+    $default  вывод с использованием правила 20 (while_do)
 
 
-State 156
+состояние 153
 
    25 for_cycle: FOR NAME '=' cycle_exp_list DO . block END
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 170
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    block          переход в состояние 167
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 157
+состояние 154
 
    26 cycle_exp_list: cycle_exp_list ',' . exp
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 171
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 168
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 158
+состояние 155
 
    27 cycle_exp_list: exp ',' . exp
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 172
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 169
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 159
+состояние 156
 
    28 statement: IF exp THEN block END .
 
-    $default  reduce using rule 28 (statement)
+    $default  вывод с использованием правила 28 (statement)
 
 
-State 160
+состояние 157
 
    31 else_if: ELSEIF . exp THEN block
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 173
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 170
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 161
+состояние 158
 
    29 statement: IF exp THEN block else_if . END
    30 else_if: else_if . ELSEIF exp THEN block
 
-    END     shift, and go to state 174
-    ELSEIF  shift, and go to state 175
+    END     сдвиг, и переход в состояние 171
+    ELSEIF  сдвиг, и переход в состояние 172
 
 
-State 162
+состояние 159
 
    34 attr: '<' NAME '>' .
 
-    $default  reduce using rule 34 (attr)
+    $default  вывод с использованием правила 34 (attr)
 
 
-State 163
+состояние 160
 
    32 attr_list: attr_list ',' NAME attr .
 
-    $default  reduce using rule 32 (attr_list)
+    $default  вывод с использованием правила 32 (attr_list)
 
 
-State 164
+состояние 161
 
-   66 exp_list: exp_list ',' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   65 exp_list: exp_list ',' exp .
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
-    $default  reduce using rule 66 (exp_list)
-
-
-State 165
-
-   68 name_list: name_list ',' NAME .
-
-    $default  reduce using rule 68 (name_list)
+    $default  вывод с использованием правила 65 (exp_list)
 
 
-State 166
+состояние 162
 
    54 function_body: '(' ')' block END .
 
-    $default  reduce using rule 54 (function_body)
+    $default  вывод с использованием правила 54 (function_body)
 
 
-State 167
+состояние 163
 
    55 function_body: '(' par_list ')' block . END
 
-    END  shift, and go to state 176
+    END  сдвиг, и переход в состояние 173
 
 
-State 168
+состояние 164
 
-   64 par_list: name_list ',' DOTS .
+   67 name_list: name_list ',' NAME .
 
-    $default  reduce using rule 64 (par_list)
-
-
-State 169
-
-   76 field: '[' exp ']' '=' . exp
-
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
-
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 177
-    literalString  go to state 47
-    numeral        go to state 48
+    $default  вывод с использованием правила 67 (name_list)
 
 
-State 170
+состояние 165
+
+   63 par_list: name_list ',' DOTS .
+
+    $default  вывод с использованием правила 63 (par_list)
+
+
+состояние 166
+
+   75 field: '[' exp ']' '=' . exp
+
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
+
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 174
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
+
+
+состояние 167
 
    25 for_cycle: FOR NAME '=' cycle_exp_list DO block . END
 
-    END  shift, and go to state 178
+    END  сдвиг, и переход в состояние 175
 
 
-State 171
+состояние 168
 
    26 cycle_exp_list: cycle_exp_list ',' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
-    $default  reduce using rule 26 (cycle_exp_list)
+    $default  вывод с использованием правила 26 (cycle_exp_list)
 
 
-State 172
+состояние 169
 
    27 cycle_exp_list: exp ',' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
-    $default  reduce using rule 27 (cycle_exp_list)
+    $default  вывод с использованием правила 27 (cycle_exp_list)
 
 
-State 173
+состояние 170
 
    31 else_if: ELSEIF exp . THEN block
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    THEN   shift, and go to state 179
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    THEN   сдвиг, и переход в состояние 176
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
 
-State 174
+состояние 171
 
    29 statement: IF exp THEN block else_if END .
 
-    $default  reduce using rule 29 (statement)
+    $default  вывод с использованием правила 29 (statement)
 
 
-State 175
+состояние 172
 
    30 else_if: else_if ELSEIF . exp THEN block
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '{'         shift, and go to state 43
+    INT         сдвиг, и переход в состояние 29
+    HEX         сдвиг, и переход в состояние 30
+    FLOAT       сдвиг, и переход в состояние 31
+    HEX_FLOAT   сдвиг, и переход в состояние 32
+    ONEQSTRING  сдвиг, и переход в состояние 33
+    TWOQSTRING  сдвиг, и переход в состояние 34
+    LONGSTRING  сдвиг, и переход в состояние 35
+    DOTS        сдвиг, и переход в состояние 36
+    NIL         сдвиг, и переход в состояние 37
+    FALSE       сдвиг, и переход в состояние 38
+    TRUE        сдвиг, и переход в состояние 39
+    UNOP        сдвиг, и переход в состояние 40
+    MINUS       сдвиг, и переход в состояние 41
+    FUNCTION    сдвиг, и переход в состояние 42
+    '{'         сдвиг, и переход в состояние 43
 
-    function_def   go to state 44
-    table_body     go to state 45
-    exp            go to state 180
-    literalString  go to state 47
-    numeral        go to state 48
+    function_def   переход в состояние 44
+    table_body     переход в состояние 45
+    exp            переход в состояние 177
+    literalString  переход в состояние 47
+    numeral        переход в состояние 48
 
 
-State 176
+состояние 173
 
    55 function_body: '(' par_list ')' block END .
 
-    $default  reduce using rule 55 (function_body)
+    $default  вывод с использованием правила 55 (function_body)
 
 
-State 177
+состояние 174
 
-   76 field: '[' exp ']' '=' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   75 field: '[' exp ']' '=' exp .
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
-    $default  reduce using rule 76 (field)
+    $default  вывод с использованием правила 75 (field)
 
 
-State 178
+состояние 175
 
    25 for_cycle: FOR NAME '=' cycle_exp_list DO block END .
 
-    $default  reduce using rule 25 (for_cycle)
+    $default  вывод с использованием правила 25 (for_cycle)
 
 
-State 179
+состояние 176
 
    31 else_if: ELSEIF exp THEN . block
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 181
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    block          переход в состояние 178
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 180
+состояние 177
 
    30 else_if: else_if ELSEIF exp . THEN block
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   84 exp: exp . BINOP exp
+   85    | exp . MINUS exp
+   86    | exp . '<' exp
+   87    | exp . '>' exp
 
-    BINOP  shift, and go to state 86
-    MINUS  shift, and go to state 87
-    THEN   shift, and go to state 182
-    '<'    shift, and go to state 89
-    '>'    shift, and go to state 90
+    BINOP  сдвиг, и переход в состояние 86
+    MINUS  сдвиг, и переход в состояние 87
+    THEN   сдвиг, и переход в состояние 179
+    '<'    сдвиг, и переход в состояние 89
+    '>'    сдвиг, и переход в состояние 90
 
 
-State 181
+состояние 178
 
    31 else_if: ELSEIF exp THEN block .
 
-    $default  reduce using rule 31 (else_if)
+    $default  вывод с использованием правила 31 (else_if)
 
 
-State 182
+состояние 179
 
    30 else_if: else_if ELSEIF exp THEN . block
 
-    NAME       shift, and go to state 1
-    DO         shift, and go to state 2
-    WHILE      shift, and go to state 3
-    FOR        shift, and go to state 4
-    REPEAT     shift, and go to state 5
-    GOTO       shift, and go to state 6
-    IF         shift, and go to state 7
-    LOCAL      shift, and go to state 8
-    FUNCTION   shift, and go to state 9
-    BREAK      shift, and go to state 10
-    LABEL_DEF  shift, and go to state 11
-    ';'        shift, and go to state 12
-    '('        shift, and go to state 13
+    NAME       сдвиг, и переход в состояние 1
+    DO         сдвиг, и переход в состояние 2
+    WHILE      сдвиг, и переход в состояние 3
+    FOR        сдвиг, и переход в состояние 4
+    REPEAT     сдвиг, и переход в состояние 5
+    GOTO       сдвиг, и переход в состояние 6
+    IF         сдвиг, и переход в состояние 7
+    LOCAL      сдвиг, и переход в состояние 8
+    FUNCTION   сдвиг, и переход в состояние 9
+    BREAK      сдвиг, и переход в состояние 10
+    LABEL_DEF  сдвиг, и переход в состояние 11
+    ';'        сдвиг, и переход в состояние 12
+    '('        сдвиг, и переход в состояние 13
 
-    NAME       [reduce using rule 7 (opt_stat)]
-    DO         [reduce using rule 7 (opt_stat)]
-    WHILE      [reduce using rule 7 (opt_stat)]
-    FOR        [reduce using rule 7 (opt_stat)]
-    REPEAT     [reduce using rule 7 (opt_stat)]
-    GOTO       [reduce using rule 7 (opt_stat)]
-    IF         [reduce using rule 7 (opt_stat)]
-    LOCAL      [reduce using rule 7 (opt_stat)]
-    FUNCTION   [reduce using rule 7 (opt_stat)]
-    BREAK      [reduce using rule 7 (opt_stat)]
-    LABEL_DEF  [reduce using rule 7 (opt_stat)]
-    ';'        [reduce using rule 7 (opt_stat)]
-    '('        [reduce using rule 7 (opt_stat)]
-    $default   reduce using rule 7 (opt_stat)
+    NAME       [вывод с использованием правила 7 (opt_stat)]
+    DO         [вывод с использованием правила 7 (opt_stat)]
+    WHILE      [вывод с использованием правила 7 (opt_stat)]
+    FOR        [вывод с использованием правила 7 (opt_stat)]
+    REPEAT     [вывод с использованием правила 7 (opt_stat)]
+    GOTO       [вывод с использованием правила 7 (opt_stat)]
+    IF         [вывод с использованием правила 7 (opt_stat)]
+    LOCAL      [вывод с использованием правила 7 (opt_stat)]
+    FUNCTION   [вывод с использованием правила 7 (opt_stat)]
+    BREAK      [вывод с использованием правила 7 (opt_stat)]
+    LABEL_DEF  [вывод с использованием правила 7 (opt_stat)]
+    ';'        [вывод с использованием правила 7 (opt_stat)]
+    '('        [вывод с использованием правила 7 (opt_stat)]
+    $default   вывод с использованием правила 7 (opt_stat)
 
-    block          go to state 183
-    stat_list      go to state 16
-    opt_stat       go to state 17
-    stat           go to state 18
-    while_do       go to state 19
-    locals         go to state 20
-    for_cycle      go to state 21
-    statement      go to state 22
-    label          go to state 23
-    var_list       go to state 24
-    var            go to state 25
-    prefix_exp     go to state 26
-    function_call  go to state 27
+    block          переход в состояние 180
+    stat_list      переход в состояние 16
+    opt_stat       переход в состояние 17
+    stat           переход в состояние 18
+    while_do       переход в состояние 19
+    locals         переход в состояние 20
+    for_cycle      переход в состояние 21
+    statement      переход в состояние 22
+    label          переход в состояние 23
+    var_list       переход в состояние 24
+    var            переход в состояние 25
+    prefix_exp     переход в состояние 26
+    function_call  переход в состояние 27
 
 
-State 183
+состояние 180
 
    30 else_if: else_if ELSEIF exp THEN block .
 
-    $default  reduce using rule 30 (else_if)
+    $default  вывод с использованием правила 30 (else_if)
