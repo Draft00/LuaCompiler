@@ -44,10 +44,10 @@ void DEBUGPRINT_BISON(char* format, ...)
 %token NIL FALSE TRUE
 
 /* Operators */
-%token BINOP UNOP MINUS ASSIGN
+%token BINOP UNOP MINUS
 
 /* Looping */
-%token DO WHILE FOR UNTIL REPEAT END
+%token DO WHILE FOR UNTIL REPEAT END GOTO
 
 /* If/else statements */
 %token IF THEN ELSEIF ELSE
@@ -73,100 +73,217 @@ void DEBUGPRINT_BISON(char* format, ...)
 %right	EXP
 %left	UMINUS
 */
-%left NAME
-%right '<' '>'
 
 %start main
 
 %%
 /*================ 2. The Grammar Section ================================*/
 
-main: func_call				{ DEBUGPRINT_BISON("\nMAIN: attribute_list"); }
+main: block				{ DEBUGPRINT_BISON("\nMAIN: block"); }
 ;
 
-var: NAME '.' NAME 		{ DEBUGPRINT_BISON("\nPREFIX_EXP: NAME '.' NAME"); }
-   | var '.' NAME 		{ DEBUGPRINT_BISON("\nPREFIX_EXP: var '.' NAME"); }
-   | var '[' exp ']' 	{ DEBUGPRINT_BISON("\nPREFIX_EXP: var '[' exp ']'"); }
-   | var '[' NAME ']' 	{ DEBUGPRINT_BISON("\nPREFIX_EXP: var '[' NAME ']'"); }
-   | NAME '[' exp ']' 	{ DEBUGPRINT_BISON("\nPREFIX_EXP: NAME '[' exp ']'"); }
-   | NAME '[' NAME ']' 	{ DEBUGPRINT_BISON("\nPREFIX_EXP: NAME '[' exp ']'"); }
+/* ===> Block */
+block: stat_list 		{ DEBUGPRINT_BISON("\nBLOCK: stat_list"); }
+	 | stat_list ret 	{ DEBUGPRINT_BISON("\nBLOCK: stat_list ret"); }
 ;
 
-func_call: args_call ')' 		{ DEBUGPRINT_BISON("\nFUNC_CALL: args_part ')'"); }
+stat_list: stat_list opt_stat 	{ DEBUGPRINT_BISON("\nSTAT_LIST: stat_list opt_stat"); }
+		 | opt_stat   			{ DEBUGPRINT_BISON("\nSTAT_LIST: opt_stat"); }
 ;
 
-args_call: func_call_part 		{ DEBUGPRINT_BISON("\nARGS_CALL: func_call_part "); }
-		 | args_call ',' exp 	{ DEBUGPRINT_BISON("\nARGS_CALL: args_part ',' exp"); }
-		 | args_call ',' NAME 	{ DEBUGPRINT_BISON("\nARGS_CALL: args_part ',' NAME"); }
+opt_stat: stat 			{ DEBUGPRINT_BISON("\nOPT_STAT: stat"); }
+		| /* empty */	{ DEBUGPRINT_BISON("\nOPT_STAT: empty"); }
+/* <=== Block */
+
+
+stat: ';' 									{ DEBUGPRINT_BISON("\nSTAT: ';'"); }	
+	| var_list '=' exp_list 				{ DEBUGPRINT_BISON("\nSTAT: var_list '=' exp_list"); }	
+	| function_call 						{ DEBUGPRINT_BISON("\nSTAT: function_call"); }	
+
+	| label 								{ DEBUGPRINT_BISON("\nSTAT: label"); }	
+	| BREAK 								{ DEBUGPRINT_BISON("\nSTAT: GOTO NAME"); }	
+	| GOTO NAME 							{ DEBUGPRINT_BISON("\nSTAT: GOTO NAME"); }	
+
+	| while_do 								{ DEBUGPRINT_BISON("\nSTAT: while_do"); }	
+
+	| statement 							{ DEBUGPRINT_BISON("\nSTAT: statement"); }	
+	| for_cycle 							{ DEBUGPRINT_BISON("\nSTAT: for_cycle"); }	
+
+	| FUNCTION function_name function_body 	{ DEBUGPRINT_BISON("\nSTAT: FUNCTION function_name function_body"); }	
+
+	| locals 								{ DEBUGPRINT_BISON("\nSTAT: locals"); }	
 ;
 
+/* ===> While_do */
+while_do: DO block END
+		| WHILE exp DO block END
+		| REPEAT block UNTIL exp
+/* <=== While */
 
-func_call_part: var '(' 			{ DEBUGPRINT_BISON("\nFUNC_CALL_PART: var '('"); }
-			  | var ':' NAME '(' 	{ DEBUGPRINT_BISON("\nFUNC_CALL_PART: var ':' NAME "); }
-			  | var ':' NAME '(' NAME 	{ DEBUGPRINT_BISON("\nFUNC_CALL_PART: var ':' NAME "); }
+
+/* ===> Locals */
+locals: LOCAL FUNCTION NAME function_body
+	  /* Optional '=' exp_list token */
+	  | LOCAL attr_list
+	  | LOCAL attr_list '=' exp_list
+/* <=== Locals */
+
+
+/* ===> For_cycle */
+for_cycle: FOR NAME '=' cycle_exp_list DO block END
 ;
 
+cycle_exp_list: cycle_exp_list ',' exp
+			  | exp ',' exp
+;
+/* <=== For_cycle */
 
-ret_stat: ret_stat_part 		{ DEBUGPRINT_BISON("\nRET_STAT: ret_stat_part"); }
-		| RETURN 				{ DEBUGPRINT_BISON("\nRET_STAT: RETURN"); }
+
+/* ===> Statement */
+statement: IF exp THEN block END 			{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block END"); }	
+		 /* Optional else_if token */
+		 | IF exp THEN block else_if END 	{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block else_if END"); }	
 ;
 
+else_if: else_if ELSEIF exp THEN block 		{ DEBUGPRINT_BISON("\nELSE_IF: else_if ELSEIF exp THEN block"); }	
+	   | ELSEIF exp THEN block 				{ DEBUGPRINT_BISON("\nELSE_IF: ELSEIF exp THEN block"); }	
+;
+/* <=== Statement */
 
-ret_stat_part: ret_stat_part ',' exp  	{ DEBUGPRINT_BISON("\nRET_STAT_PART: ret_stat ',' exp"); }
-			 | ret_stat_part ',' NAME  	{ DEBUGPRINT_BISON("\nRET_STAT_PART: ret_stat ',' NAME"); }
-			 | RETURN exp 				{ DEBUGPRINT_BISON("\nRET_STAT_PART: RETURN exp"); }
-			 | RETURN NAME 				{ DEBUGPRINT_BISON("\nRET_STAT_PART: RETURN exp"); }
+
+
+/* ===> Attr_list */
+attr_list: attr_list ',' NAME attr 	{ DEBUGPRINT_BISON("\nATTR_LIST: attr_list ',' NAME attr"); }	
+		 | NAME attr 				{ DEBUGPRINT_BISON("\nATTR_LIST: NAME attr"); }	
+;
+/* ===> Attr_list */
+
+
+/* ===> Attr */
+attr: '<' NAME '>' 			 	{ DEBUGPRINT_BISON("\nATTR: '<' NAME '>'"); }	
+	| /* empty */ 				{ DEBUGPRINT_BISON("\nATTR: empty"); }
+;
+/* ===> Attr */
+
+
+/* ===> Ret */
+/* All possible combinations: RETURN optional(exp_list) optional(';') */
+ret: RETURN 					{ DEBUGPRINT_BISON("\nRET: RETURN"); }
+   | RETURN ';' 				{ DEBUGPRINT_BISON("\nRET: RETURN ;'"); }
+   | RETURN exp_list 			{ DEBUGPRINT_BISON("\nRET: RETURN exp_list"); }
+   | RETURN exp_list ';'  		{ DEBUGPRINT_BISON("\nRET: RETURN exp_list ';'"); }
+ ;
+/* <=== Ret */
+
+
+/* ===> Label */
+label: LABEL_DEF NAME LABEL_DEF { DEBUGPRINT_BISON("\nLABEL: LABEL_DEF NAME LABEL_DEF"); }
+;
+/* <=== Label */
+
+
+/* ===> Function_name */
+/* Optional ':' NAME context */
+function_name: function_name_part 			{ DEBUGPRINT_BISON("\nFUNCTION_NAME: function_name_part"); }
+			 | function_name_part ':' NAME 	{ DEBUGPRINT_BISON("\nFUNCTION_NAME: function_name_part ':' NAME"); }
 ;
 
+/* Recursion */
+function_name_part: function_name_part '.' NAME 	{ DEBUGPRINT_BISON("\nFUNCTION_NAME_PART: function_name_part '.' NAME"); }
+				  | NAME 							{ DEBUGPRINT_BISON("\nFUNCTION_NAME_PART: NAME"); }
+;
+/* <=== Function_name */
 
-attribute_list: attribute_list ',' attribute 	{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: attribute_list ',' attribute"); }
-			  | attribute_list ',' NAME 		{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: attribute_list ',' NAME"); }
-			  | attribute 						{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: attribute"); }
-			  | name_list ',' attribute 		{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: name_list ',' attribute"); }
-			  | attribute ',' NAME 				{ DEBUGPRINT_BISON("\nATTRIBUTE_LIST: attribute ',' NAME"); }
+
+/* ===> Var_list block */
+var_list: var_list ',' var 					{ DEBUGPRINT_BISON("\nVAR_LIST: var_list ',' var"); }
+		| var 								{ DEBUGPRINT_BISON("\nVAR_LIST: var"); }
+;
+/* <=== Var_list block */
+
+
+/* ===> Var block */
+var: NAME 									{ DEBUGPRINT_BISON("\nVAR: NAME"); }
+   | prefix_exp '[' exp ']' 				{ DEBUGPRINT_BISON("\nVAR: prefix_exp '[' exp ']'"); }
+   | prefix_exp '.' NAME 					{ DEBUGPRINT_BISON("\nVAR: prefix_exp '.' NAME"); }
+;
+/* <=== Var block */
+
+
+/* ===> Prefix_exp block */
+prefix_exp: var 							{ DEBUGPRINT_BISON("\nPREFIX_EXP: var"); }
+		  | function_call 					{ DEBUGPRINT_BISON("\nPREFIX_EXP: function_call"); }
+		  | '(' exp ')' 					{ DEBUGPRINT_BISON("\nPREFIX_EXP: '(' exp ')'"); }
+;
+/* <=== Prefix_exp block */
+
+
+/* ===> Function */
+function_def: FUNCTION function_body 		{ DEBUGPRINT_BISON("\nFUNCTION_BODY: FUNCTION function_body"); }
 ;
 
-
-attribute: NAME '<' NAME '>' 	{ DEBUGPRINT_BISON("\nATTRIBUTE: NAME '<' NAME '>'"); }
-		 | NAME '<' '>' 		{ DEBUGPRINT_BISON("\nATTRIBUTE: NAME '<' '>'"); }
+function_body: '(' ')' block END 			{ DEBUGPRINT_BISON("\nFUNCTION_BODY: '(' ')' block END"); }
+			 | '(' par_list ')' block END 	{ DEBUGPRINT_BISON("\nFUNCTION_BODY: '(' par_list ')' block END"); }
 ;
+/* <=== Function */
 
 
-par_list: name_list				{ DEBUGPRINT_BISON("\nPAR_LIST: name_list"); }
+/* ===> Function_call block */
+function_call: prefix_exp args 				{ DEBUGPRINT_BISON("\nFUNCTION_CALL: prefix_exp args"); }
+			 | prefix_exp ':' NAME args 	{ DEBUGPRINT_BISON("\nFUNCTION_CALL: prefix_exp ':' Name args"); }
+;
+/* <=== Function_call block */
 
-		/* With rule makes ... available only be single or last token*/
+
+/* ===> Args block */
+args: '(' ')' 			{ DEBUGPRINT_BISON("\nARGS: '(' ')'"); }
+	| '(' exp_list ')' 	{ DEBUGPRINT_BISON("\nARGS: '(' exp_list ')'"); }
+	| table_body 		{ DEBUGPRINT_BISON("\nARGS: table_body"); }
+	| literalString 	{ DEBUGPRINT_BISON("\nARGS: literalString"); }
+;
+/* <=== Args block */
+
+
+/* ===> Par_list block */
+par_list: name_list  			{ DEBUGPRINT_BISON("\nPAR_LIST: name_list"); }
 		| name_list ',' DOTS 	{ DEBUGPRINT_BISON("\nPAR_LIST: name_list ',' DOTS"); }
 		| DOTS 					{ DEBUGPRINT_BISON("\nPAR_LIST: DOTS"); }
 ;
+/* ===> Par_list block */
 
 
-name_list: name_list ',' NAME 	{ DEBUGPRINT_BISON("\nNAME_LIST: name_list ',' name_list"); }
+/* ===> Exp_list block */
+exp_list: exp_list ',' exp 		{ DEBUGPRINT_BISON("\nEXP_LIST: exp_list ',' exp"); }
+		| exp 					{ DEBUGPRINT_BISON("\nEXP_LIST: exp"); }
+;
+/* <=== Exp_list block */
+
+
+/* ===> Name_list block */
+name_list: name_list ',' NAME 	{ DEBUGPRINT_BISON("\nNAME_LIST: name_list ',' NAME"); }
 		 | NAME 				{ DEBUGPRINT_BISON("\nNAME_LIST: NAME"); }
 ;
+/* <=== Name_list block */
 
 
-body_constructor: '{' field_list '}'	{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: '{' field_list '}'"); }
-				| '{' '}' 				{ DEBUGPRINT_BISON("\nBODY_CONSTRUCTOR: '{' '}'"); }
+/* ===> Table_body block */
+table_body: '{' '}' 			{ DEBUGPRINT_BISON("\nTABLE_BODY: '{' '}' "); }
+		  | '{' field_list '}' 	{ DEBUGPRINT_BISON("\nTABLE_BODY: '{' field_list '}'"); }
+;
+/* <=== Table_body block */
+
+
+/* ===> Field_list block */
+/* Context with optional field_sep */
+field_list: field_list_part field_sep  		{ DEBUGPRINT_BISON("\nFIELD_LIST: field_list_part field_sep"); }
+		  | field_list_part 		 		{ DEBUGPRINT_BISON("\nFIELD_LIST: field_list_part"); }
 ;
 
-
-label: LABEL_DEF NAME LABEL_DEF 		{ DEBUGPRINT_BISON("\nLABEL: '::' NAME '::' "); }
+/* Recursion */
+field_list_part: field_list_part field_sep field	{ DEBUGPRINT_BISON("\nFIELD_LIST_PART: field_list_part field_sep"); }
+			   | field 								{ DEBUGPRINT_BISON("\nFIELD_LIST_PART: field"); }
 ;
-
-
-field_list: field_list field_sep  		{ DEBUGPRINT_BISON("\nFIELD_LIST: field_list field_sep"); }
-		  /* Recursion element collector */
-		  | field_list field_sep field 	{ DEBUGPRINT_BISON("\nFIELD_LIST: field_list field_sep field"); }
-
-		  /* This line is the start point element list collector */
-		  | field field_sep field 		{ DEBUGPRINT_BISON("\nFIELD_LIST: field field_sep field"); }
-
-		  /* Single element collector */
-		  | field  						{ DEBUGPRINT_BISON("\nFIELD_LIST: field"); }
-
-		  /* Resolve [field ,] .field->field_list then field_list->field can't resolve =() */
-		  | field field_sep 			{ DEBUGPRINT_BISON("\nFIELD_LIST: field field_sep"); }
-;
+/* <=== Field_list block */
 
 
 field: '[' exp ']' '=' exp 	{ DEBUGPRINT_BISON("\nFIELD: '[' exp ']' '=' exp"); }
@@ -185,30 +302,30 @@ exp:  NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
 	| TRUE			{ DEBUGPRINT_BISON("\nEXP: TRUE"); }
 	| DOTS			{ DEBUGPRINT_BISON("\nEXP: DOTS"); }
 
-	//| '(' exp ')'	{ DEBUGPRINT_BISON("\nEXP: ( exp )"); }
 	| exp BINOP exp { DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
 	| exp MINUS exp { DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
-	/* Unary and binary */
-	| MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }
-
-	| UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }
-
-	| NAME BINOP exp 	{ DEBUGPRINT_BISON("\nEXP: NAME BINOP exp"); }
-	| exp BINOP NAME 	{ DEBUGPRINT_BISON("\nEXP: exp BINOP NAME"); }
 
 	/* Because '<' NAME '>' is attribute */
 	| exp '<' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
 	| exp '>' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
 
+	/* Unary and binary */
+	| MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }
+
+	| UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }
+
 	| numeral		{ DEBUGPRINT_BISON("\nEXP: numeral"); }
 	| literalString { DEBUGPRINT_BISON("\nEXP: literalString"); }
+	| table_body 	{ DEBUGPRINT_BISON("\nEXP: table_body"); }
+
+	| function_def 	{ DEBUGPRINT_BISON("\nEXP: function_def"); }
 ;
 
 
-literalString:	ONEQSTRING 		{ DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
-				| TWOQSTRING	{ DEBUGPRINT_BISON("\nVAR: TWOQSTRING"); }
-				| LONGSTRING 	{ DEBUGPRINT_BISON("\nVAR: LONGSTRING"); }/* TODO */
-				//| LongString
+literalString: ONEQSTRING 		{ DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
+			 | TWOQSTRING	{ DEBUGPRINT_BISON("\nVAR: TWOQSTRING"); }
+			 | LONGSTRING 	{ DEBUGPRINT_BISON("\nVAR: LONGSTRING"); }/* TODO */
+		     //| LongString
 ;
 
 

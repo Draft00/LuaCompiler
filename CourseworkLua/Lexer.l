@@ -93,6 +93,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "until"         		{ DEBUGPRINT("\nLex: UNTIL: %s", yytext); 		return UNTIL; }
 "repeat"        		{ DEBUGPRINT("\nLex: REPEAT: %s", yytext); 		return REPEAT; }
 "end"           		{ DEBUGPRINT("\nLex: END: %s", yytext); 		return END; }
+"goto" 					{ DEBUGPRINT("\nLex: GOTO: %s", yytext); 		return GOTO; }
 
 
 "if"					{ DEBUGPRINT("\nLex: IF: %s", yytext); 			return IF; }	/* Statements */
