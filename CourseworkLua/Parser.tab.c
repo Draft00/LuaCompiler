@@ -563,9 +563,9 @@ static const yytype_uint16 yyrline[] =
      208,   214,   215,   216,   222,   225,   226,   232,   233,   239,
      240,   241,   242,   248,   249,   250,   256,   257,   264,   265,
      271,   272,   279,   280,   284,   285,   290,   291,   292,   296,
-     297,   301,   302,   303,   304,   305,   307,   308,   309,   312,
-     313,   316,   318,   320,   321,   322,   324,   325,   329,   330,
-     331,   336,   337,   338,   339
+     297,   301,   302,   303,   304,   306,   308,   309,   310,   313,
+     314,   317,   318,   319,   320,   321,   322,   323,   327,   328,
+     329,   334,   335,   336,   337
 };
 #endif
 
@@ -2175,43 +2175,43 @@ yyreduce:
 
   case 85:
 /* Line 1802 of yacc.c  */
-#line 305 "Parser.y"
+#line 306 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: NAME"); }
     break;
 
   case 86:
 /* Line 1802 of yacc.c  */
-#line 307 "Parser.y"
+#line 308 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: '(' exp ')' "); }
     break;
 
   case 87:
 /* Line 1802 of yacc.c  */
-#line 308 "Parser.y"
+#line 309 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
     break;
 
   case 88:
 /* Line 1802 of yacc.c  */
-#line 309 "Parser.y"
+#line 310 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
     break;
 
   case 89:
 /* Line 1802 of yacc.c  */
-#line 312 "Parser.y"
+#line 313 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
     break;
 
   case 90:
 /* Line 1802 of yacc.c  */
-#line 313 "Parser.y"
+#line 314 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
     break;
 
   case 91:
 /* Line 1802 of yacc.c  */
-#line 316 "Parser.y"
+#line 317 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: MINUS exp"); }
     break;
 
@@ -2223,73 +2223,73 @@ yyreduce:
 
   case 93:
 /* Line 1802 of yacc.c  */
-#line 320 "Parser.y"
+#line 319 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: numeral"); }
     break;
 
   case 94:
 /* Line 1802 of yacc.c  */
-#line 321 "Parser.y"
+#line 320 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: literalString"); }
     break;
 
   case 95:
 /* Line 1802 of yacc.c  */
-#line 322 "Parser.y"
+#line 321 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: table_body"); }
     break;
 
   case 96:
 /* Line 1802 of yacc.c  */
-#line 324 "Parser.y"
+#line 322 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: function_def"); }
     break;
 
   case 97:
 /* Line 1802 of yacc.c  */
-#line 325 "Parser.y"
+#line 323 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: function_call"); }
     break;
 
   case 98:
 /* Line 1802 of yacc.c  */
-#line 329 "Parser.y"
+#line 327 "Parser.y"
     { DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
     break;
 
   case 99:
 /* Line 1802 of yacc.c  */
-#line 330 "Parser.y"
+#line 328 "Parser.y"
     { DEBUGPRINT_BISON("\nVAR: TWOQSTRING"); }
     break;
 
   case 100:
 /* Line 1802 of yacc.c  */
-#line 331 "Parser.y"
+#line 329 "Parser.y"
     { DEBUGPRINT_BISON("\nVAR: LONGSTRING"); }
     break;
 
   case 101:
 /* Line 1802 of yacc.c  */
-#line 336 "Parser.y"
+#line 334 "Parser.y"
     { DEBUGPRINT_BISON("\nNUMERAL: INT"); }
     break;
 
   case 102:
 /* Line 1802 of yacc.c  */
-#line 337 "Parser.y"
+#line 335 "Parser.y"
     { DEBUGPRINT_BISON("\nNUMERAL: HEX"); }
     break;
 
   case 103:
 /* Line 1802 of yacc.c  */
-#line 338 "Parser.y"
+#line 336 "Parser.y"
     { DEBUGPRINT_BISON("\nNUMERAL: FLOAT"); }
     break;
 
   case 104:
 /* Line 1802 of yacc.c  */
-#line 339 "Parser.y"
+#line 337 "Parser.y"
     { DEBUGPRINT_BISON("\nNUMERAL: HEX_FLOAT"); }
     break;
 
@@ -2534,7 +2534,7 @@ yyreturn:
 
 
 /* Line 2050 of yacc.c  */
-#line 357 "Parser.y"
+#line 355 "Parser.y"
 
 
 int parser_main(int argc, char *argv[])

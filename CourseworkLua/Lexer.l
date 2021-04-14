@@ -8,7 +8,7 @@
 #define noyywrap
 #define DEBUG
 
-#define fileno _fileno
+//#define fileno _fileno
 
 #define YY_USER_ACTION \
 yylloc.first_line = yylloc.last_line; \
