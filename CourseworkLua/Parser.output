@@ -3,13 +3,12 @@ Terminals unused in grammar
    TWOQ
    ONEQ
    NESTED_STR
-   ELSE
 
 
 State 0 conflicts: 13 shift/reduce
 State 2 conflicts: 13 shift/reduce
 State 5 conflicts: 13 shift/reduce
-State 16 conflicts: 14 shift/reduce, 4 reduce/reduce
+State 16 conflicts: 14 shift/reduce, 5 reduce/reduce
 State 27 conflicts: 1 reduce/reduce
 State 45 conflicts: 1 reduce/reduce
 State 47 conflicts: 1 reduce/reduce
@@ -25,8 +24,10 @@ State 134 conflicts: 4 shift/reduce
 State 135 conflicts: 4 shift/reduce
 State 152 conflicts: 13 shift/reduce
 State 158 conflicts: 13 shift/reduce
-State 181 conflicts: 13 shift/reduce
+State 163 conflicts: 13 shift/reduce
+State 180 conflicts: 13 shift/reduce
 State 184 conflicts: 13 shift/reduce
+State 189 conflicts: 13 shift/reduce
 
 
 Grammar
@@ -71,158 +72,160 @@ Grammar
 
    28 statement: IF exp THEN block END
    29          | IF exp THEN block else_if END
+   30          | IF exp THEN block ELSE block END
+   31          | IF exp THEN block else_if ELSE block END
 
-   30 else_if: else_if ELSEIF exp THEN block
-   31        | ELSEIF exp THEN block
+   32 else_if: else_if ELSEIF exp THEN block
+   33        | ELSEIF exp THEN block
 
-   32 attr_list: attr_list ',' NAME attr
-   33          | NAME attr
+   34 attr_list: attr_list ',' NAME attr
+   35          | NAME attr
 
-   34 attr: '<' NAME '>'
-   35     | /* empty */
+   36 attr: '<' NAME '>'
+   37     | /* empty */
 
-   36 ret: RETURN
-   37    | RETURN ';'
-   38    | RETURN exp_list
-   39    | RETURN exp_list ';'
+   38 ret: RETURN
+   39    | RETURN ';'
+   40    | RETURN exp_list
+   41    | RETURN exp_list ';'
 
-   40 label: LABEL_DEF NAME LABEL_DEF
+   42 label: LABEL_DEF NAME LABEL_DEF
 
-   41 function_name: function_name_part
-   42              | function_name_part ':' NAME
+   43 function_name: function_name_part
+   44              | function_name_part ':' NAME
 
-   43 function_name_part: function_name_part '.' NAME
-   44                   | NAME
+   45 function_name_part: function_name_part '.' NAME
+   46                   | NAME
 
-   45 var_list: var_list ',' var
-   46         | var
+   47 var_list: var_list ',' var
+   48         | var
 
-   47 var: NAME
-   48    | prefix_exp '[' exp ']'
-   49    | prefix_exp '.' NAME
+   49 var: NAME
+   50    | prefix_exp '[' exp ']'
+   51    | prefix_exp '.' NAME
 
-   50 prefix_exp: var
-   51           | function_call
-   52           | '(' exp ')'
+   52 prefix_exp: var
+   53           | function_call
+   54           | '(' exp ')'
 
-   53 function_def: FUNCTION function_body
+   55 function_def: FUNCTION function_body
 
-   54 function_body: '(' ')' block END
-   55              | '(' par_list ')' block END
+   56 function_body: '(' ')' block END
+   57              | '(' par_list ')' block END
 
-   56 function_call: prefix_exp args
-   57              | prefix_exp ':' NAME args
+   58 function_call: prefix_exp args
+   59              | prefix_exp ':' NAME args
 
-   58 args: '(' ')'
-   59     | '(' exp_list ')'
-   60     | table_body
-   61     | literalString
+   60 args: '(' ')'
+   61     | '(' exp_list ')'
+   62     | table_body
+   63     | literalString
 
-   62 par_list: name_list
-   63         | name_list ',' DOTS
-   64         | DOTS
+   64 par_list: name_list
+   65         | name_list ',' DOTS
+   66         | DOTS
 
-   65 exp_list: exp_list ',' exp
-   66         | exp
+   67 exp_list: exp_list ',' exp
+   68         | exp
 
-   67 name_list: name_list ',' NAME
-   68          | NAME
+   69 name_list: name_list ',' NAME
+   70          | NAME
 
-   69 table_body: '{' '}'
-   70           | '{' field_list '}'
+   71 table_body: '{' '}'
+   72           | '{' field_list '}'
 
-   71 field_list: field_list_part field_sep
-   72           | field_list_part
+   73 field_list: field_list_part field_sep
+   74           | field_list_part
 
-   73 field_list_part: field_list_part field_sep field
-   74                | field
+   75 field_list_part: field_list_part field_sep field
+   76                | field
 
-   75 field: '[' exp ']' '=' exp
-   76      | NAME '=' exp
-   77      | exp
+   77 field: '[' exp ']' '=' exp
+   78      | NAME '=' exp
+   79      | exp
 
-   78 field_sep: ','
-   79          | ';'
+   80 field_sep: ','
+   81          | ';'
 
-   80 exp: NIL
-   81    | FALSE
-   82    | TRUE
-   83    | DOTS
-   84    | '(' exp ')'
-   85    | exp BINOP exp
-   86    | exp MINUS exp
-   87    | exp '<' exp
-   88    | exp '>' exp
-   89    | MINUS exp
-   90    | UNOP exp
-   91    | numeral
-   92    | literalString
-   93    | table_body
-   94    | function_def
-   95    | function_call
-   96    | var
+   82 exp: NIL
+   83    | FALSE
+   84    | TRUE
+   85    | DOTS
+   86    | '(' exp ')'
+   87    | exp BINOP exp
+   88    | exp MINUS exp
+   89    | exp '<' exp
+   90    | exp '>' exp
+   91    | MINUS exp
+   92    | UNOP exp
+   93    | numeral
+   94    | literalString
+   95    | table_body
+   96    | function_def
+   97    | function_call
+   98    | var
 
-   97 literalString: ONEQSTRING
-   98              | TWOQSTRING
-   99              | LONGSTRING
+   99 literalString: ONEQSTRING
+  100              | TWOQSTRING
+  101              | LONGSTRING
 
-  100 numeral: INT
-  101        | HEX
-  102        | FLOAT
-  103        | HEX_FLOAT
+  102 numeral: INT
+  103        | HEX
+  104        | FLOAT
+  105        | HEX_FLOAT
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 52 54 55 58 59 84
-')' (41) 52 54 55 58 59 84
-',' (44) 26 27 32 45 63 65 67 78
-'.' (46) 43 49
-':' (58) 42 57
-';' (59) 8 37 39 79
-'<' (60) 34 87
-'=' (61) 9 24 25 75 76
-'>' (62) 34 88
-'[' (91) 48 75
-']' (93) 48 75
-'{' (123) 69 70
-'}' (125) 69 70
+'(' (40) 54 56 57 60 61 86
+')' (41) 54 56 57 60 61 86
+',' (44) 26 27 34 47 65 67 69 80
+'.' (46) 45 51
+':' (58) 44 59
+';' (59) 8 39 41 81
+'<' (60) 36 89
+'=' (61) 9 24 25 77 78
+'>' (62) 36 90
+'[' (91) 50 77
+']' (93) 50 77
+'{' (123) 71 72
+'}' (125) 71 72
 error (256)
-INT (258) 100
-HEX (259) 101
-FLOAT (260) 102
-HEX_FLOAT (261) 103
+INT (258) 102
+HEX (259) 103
+FLOAT (260) 104
+HEX_FLOAT (261) 105
 TWOQ (262)
 ONEQ (263)
-ONEQSTRING (264) 97
-TWOQSTRING (265) 98
-LONGSTRING (266) 99
+ONEQSTRING (264) 99
+TWOQSTRING (265) 100
+LONGSTRING (266) 101
 NESTED_STR (267)
-NAME (268) 13 22 25 32 33 34 40 42 43 44 47 49 57 67 68 76
-DOTS (269) 63 64 83
-NIL (270) 80
-FALSE (271) 81
-TRUE (272) 82
-BINOP (273) 85
-UNOP (274) 90
-MINUS (275) 86 89
+NAME (268) 13 22 25 34 35 36 42 44 45 46 49 51 59 69 70 78
+DOTS (269) 65 66 85
+NIL (270) 82
+FALSE (271) 83
+TRUE (272) 84
+BINOP (273) 87
+UNOP (274) 92
+MINUS (275) 88 91
 DO (276) 19 20 25
 WHILE (277) 20
 FOR (278) 25
 UNTIL (279) 21
 REPEAT (280) 21
-END (281) 19 20 25 28 29 54 55
+END (281) 19 20 25 28 29 30 31 56 57
 GOTO (282) 13
-IF (283) 28 29
-THEN (284) 28 29 30 31
-ELSEIF (285) 30 31
-ELSE (286)
+IF (283) 28 29 30 31
+THEN (284) 28 29 30 31 32 33
+ELSEIF (285) 32 33
+ELSE (286) 30 31
 LOCAL (287) 22 23 24
-FUNCTION (288) 17 22 53
+FUNCTION (288) 17 22 55
 BREAK (289) 12
-RETURN (290) 36 37 38 39
-LABEL_DEF (291) 40
+RETURN (290) 38 39 40 41
+LABEL_DEF (291) 42
 
 
 Nonterminals, with rules where they appear
@@ -232,7 +235,7 @@ $accept (50)
 main (51)
     on left: 1, on right: 0
 block (52)
-    on left: 2 3, on right: 1 19 20 21 25 28 29 30 31 54 55
+    on left: 2 3, on right: 1 19 20 21 25 28 29 30 31 32 33 56 57
 stat_list (53)
     on left: 4 5, on right: 2 3 4
 opt_stat (54)
@@ -248,59 +251,59 @@ for_cycle (58)
 cycle_exp_list (59)
     on left: 26 27, on right: 25 26
 statement (60)
-    on left: 28 29, on right: 15
+    on left: 28 29 30 31, on right: 15
 else_if (61)
-    on left: 30 31, on right: 29 30
+    on left: 32 33, on right: 29 31 32
 attr_list (62)
-    on left: 32 33, on right: 23 24 32
+    on left: 34 35, on right: 23 24 34
 attr (63)
-    on left: 34 35, on right: 32 33
+    on left: 36 37, on right: 34 35
 ret (64)
-    on left: 36 37 38 39, on right: 3
+    on left: 38 39 40 41, on right: 3
 label (65)
-    on left: 40, on right: 11
+    on left: 42, on right: 11
 function_name (66)
-    on left: 41 42, on right: 17
+    on left: 43 44, on right: 17
 function_name_part (67)
-    on left: 43 44, on right: 41 42 43
+    on left: 45 46, on right: 43 44 45
 var_list (68)
-    on left: 45 46, on right: 9 45
+    on left: 47 48, on right: 9 47
 var (69)
-    on left: 47 48 49, on right: 45 46 50 96
+    on left: 49 50 51, on right: 47 48 52 98
 prefix_exp (70)
-    on left: 50 51 52, on right: 48 49 56 57
+    on left: 52 53 54, on right: 50 51 58 59
 function_def (71)
-    on left: 53, on right: 94
+    on left: 55, on right: 96
 function_body (72)
-    on left: 54 55, on right: 17 22 53
+    on left: 56 57, on right: 17 22 55
 function_call (73)
-    on left: 56 57, on right: 10 51 95
+    on left: 58 59, on right: 10 53 97
 args (74)
-    on left: 58 59 60 61, on right: 56 57
+    on left: 60 61 62 63, on right: 58 59
 par_list (75)
-    on left: 62 63 64, on right: 55
+    on left: 64 65 66, on right: 57
 exp_list (76)
-    on left: 65 66, on right: 9 24 38 39 59 65
+    on left: 67 68, on right: 9 24 40 41 61 67
 name_list (77)
-    on left: 67 68, on right: 62 63 67
+    on left: 69 70, on right: 64 65 69
 table_body (78)
-    on left: 69 70, on right: 60 93
+    on left: 71 72, on right: 62 95
 field_list (79)
-    on left: 71 72, on right: 70
+    on left: 73 74, on right: 72
 field_list_part (80)
-    on left: 73 74, on right: 71 72 73
+    on left: 75 76, on right: 73 74 75
 field (81)
-    on left: 75 76 77, on right: 73 74
+    on left: 77 78 79, on right: 75 76
 field_sep (82)
-    on left: 78 79, on right: 71 73
+    on left: 80 81, on right: 73 75
 exp (83)
-    on left: 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96, on right:
-    20 21 26 27 28 29 30 31 48 52 65 66 75 76 77 84 85 86 87 88 89
-    90
+    on left: 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98, on right:
+    20 21 26 27 28 29 30 31 32 33 50 54 67 68 77 78 79 86 87 88 89
+    90 91 92
 literalString (84)
-    on left: 97 98 99, on right: 61 92
+    on left: 99 100 101, on right: 63 94
 numeral (85)
-    on left: 100 101 102 103, on right: 91
+    on left: 102 103 104 105, on right: 93
 
 
 State 0
@@ -354,9 +357,9 @@ State 0
 
 State 1
 
-   47 var: NAME .
+   49 var: NAME .
 
-    $default  reduce using rule 47 (var)
+    $default  reduce using rule 49 (var)
 
 
 State 2
@@ -505,6 +508,8 @@ State 7
 
    28 statement: IF . exp THEN block END
    29          | IF . exp THEN block else_if END
+   30          | IF . exp THEN block ELSE block END
+   31          | IF . exp THEN block else_if ELSE block END
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -565,7 +570,7 @@ State 10
 
 State 11
 
-   40 label: LABEL_DEF . NAME LABEL_DEF
+   42 label: LABEL_DEF . NAME LABEL_DEF
 
     NAME  shift, and go to state 62
 
@@ -579,7 +584,7 @@ State 12
 
 State 13
 
-   52 prefix_exp: '(' . exp ')'
+   54 prefix_exp: '(' . exp ')'
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -659,6 +664,8 @@ State 16
     IF         [reduce using rule 7 (opt_stat)]
     ELSEIF     reduce using rule 2 (block)
     ELSEIF     [reduce using rule 7 (opt_stat)]
+    ELSE       reduce using rule 2 (block)
+    ELSE       [reduce using rule 7 (opt_stat)]
     LOCAL      [reduce using rule 7 (opt_stat)]
     FUNCTION   [reduce using rule 7 (opt_stat)]
     BREAK      [reduce using rule 7 (opt_stat)]
@@ -734,7 +741,7 @@ State 23
 State 24
 
     9 stat: var_list . '=' exp_list
-   45 var_list: var_list . ',' var
+   47 var_list: var_list . ',' var
 
     '='  shift, and go to state 68
     ','  shift, and go to state 69
@@ -742,20 +749,20 @@ State 24
 
 State 25
 
-   46 var_list: var .
-   50 prefix_exp: var .
+   48 var_list: var .
+   52 prefix_exp: var .
 
-    '='       reduce using rule 46 (var_list)
-    ','       reduce using rule 46 (var_list)
-    $default  reduce using rule 50 (prefix_exp)
+    '='       reduce using rule 48 (var_list)
+    ','       reduce using rule 48 (var_list)
+    $default  reduce using rule 52 (prefix_exp)
 
 
 State 26
 
-   48 var: prefix_exp . '[' exp ']'
-   49    | prefix_exp . '.' NAME
-   56 function_call: prefix_exp . args
-   57              | prefix_exp . ':' NAME args
+   50 var: prefix_exp . '[' exp ']'
+   51    | prefix_exp . '.' NAME
+   58 function_call: prefix_exp . args
+   59              | prefix_exp . ':' NAME args
 
     ONEQSTRING  shift, and go to state 33
     TWOQSTRING  shift, and go to state 34
@@ -774,17 +781,17 @@ State 26
 State 27
 
    10 stat: function_call .
-   51 prefix_exp: function_call .
+   53 prefix_exp: function_call .
 
-    ONEQSTRING  reduce using rule 51 (prefix_exp)
-    TWOQSTRING  reduce using rule 51 (prefix_exp)
-    LONGSTRING  reduce using rule 51 (prefix_exp)
-    ':'         reduce using rule 51 (prefix_exp)
-    '.'         reduce using rule 51 (prefix_exp)
-    '['         reduce using rule 51 (prefix_exp)
+    ONEQSTRING  reduce using rule 53 (prefix_exp)
+    TWOQSTRING  reduce using rule 53 (prefix_exp)
+    LONGSTRING  reduce using rule 53 (prefix_exp)
+    ':'         reduce using rule 53 (prefix_exp)
+    '.'         reduce using rule 53 (prefix_exp)
+    '['         reduce using rule 53 (prefix_exp)
     '('         reduce using rule 10 (stat)
-    '('         [reduce using rule 51 (prefix_exp)]
-    '{'         reduce using rule 51 (prefix_exp)
+    '('         [reduce using rule 53 (prefix_exp)]
+    '{'         reduce using rule 53 (prefix_exp)
     $default    reduce using rule 10 (stat)
 
 
@@ -797,84 +804,84 @@ State 28
 
 State 29
 
-  100 numeral: INT .
-
-    $default  reduce using rule 100 (numeral)
-
-
-State 30
-
-  101 numeral: HEX .
-
-    $default  reduce using rule 101 (numeral)
-
-
-State 31
-
-  102 numeral: FLOAT .
+  102 numeral: INT .
 
     $default  reduce using rule 102 (numeral)
 
 
-State 32
+State 30
 
-  103 numeral: HEX_FLOAT .
+  103 numeral: HEX .
 
     $default  reduce using rule 103 (numeral)
 
 
+State 31
+
+  104 numeral: FLOAT .
+
+    $default  reduce using rule 104 (numeral)
+
+
+State 32
+
+  105 numeral: HEX_FLOAT .
+
+    $default  reduce using rule 105 (numeral)
+
+
 State 33
 
-   97 literalString: ONEQSTRING .
-
-    $default  reduce using rule 97 (literalString)
-
-
-State 34
-
-   98 literalString: TWOQSTRING .
-
-    $default  reduce using rule 98 (literalString)
-
-
-State 35
-
-   99 literalString: LONGSTRING .
+   99 literalString: ONEQSTRING .
 
     $default  reduce using rule 99 (literalString)
 
 
+State 34
+
+  100 literalString: TWOQSTRING .
+
+    $default  reduce using rule 100 (literalString)
+
+
+State 35
+
+  101 literalString: LONGSTRING .
+
+    $default  reduce using rule 101 (literalString)
+
+
 State 36
 
-   83 exp: DOTS .
+   85 exp: DOTS .
 
-    $default  reduce using rule 83 (exp)
+    $default  reduce using rule 85 (exp)
 
 
 State 37
 
-   80 exp: NIL .
-
-    $default  reduce using rule 80 (exp)
-
-
-State 38
-
-   81 exp: FALSE .
-
-    $default  reduce using rule 81 (exp)
-
-
-State 39
-
-   82 exp: TRUE .
+   82 exp: NIL .
 
     $default  reduce using rule 82 (exp)
 
 
+State 38
+
+   83 exp: FALSE .
+
+    $default  reduce using rule 83 (exp)
+
+
+State 39
+
+   84 exp: TRUE .
+
+    $default  reduce using rule 84 (exp)
+
+
 State 40
 
-   90 exp: UNOP . exp
+   92 exp: UNOP . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -906,7 +913,7 @@ State 40
 
 State 41
 
-   89 exp: MINUS . exp
+   91 exp: MINUS . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -938,7 +945,7 @@ State 41
 
 State 42
 
-   53 function_def: FUNCTION . function_body
+   55 function_def: FUNCTION . function_body
 
     '('  shift, and go to state 80
 
@@ -947,8 +954,8 @@ State 42
 
 State 43
 
-   52 prefix_exp: '(' . exp ')'
-   84 exp: '(' . exp ')'
+   54 prefix_exp: '(' . exp ')'
+   86 exp: '(' . exp ')'
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -980,8 +987,8 @@ State 43
 
 State 44
 
-   69 table_body: '{' . '}'
-   70           | '{' . field_list '}'
+   71 table_body: '{' . '}'
+   72           | '{' . field_list '}'
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1018,59 +1025,59 @@ State 44
 
 State 45
 
-   50 prefix_exp: var .
-   96 exp: var .
+   52 prefix_exp: var .
+   98 exp: var .
 
-    ONEQSTRING  reduce using rule 50 (prefix_exp)
-    TWOQSTRING  reduce using rule 50 (prefix_exp)
-    LONGSTRING  reduce using rule 50 (prefix_exp)
-    ':'         reduce using rule 50 (prefix_exp)
-    '.'         reduce using rule 50 (prefix_exp)
-    '['         reduce using rule 50 (prefix_exp)
-    '('         reduce using rule 50 (prefix_exp)
-    '('         [reduce using rule 96 (exp)]
-    '{'         reduce using rule 50 (prefix_exp)
-    $default    reduce using rule 96 (exp)
+    ONEQSTRING  reduce using rule 52 (prefix_exp)
+    TWOQSTRING  reduce using rule 52 (prefix_exp)
+    LONGSTRING  reduce using rule 52 (prefix_exp)
+    ':'         reduce using rule 52 (prefix_exp)
+    '.'         reduce using rule 52 (prefix_exp)
+    '['         reduce using rule 52 (prefix_exp)
+    '('         reduce using rule 52 (prefix_exp)
+    '('         [reduce using rule 98 (exp)]
+    '{'         reduce using rule 52 (prefix_exp)
+    $default    reduce using rule 98 (exp)
 
 
 State 46
 
-   94 exp: function_def .
+   96 exp: function_def .
 
-    $default  reduce using rule 94 (exp)
+    $default  reduce using rule 96 (exp)
 
 
 State 47
 
-   51 prefix_exp: function_call .
-   95 exp: function_call .
+   53 prefix_exp: function_call .
+   97 exp: function_call .
 
-    ONEQSTRING  reduce using rule 51 (prefix_exp)
-    TWOQSTRING  reduce using rule 51 (prefix_exp)
-    LONGSTRING  reduce using rule 51 (prefix_exp)
-    ':'         reduce using rule 51 (prefix_exp)
-    '.'         reduce using rule 51 (prefix_exp)
-    '['         reduce using rule 51 (prefix_exp)
-    '('         reduce using rule 51 (prefix_exp)
-    '('         [reduce using rule 95 (exp)]
-    '{'         reduce using rule 51 (prefix_exp)
-    $default    reduce using rule 95 (exp)
+    ONEQSTRING  reduce using rule 53 (prefix_exp)
+    TWOQSTRING  reduce using rule 53 (prefix_exp)
+    LONGSTRING  reduce using rule 53 (prefix_exp)
+    ':'         reduce using rule 53 (prefix_exp)
+    '.'         reduce using rule 53 (prefix_exp)
+    '['         reduce using rule 53 (prefix_exp)
+    '('         reduce using rule 53 (prefix_exp)
+    '('         [reduce using rule 97 (exp)]
+    '{'         reduce using rule 53 (prefix_exp)
+    $default    reduce using rule 97 (exp)
 
 
 State 48
 
-   93 exp: table_body .
+   95 exp: table_body .
 
-    $default  reduce using rule 93 (exp)
+    $default  reduce using rule 95 (exp)
 
 
 State 49
 
    20 while_do: WHILE exp . DO block END
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -1081,16 +1088,16 @@ State 49
 
 State 50
 
-   92 exp: literalString .
+   94 exp: literalString .
 
-    $default  reduce using rule 92 (exp)
+    $default  reduce using rule 94 (exp)
 
 
 State 51
 
-   91 exp: numeral .
+   93 exp: numeral .
 
-    $default  reduce using rule 91 (exp)
+    $default  reduce using rule 93 (exp)
 
 
 State 52
@@ -1118,10 +1125,12 @@ State 55
 
    28 statement: IF exp . THEN block END
    29          | IF exp . THEN block else_if END
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   30          | IF exp . THEN block ELSE block END
+   31          | IF exp . THEN block else_if ELSE block END
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -1132,11 +1141,11 @@ State 55
 
 State 56
 
-   33 attr_list: NAME . attr
+   35 attr_list: NAME . attr
 
     '<'  shift, and go to state 98
 
-    $default  reduce using rule 35 (attr)
+    $default  reduce using rule 37 (attr)
 
     attr  go to state 99
 
@@ -1152,7 +1161,7 @@ State 58
 
    23 locals: LOCAL attr_list .
    24       | LOCAL attr_list . '=' exp_list
-   32 attr_list: attr_list . ',' NAME attr
+   34 attr_list: attr_list . ',' NAME attr
 
     '='  shift, and go to state 101
     ','  shift, and go to state 102
@@ -1162,9 +1171,9 @@ State 58
 
 State 59
 
-   44 function_name_part: NAME .
+   46 function_name_part: NAME .
 
-    $default  reduce using rule 44 (function_name_part)
+    $default  reduce using rule 46 (function_name_part)
 
 
 State 60
@@ -1178,30 +1187,30 @@ State 60
 
 State 61
 
-   41 function_name: function_name_part .
-   42              | function_name_part . ':' NAME
-   43 function_name_part: function_name_part . '.' NAME
+   43 function_name: function_name_part .
+   44              | function_name_part . ':' NAME
+   45 function_name_part: function_name_part . '.' NAME
 
     ':'  shift, and go to state 104
     '.'  shift, and go to state 105
 
-    $default  reduce using rule 41 (function_name)
+    $default  reduce using rule 43 (function_name)
 
 
 State 62
 
-   40 label: LABEL_DEF NAME . LABEL_DEF
+   42 label: LABEL_DEF NAME . LABEL_DEF
 
     LABEL_DEF  shift, and go to state 106
 
 
 State 63
 
-   52 prefix_exp: '(' exp . ')'
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   54 prefix_exp: '(' exp . ')'
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -1219,10 +1228,10 @@ State 64
 
 State 65
 
-   36 ret: RETURN .
-   37    | RETURN . ';'
-   38    | RETURN . exp_list
-   39    | RETURN . exp_list ';'
+   38 ret: RETURN .
+   39    | RETURN . ';'
+   40    | RETURN . exp_list
+   41    | RETURN . exp_list ';'
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1243,7 +1252,7 @@ State 65
     '('         shift, and go to state 43
     '{'         shift, and go to state 44
 
-    $default  reduce using rule 36 (ret)
+    $default  reduce using rule 38 (ret)
 
     var            go to state 45
     prefix_exp     go to state 26
@@ -1305,7 +1314,7 @@ State 68
 
 State 69
 
-   45 var_list: var_list ',' . var
+   47 var_list: var_list ',' . var
 
     NAME  shift, and go to state 1
     '('   shift, and go to state 13
@@ -1317,21 +1326,21 @@ State 69
 
 State 70
 
-   57 function_call: prefix_exp ':' . NAME args
+   59 function_call: prefix_exp ':' . NAME args
 
     NAME  shift, and go to state 114
 
 
 State 71
 
-   49 var: prefix_exp '.' . NAME
+   51 var: prefix_exp '.' . NAME
 
     NAME  shift, and go to state 115
 
 
 State 72
 
-   48 var: prefix_exp '[' . exp ']'
+   50 var: prefix_exp '[' . exp ']'
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1363,8 +1372,8 @@ State 72
 
 State 73
 
-   58 args: '(' . ')'
-   59     | '(' . exp_list ')'
+   60 args: '(' . ')'
+   61     | '(' . exp_list ')'
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1398,23 +1407,23 @@ State 73
 
 State 74
 
-   56 function_call: prefix_exp args .
+   58 function_call: prefix_exp args .
 
-    $default  reduce using rule 56 (function_call)
+    $default  reduce using rule 58 (function_call)
 
 
 State 75
 
-   60 args: table_body .
+   62 args: table_body .
 
-    $default  reduce using rule 60 (args)
+    $default  reduce using rule 62 (args)
 
 
 State 76
 
-   61 args: literalString .
+   63 args: literalString .
 
-    $default  reduce using rule 61 (args)
+    $default  reduce using rule 63 (args)
 
 
 State 77
@@ -1426,48 +1435,48 @@ State 77
 
 State 78
 
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-   90    | UNOP exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
+   92    | UNOP exp .
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
     '<'    shift, and go to state 93
     '>'    shift, and go to state 94
 
-    BINOP     [reduce using rule 90 (exp)]
-    MINUS     [reduce using rule 90 (exp)]
-    '<'       [reduce using rule 90 (exp)]
-    '>'       [reduce using rule 90 (exp)]
-    $default  reduce using rule 90 (exp)
+    BINOP     [reduce using rule 92 (exp)]
+    MINUS     [reduce using rule 92 (exp)]
+    '<'       [reduce using rule 92 (exp)]
+    '>'       [reduce using rule 92 (exp)]
+    $default  reduce using rule 92 (exp)
 
 
 State 79
 
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-   89    | MINUS exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
+   91    | MINUS exp .
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
     '<'    shift, and go to state 93
     '>'    shift, and go to state 94
 
-    BINOP     [reduce using rule 89 (exp)]
-    MINUS     [reduce using rule 89 (exp)]
-    '<'       [reduce using rule 89 (exp)]
-    '>'       [reduce using rule 89 (exp)]
-    $default  reduce using rule 89 (exp)
+    BINOP     [reduce using rule 91 (exp)]
+    MINUS     [reduce using rule 91 (exp)]
+    '<'       [reduce using rule 91 (exp)]
+    '>'       [reduce using rule 91 (exp)]
+    $default  reduce using rule 91 (exp)
 
 
 State 80
 
-   54 function_body: '(' . ')' block END
-   55              | '(' . par_list ')' block END
+   56 function_body: '(' . ')' block END
+   57              | '(' . par_list ')' block END
 
     NAME  shift, and go to state 119
     DOTS  shift, and go to state 120
@@ -1479,19 +1488,19 @@ State 80
 
 State 81
 
-   53 function_def: FUNCTION function_body .
+   55 function_def: FUNCTION function_body .
 
-    $default  reduce using rule 53 (function_def)
+    $default  reduce using rule 55 (function_def)
 
 
 State 82
 
-   52 prefix_exp: '(' exp . ')'
-   84 exp: '(' exp . ')'
-   85    | exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   54 prefix_exp: '(' exp . ')'
+   86 exp: '(' exp . ')'
+   87    | exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -1502,17 +1511,17 @@ State 82
 
 State 83
 
-   47 var: NAME .
-   76 field: NAME . '=' exp
+   49 var: NAME .
+   78 field: NAME . '=' exp
 
     '='  shift, and go to state 125
 
-    $default  reduce using rule 47 (var)
+    $default  reduce using rule 49 (var)
 
 
 State 84
 
-   75 field: '[' . exp ']' '=' exp
+   77 field: '[' . exp ']' '=' exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1544,58 +1553,58 @@ State 84
 
 State 85
 
-   69 table_body: '{' '}' .
+   71 table_body: '{' '}' .
 
-    $default  reduce using rule 69 (table_body)
+    $default  reduce using rule 71 (table_body)
 
 
 State 86
 
-   70 table_body: '{' field_list . '}'
+   72 table_body: '{' field_list . '}'
 
     '}'  shift, and go to state 127
 
 
 State 87
 
-   71 field_list: field_list_part . field_sep
-   72           | field_list_part .
-   73 field_list_part: field_list_part . field_sep field
+   73 field_list: field_list_part . field_sep
+   74           | field_list_part .
+   75 field_list_part: field_list_part . field_sep field
 
     ';'  shift, and go to state 128
     ','  shift, and go to state 129
 
-    $default  reduce using rule 72 (field_list)
+    $default  reduce using rule 74 (field_list)
 
     field_sep  go to state 130
 
 
 State 88
 
-   74 field_list_part: field .
+   76 field_list_part: field .
 
-    $default  reduce using rule 74 (field_list_part)
+    $default  reduce using rule 76 (field_list_part)
 
 
 State 89
 
-   77 field: exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   79 field: exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
     '<'    shift, and go to state 93
     '>'    shift, and go to state 94
 
-    $default  reduce using rule 77 (field)
+    $default  reduce using rule 79 (field)
 
 
 State 90
 
-   85 exp: exp BINOP . exp
+   87 exp: exp BINOP . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1627,7 +1636,7 @@ State 90
 
 State 91
 
-   86 exp: exp MINUS . exp
+   88 exp: exp MINUS . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1707,7 +1716,7 @@ State 92
 
 State 93
 
-   87 exp: exp '<' . exp
+   89 exp: exp '<' . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1739,7 +1748,7 @@ State 93
 
 State 94
 
-   88 exp: exp '>' . exp
+   90 exp: exp '>' . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -1838,6 +1847,8 @@ State 97
 
    28 statement: IF exp THEN . block END
    29          | IF exp THEN . block else_if END
+   30          | IF exp THEN . block ELSE block END
+   31          | IF exp THEN . block else_if ELSE block END
 
     NAME       shift, and go to state 1
     DO         shift, and go to state 2
@@ -1885,16 +1896,16 @@ State 97
 
 State 98
 
-   34 attr: '<' . NAME '>'
+   36 attr: '<' . NAME '>'
 
     NAME  shift, and go to state 140
 
 
 State 99
 
-   33 attr_list: NAME attr .
+   35 attr_list: NAME attr .
 
-    $default  reduce using rule 33 (attr_list)
+    $default  reduce using rule 35 (attr_list)
 
 
 State 100
@@ -1941,7 +1952,7 @@ State 101
 
 State 102
 
-   32 attr_list: attr_list ',' . NAME attr
+   34 attr_list: attr_list ',' . NAME attr
 
     NAME  shift, and go to state 143
 
@@ -1955,71 +1966,71 @@ State 103
 
 State 104
 
-   42 function_name: function_name_part ':' . NAME
+   44 function_name: function_name_part ':' . NAME
 
     NAME  shift, and go to state 144
 
 
 State 105
 
-   43 function_name_part: function_name_part '.' . NAME
+   45 function_name_part: function_name_part '.' . NAME
 
     NAME  shift, and go to state 145
 
 
 State 106
 
-   40 label: LABEL_DEF NAME LABEL_DEF .
+   42 label: LABEL_DEF NAME LABEL_DEF .
 
-    $default  reduce using rule 40 (label)
+    $default  reduce using rule 42 (label)
 
 
 State 107
 
-   52 prefix_exp: '(' exp ')' .
+   54 prefix_exp: '(' exp ')' .
 
-    $default  reduce using rule 52 (prefix_exp)
+    $default  reduce using rule 54 (prefix_exp)
 
 
 State 108
 
-   37 ret: RETURN ';' .
+   39 ret: RETURN ';' .
 
-    $default  reduce using rule 37 (ret)
+    $default  reduce using rule 39 (ret)
 
 
 State 109
 
-   38 ret: RETURN exp_list .
-   39    | RETURN exp_list . ';'
-   65 exp_list: exp_list . ',' exp
+   40 ret: RETURN exp_list .
+   41    | RETURN exp_list . ';'
+   67 exp_list: exp_list . ',' exp
 
     ';'  shift, and go to state 146
     ','  shift, and go to state 147
 
-    $default  reduce using rule 38 (ret)
+    $default  reduce using rule 40 (ret)
 
 
 State 110
 
-   66 exp_list: exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   68 exp_list: exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
     '<'    shift, and go to state 93
     '>'    shift, and go to state 94
 
-    $default  reduce using rule 66 (exp_list)
+    $default  reduce using rule 68 (exp_list)
 
 
 State 111
 
     9 stat: var_list '=' exp_list .
-   65 exp_list: exp_list . ',' exp
+   67 exp_list: exp_list . ',' exp
 
     ','  shift, and go to state 147
 
@@ -2028,24 +2039,24 @@ State 111
 
 State 112
 
-   45 var_list: var_list ',' var .
-   50 prefix_exp: var .
+   47 var_list: var_list ',' var .
+   52 prefix_exp: var .
 
-    '='       reduce using rule 45 (var_list)
-    ','       reduce using rule 45 (var_list)
-    $default  reduce using rule 50 (prefix_exp)
+    '='       reduce using rule 47 (var_list)
+    ','       reduce using rule 47 (var_list)
+    $default  reduce using rule 52 (prefix_exp)
 
 
 State 113
 
-   51 prefix_exp: function_call .
+   53 prefix_exp: function_call .
 
-    $default  reduce using rule 51 (prefix_exp)
+    $default  reduce using rule 53 (prefix_exp)
 
 
 State 114
 
-   57 function_call: prefix_exp ':' NAME . args
+   59 function_call: prefix_exp ':' NAME . args
 
     ONEQSTRING  shift, and go to state 33
     TWOQSTRING  shift, and go to state 34
@@ -2060,18 +2071,18 @@ State 114
 
 State 115
 
-   49 var: prefix_exp '.' NAME .
+   51 var: prefix_exp '.' NAME .
 
-    $default  reduce using rule 49 (var)
+    $default  reduce using rule 51 (var)
 
 
 State 116
 
-   48 var: prefix_exp '[' exp . ']'
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   50 var: prefix_exp '[' exp . ']'
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -2082,15 +2093,15 @@ State 116
 
 State 117
 
-   58 args: '(' ')' .
+   60 args: '(' ')' .
 
-    $default  reduce using rule 58 (args)
+    $default  reduce using rule 60 (args)
 
 
 State 118
 
-   59 args: '(' exp_list . ')'
-   65 exp_list: exp_list . ',' exp
+   61 args: '(' exp_list . ')'
+   67 exp_list: exp_list . ',' exp
 
     ','  shift, and go to state 147
     ')'  shift, and go to state 150
@@ -2098,21 +2109,21 @@ State 118
 
 State 119
 
-   68 name_list: NAME .
+   70 name_list: NAME .
 
-    $default  reduce using rule 68 (name_list)
+    $default  reduce using rule 70 (name_list)
 
 
 State 120
 
-   64 par_list: DOTS .
+   66 par_list: DOTS .
 
-    $default  reduce using rule 64 (par_list)
+    $default  reduce using rule 66 (par_list)
 
 
 State 121
 
-   54 function_body: '(' ')' . block END
+   56 function_body: '(' ')' . block END
 
     NAME       shift, and go to state 1
     DO         shift, and go to state 2
@@ -2160,42 +2171,42 @@ State 121
 
 State 122
 
-   55 function_body: '(' par_list . ')' block END
+   57 function_body: '(' par_list . ')' block END
 
     ')'  shift, and go to state 152
 
 
 State 123
 
-   62 par_list: name_list .
-   63         | name_list . ',' DOTS
-   67 name_list: name_list . ',' NAME
+   64 par_list: name_list .
+   65         | name_list . ',' DOTS
+   69 name_list: name_list . ',' NAME
 
     ','  shift, and go to state 153
 
-    $default  reduce using rule 62 (par_list)
+    $default  reduce using rule 64 (par_list)
 
 
 State 124
 
-   52 prefix_exp: '(' exp ')' .
-   84 exp: '(' exp ')' .
+   54 prefix_exp: '(' exp ')' .
+   86 exp: '(' exp ')' .
 
-    ONEQSTRING  reduce using rule 52 (prefix_exp)
-    TWOQSTRING  reduce using rule 52 (prefix_exp)
-    LONGSTRING  reduce using rule 52 (prefix_exp)
-    ':'         reduce using rule 52 (prefix_exp)
-    '.'         reduce using rule 52 (prefix_exp)
-    '['         reduce using rule 52 (prefix_exp)
-    '('         reduce using rule 52 (prefix_exp)
-    '('         [reduce using rule 84 (exp)]
-    '{'         reduce using rule 52 (prefix_exp)
-    $default    reduce using rule 84 (exp)
+    ONEQSTRING  reduce using rule 54 (prefix_exp)
+    TWOQSTRING  reduce using rule 54 (prefix_exp)
+    LONGSTRING  reduce using rule 54 (prefix_exp)
+    ':'         reduce using rule 54 (prefix_exp)
+    '.'         reduce using rule 54 (prefix_exp)
+    '['         reduce using rule 54 (prefix_exp)
+    '('         reduce using rule 54 (prefix_exp)
+    '('         [reduce using rule 86 (exp)]
+    '{'         reduce using rule 54 (prefix_exp)
+    $default    reduce using rule 86 (exp)
 
 
 State 125
 
-   76 field: NAME '=' . exp
+   78 field: NAME '=' . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -2227,11 +2238,11 @@ State 125
 
 State 126
 
-   75 field: '[' exp . ']' '=' exp
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   77 field: '[' exp . ']' '=' exp
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -2242,29 +2253,29 @@ State 126
 
 State 127
 
-   70 table_body: '{' field_list '}' .
+   72 table_body: '{' field_list '}' .
 
-    $default  reduce using rule 70 (table_body)
+    $default  reduce using rule 72 (table_body)
 
 
 State 128
 
-   79 field_sep: ';' .
+   81 field_sep: ';' .
 
-    $default  reduce using rule 79 (field_sep)
+    $default  reduce using rule 81 (field_sep)
 
 
 State 129
 
-   78 field_sep: ',' .
+   80 field_sep: ',' .
 
-    $default  reduce using rule 78 (field_sep)
+    $default  reduce using rule 80 (field_sep)
 
 
 State 130
 
-   71 field_list: field_list_part field_sep .
-   73 field_list_part: field_list_part field_sep . field
+   73 field_list: field_list_part field_sep .
+   75 field_list_part: field_list_part field_sep . field
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -2285,7 +2296,7 @@ State 130
     '('         shift, and go to state 43
     '{'         shift, and go to state 44
 
-    $default  reduce using rule 71 (field_list)
+    $default  reduce using rule 73 (field_list)
 
     var            go to state 45
     prefix_exp     go to state 26
@@ -2300,58 +2311,11 @@ State 130
 
 State 131
 
-   85 exp: exp . BINOP exp
-   85    | exp BINOP exp .
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-
-    BINOP  shift, and go to state 90
-    MINUS  shift, and go to state 91
-    '<'    shift, and go to state 93
-    '>'    shift, and go to state 94
-
-    BINOP     [reduce using rule 85 (exp)]
-    MINUS     [reduce using rule 85 (exp)]
-    '<'       [reduce using rule 85 (exp)]
-    '>'       [reduce using rule 85 (exp)]
-    $default  reduce using rule 85 (exp)
-
-
-State 132
-
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   86    | exp MINUS exp .
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-
-    BINOP  shift, and go to state 90
-    MINUS  shift, and go to state 91
-    '<'    shift, and go to state 93
-    '>'    shift, and go to state 94
-
-    BINOP     [reduce using rule 86 (exp)]
-    MINUS     [reduce using rule 86 (exp)]
-    '<'       [reduce using rule 86 (exp)]
-    '>'       [reduce using rule 86 (exp)]
-    $default  reduce using rule 86 (exp)
-
-
-State 133
-
-   20 while_do: WHILE exp DO block . END
-
-    END  shift, and go to state 157
-
-
-State 134
-
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   87    | exp '<' exp .
-   88    | exp . '>' exp
+   87 exp: exp . BINOP exp
+   87    | exp BINOP exp .
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -2365,13 +2329,13 @@ State 134
     $default  reduce using rule 87 (exp)
 
 
-State 135
+State 132
 
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-   88    | exp '>' exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   88    | exp MINUS exp .
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -2383,6 +2347,53 @@ State 135
     '<'       [reduce using rule 88 (exp)]
     '>'       [reduce using rule 88 (exp)]
     $default  reduce using rule 88 (exp)
+
+
+State 133
+
+   20 while_do: WHILE exp DO block . END
+
+    END  shift, and go to state 157
+
+
+State 134
+
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   89    | exp '<' exp .
+   90    | exp . '>' exp
+
+    BINOP  shift, and go to state 90
+    MINUS  shift, and go to state 91
+    '<'    shift, and go to state 93
+    '>'    shift, and go to state 94
+
+    BINOP     [reduce using rule 89 (exp)]
+    MINUS     [reduce using rule 89 (exp)]
+    '<'       [reduce using rule 89 (exp)]
+    '>'       [reduce using rule 89 (exp)]
+    $default  reduce using rule 89 (exp)
+
+
+State 135
+
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
+   90    | exp '>' exp .
+
+    BINOP  shift, and go to state 90
+    MINUS  shift, and go to state 91
+    '<'    shift, and go to state 93
+    '>'    shift, and go to state 94
+
+    BINOP     [reduce using rule 90 (exp)]
+    MINUS     [reduce using rule 90 (exp)]
+    '<'       [reduce using rule 90 (exp)]
+    '>'       [reduce using rule 90 (exp)]
+    $default  reduce using rule 90 (exp)
 
 
 State 136
@@ -2397,10 +2408,10 @@ State 136
 State 137
 
    27 cycle_exp_list: exp . ',' exp
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -2412,10 +2423,10 @@ State 137
 State 138
 
    21 while_do: REPEAT block UNTIL exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
@@ -2429,18 +2440,21 @@ State 139
 
    28 statement: IF exp THEN block . END
    29          | IF exp THEN block . else_if END
+   30          | IF exp THEN block . ELSE block END
+   31          | IF exp THEN block . else_if ELSE block END
 
     END     shift, and go to state 161
     ELSEIF  shift, and go to state 162
+    ELSE    shift, and go to state 163
 
-    else_if  go to state 163
+    else_if  go to state 164
 
 
 State 140
 
-   34 attr: '<' NAME . '>'
+   36 attr: '<' NAME . '>'
 
-    '>'  shift, and go to state 164
+    '>'  shift, and go to state 165
 
 
 State 141
@@ -2453,7 +2467,7 @@ State 141
 State 142
 
    24 locals: LOCAL attr_list '=' exp_list .
-   65 exp_list: exp_list . ',' exp
+   67 exp_list: exp_list . ',' exp
 
     ','  shift, and go to state 147
 
@@ -2462,39 +2476,39 @@ State 142
 
 State 143
 
-   32 attr_list: attr_list ',' NAME . attr
+   34 attr_list: attr_list ',' NAME . attr
 
     '<'  shift, and go to state 98
 
-    $default  reduce using rule 35 (attr)
+    $default  reduce using rule 37 (attr)
 
-    attr  go to state 165
+    attr  go to state 166
 
 
 State 144
 
-   42 function_name: function_name_part ':' NAME .
+   44 function_name: function_name_part ':' NAME .
 
-    $default  reduce using rule 42 (function_name)
+    $default  reduce using rule 44 (function_name)
 
 
 State 145
 
-   43 function_name_part: function_name_part '.' NAME .
+   45 function_name_part: function_name_part '.' NAME .
 
-    $default  reduce using rule 43 (function_name_part)
+    $default  reduce using rule 45 (function_name_part)
 
 
 State 146
 
-   39 ret: RETURN exp_list ';' .
+   41 ret: RETURN exp_list ';' .
 
-    $default  reduce using rule 39 (ret)
+    $default  reduce using rule 41 (ret)
 
 
 State 147
 
-   65 exp_list: exp_list ',' . exp
+   67 exp_list: exp_list ',' . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -2519,42 +2533,42 @@ State 147
     function_def   go to state 46
     function_call  go to state 47
     table_body     go to state 48
-    exp            go to state 166
+    exp            go to state 167
     literalString  go to state 50
     numeral        go to state 51
 
 
 State 148
 
-   57 function_call: prefix_exp ':' NAME args .
+   59 function_call: prefix_exp ':' NAME args .
 
-    $default  reduce using rule 57 (function_call)
+    $default  reduce using rule 59 (function_call)
 
 
 State 149
 
-   48 var: prefix_exp '[' exp ']' .
+   50 var: prefix_exp '[' exp ']' .
 
-    $default  reduce using rule 48 (var)
+    $default  reduce using rule 50 (var)
 
 
 State 150
 
-   59 args: '(' exp_list ')' .
+   61 args: '(' exp_list ')' .
 
-    $default  reduce using rule 59 (args)
+    $default  reduce using rule 61 (args)
 
 
 State 151
 
-   54 function_body: '(' ')' block . END
+   56 function_body: '(' ')' block . END
 
-    END  shift, and go to state 167
+    END  shift, and go to state 168
 
 
 State 152
 
-   55 function_body: '(' par_list ')' . block END
+   57 function_body: '(' par_list ')' . block END
 
     NAME       shift, and go to state 1
     DO         shift, and go to state 2
@@ -2585,7 +2599,7 @@ State 152
     '('        [reduce using rule 7 (opt_stat)]
     $default   reduce using rule 7 (opt_stat)
 
-    block          go to state 168
+    block          go to state 169
     stat_list      go to state 16
     opt_stat       go to state 17
     stat           go to state 18
@@ -2602,41 +2616,41 @@ State 152
 
 State 153
 
-   63 par_list: name_list ',' . DOTS
-   67 name_list: name_list ',' . NAME
+   65 par_list: name_list ',' . DOTS
+   69 name_list: name_list ',' . NAME
 
-    NAME  shift, and go to state 169
-    DOTS  shift, and go to state 170
+    NAME  shift, and go to state 170
+    DOTS  shift, and go to state 171
 
 
 State 154
 
-   76 field: NAME '=' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   78 field: NAME '=' exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
     '<'    shift, and go to state 93
     '>'    shift, and go to state 94
 
-    $default  reduce using rule 76 (field)
+    $default  reduce using rule 78 (field)
 
 
 State 155
 
-   75 field: '[' exp ']' . '=' exp
+   77 field: '[' exp ']' . '=' exp
 
-    '='  shift, and go to state 171
+    '='  shift, and go to state 172
 
 
 State 156
 
-   73 field_list_part: field_list_part field_sep field .
+   75 field_list_part: field_list_part field_sep field .
 
-    $default  reduce using rule 73 (field_list_part)
+    $default  reduce using rule 75 (field_list_part)
 
 
 State 157
@@ -2679,7 +2693,7 @@ State 158
     '('        [reduce using rule 7 (opt_stat)]
     $default   reduce using rule 7 (opt_stat)
 
-    block          go to state 172
+    block          go to state 173
     stat_list      go to state 16
     opt_stat       go to state 17
     stat           go to state 18
@@ -2721,7 +2735,7 @@ State 159
     function_def   go to state 46
     function_call  go to state 47
     table_body     go to state 48
-    exp            go to state 173
+    exp            go to state 174
     literalString  go to state 50
     numeral        go to state 51
 
@@ -2753,7 +2767,7 @@ State 160
     function_def   go to state 46
     function_call  go to state 47
     table_body     go to state 48
-    exp            go to state 174
+    exp            go to state 175
     literalString  go to state 50
     numeral        go to state 51
 
@@ -2767,7 +2781,7 @@ State 161
 
 State 162
 
-   31 else_if: ELSEIF . exp THEN block
+   33 else_if: ELSEIF . exp THEN block
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -2792,174 +2806,131 @@ State 162
     function_def   go to state 46
     function_call  go to state 47
     table_body     go to state 48
-    exp            go to state 175
+    exp            go to state 176
     literalString  go to state 50
     numeral        go to state 51
 
 
 State 163
 
-   29 statement: IF exp THEN block else_if . END
-   30 else_if: else_if . ELSEIF exp THEN block
+   30 statement: IF exp THEN block ELSE . block END
 
-    END     shift, and go to state 176
-    ELSEIF  shift, and go to state 177
+    NAME       shift, and go to state 1
+    DO         shift, and go to state 2
+    WHILE      shift, and go to state 3
+    FOR        shift, and go to state 4
+    REPEAT     shift, and go to state 5
+    GOTO       shift, and go to state 6
+    IF         shift, and go to state 7
+    LOCAL      shift, and go to state 8
+    FUNCTION   shift, and go to state 9
+    BREAK      shift, and go to state 10
+    LABEL_DEF  shift, and go to state 11
+    ';'        shift, and go to state 12
+    '('        shift, and go to state 13
+
+    NAME       [reduce using rule 7 (opt_stat)]
+    DO         [reduce using rule 7 (opt_stat)]
+    WHILE      [reduce using rule 7 (opt_stat)]
+    FOR        [reduce using rule 7 (opt_stat)]
+    REPEAT     [reduce using rule 7 (opt_stat)]
+    GOTO       [reduce using rule 7 (opt_stat)]
+    IF         [reduce using rule 7 (opt_stat)]
+    LOCAL      [reduce using rule 7 (opt_stat)]
+    FUNCTION   [reduce using rule 7 (opt_stat)]
+    BREAK      [reduce using rule 7 (opt_stat)]
+    LABEL_DEF  [reduce using rule 7 (opt_stat)]
+    ';'        [reduce using rule 7 (opt_stat)]
+    '('        [reduce using rule 7 (opt_stat)]
+    $default   reduce using rule 7 (opt_stat)
+
+    block          go to state 177
+    stat_list      go to state 16
+    opt_stat       go to state 17
+    stat           go to state 18
+    while_do       go to state 19
+    locals         go to state 20
+    for_cycle      go to state 21
+    statement      go to state 22
+    label          go to state 23
+    var_list       go to state 24
+    var            go to state 25
+    prefix_exp     go to state 26
+    function_call  go to state 27
 
 
 State 164
 
-   34 attr: '<' NAME '>' .
+   29 statement: IF exp THEN block else_if . END
+   31          | IF exp THEN block else_if . ELSE block END
+   32 else_if: else_if . ELSEIF exp THEN block
 
-    $default  reduce using rule 34 (attr)
+    END     shift, and go to state 178
+    ELSEIF  shift, and go to state 179
+    ELSE    shift, and go to state 180
 
 
 State 165
 
-   32 attr_list: attr_list ',' NAME attr .
+   36 attr: '<' NAME '>' .
 
-    $default  reduce using rule 32 (attr_list)
+    $default  reduce using rule 36 (attr)
 
 
 State 166
 
-   65 exp_list: exp_list ',' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   34 attr_list: attr_list ',' NAME attr .
 
-    BINOP  shift, and go to state 90
-    MINUS  shift, and go to state 91
-    '<'    shift, and go to state 93
-    '>'    shift, and go to state 94
-
-    $default  reduce using rule 65 (exp_list)
+    $default  reduce using rule 34 (attr_list)
 
 
 State 167
 
-   54 function_body: '(' ')' block END .
+   67 exp_list: exp_list ',' exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
-    $default  reduce using rule 54 (function_body)
+    BINOP  shift, and go to state 90
+    MINUS  shift, and go to state 91
+    '<'    shift, and go to state 93
+    '>'    shift, and go to state 94
+
+    $default  reduce using rule 67 (exp_list)
 
 
 State 168
 
-   55 function_body: '(' par_list ')' block . END
+   56 function_body: '(' ')' block END .
 
-    END  shift, and go to state 178
+    $default  reduce using rule 56 (function_body)
 
 
 State 169
 
-   67 name_list: name_list ',' NAME .
+   57 function_body: '(' par_list ')' block . END
 
-    $default  reduce using rule 67 (name_list)
+    END  shift, and go to state 181
 
 
 State 170
 
-   63 par_list: name_list ',' DOTS .
+   69 name_list: name_list ',' NAME .
 
-    $default  reduce using rule 63 (par_list)
+    $default  reduce using rule 69 (name_list)
 
 
 State 171
 
-   75 field: '[' exp ']' '=' . exp
+   65 par_list: name_list ',' DOTS .
 
-    INT         shift, and go to state 29
-    HEX         shift, and go to state 30
-    FLOAT       shift, and go to state 31
-    HEX_FLOAT   shift, and go to state 32
-    ONEQSTRING  shift, and go to state 33
-    TWOQSTRING  shift, and go to state 34
-    LONGSTRING  shift, and go to state 35
-    NAME        shift, and go to state 1
-    DOTS        shift, and go to state 36
-    NIL         shift, and go to state 37
-    FALSE       shift, and go to state 38
-    TRUE        shift, and go to state 39
-    UNOP        shift, and go to state 40
-    MINUS       shift, and go to state 41
-    FUNCTION    shift, and go to state 42
-    '('         shift, and go to state 43
-    '{'         shift, and go to state 44
-
-    var            go to state 45
-    prefix_exp     go to state 26
-    function_def   go to state 46
-    function_call  go to state 47
-    table_body     go to state 48
-    exp            go to state 179
-    literalString  go to state 50
-    numeral        go to state 51
+    $default  reduce using rule 65 (par_list)
 
 
 State 172
 
-   25 for_cycle: FOR NAME '=' cycle_exp_list DO block . END
-
-    END  shift, and go to state 180
-
-
-State 173
-
-   26 cycle_exp_list: cycle_exp_list ',' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-
-    BINOP  shift, and go to state 90
-    MINUS  shift, and go to state 91
-    '<'    shift, and go to state 93
-    '>'    shift, and go to state 94
-
-    $default  reduce using rule 26 (cycle_exp_list)
-
-
-State 174
-
-   27 cycle_exp_list: exp ',' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-
-    BINOP  shift, and go to state 90
-    MINUS  shift, and go to state 91
-    '<'    shift, and go to state 93
-    '>'    shift, and go to state 94
-
-    $default  reduce using rule 27 (cycle_exp_list)
-
-
-State 175
-
-   31 else_if: ELSEIF exp . THEN block
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
-
-    BINOP  shift, and go to state 90
-    MINUS  shift, and go to state 91
-    THEN   shift, and go to state 181
-    '<'    shift, and go to state 93
-    '>'    shift, and go to state 94
-
-
-State 176
-
-   29 statement: IF exp THEN block else_if END .
-
-    $default  reduce using rule 29 (statement)
-
-
-State 177
-
-   30 else_if: else_if ELSEIF . exp THEN block
+   77 field: '[' exp ']' '=' . exp
 
     INT         shift, and go to state 29
     HEX         shift, and go to state 30
@@ -2989,39 +2960,109 @@ State 177
     numeral        go to state 51
 
 
-State 178
+State 173
 
-   55 function_body: '(' par_list ')' block END .
+   25 for_cycle: FOR NAME '=' cycle_exp_list DO block . END
 
-    $default  reduce using rule 55 (function_body)
+    END  shift, and go to state 183
 
 
-State 179
+State 174
 
-   75 field: '[' exp ']' '=' exp .
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   26 cycle_exp_list: cycle_exp_list ',' exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
     '<'    shift, and go to state 93
     '>'    shift, and go to state 94
 
-    $default  reduce using rule 75 (field)
+    $default  reduce using rule 26 (cycle_exp_list)
+
+
+State 175
+
+   27 cycle_exp_list: exp ',' exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
+
+    BINOP  shift, and go to state 90
+    MINUS  shift, and go to state 91
+    '<'    shift, and go to state 93
+    '>'    shift, and go to state 94
+
+    $default  reduce using rule 27 (cycle_exp_list)
+
+
+State 176
+
+   33 else_if: ELSEIF exp . THEN block
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
+
+    BINOP  shift, and go to state 90
+    MINUS  shift, and go to state 91
+    THEN   shift, and go to state 184
+    '<'    shift, and go to state 93
+    '>'    shift, and go to state 94
+
+
+State 177
+
+   30 statement: IF exp THEN block ELSE block . END
+
+    END  shift, and go to state 185
+
+
+State 178
+
+   29 statement: IF exp THEN block else_if END .
+
+    $default  reduce using rule 29 (statement)
+
+
+State 179
+
+   32 else_if: else_if ELSEIF . exp THEN block
+
+    INT         shift, and go to state 29
+    HEX         shift, and go to state 30
+    FLOAT       shift, and go to state 31
+    HEX_FLOAT   shift, and go to state 32
+    ONEQSTRING  shift, and go to state 33
+    TWOQSTRING  shift, and go to state 34
+    LONGSTRING  shift, and go to state 35
+    NAME        shift, and go to state 1
+    DOTS        shift, and go to state 36
+    NIL         shift, and go to state 37
+    FALSE       shift, and go to state 38
+    TRUE        shift, and go to state 39
+    UNOP        shift, and go to state 40
+    MINUS       shift, and go to state 41
+    FUNCTION    shift, and go to state 42
+    '('         shift, and go to state 43
+    '{'         shift, and go to state 44
+
+    var            go to state 45
+    prefix_exp     go to state 26
+    function_def   go to state 46
+    function_call  go to state 47
+    table_body     go to state 48
+    exp            go to state 186
+    literalString  go to state 50
+    numeral        go to state 51
 
 
 State 180
 
-   25 for_cycle: FOR NAME '=' cycle_exp_list DO block END .
-
-    $default  reduce using rule 25 (for_cycle)
-
-
-State 181
-
-   31 else_if: ELSEIF exp THEN . block
+   31 statement: IF exp THEN block else_if ELSE . block END
 
     NAME       shift, and go to state 1
     DO         shift, and go to state 2
@@ -3052,7 +3093,7 @@ State 181
     '('        [reduce using rule 7 (opt_stat)]
     $default   reduce using rule 7 (opt_stat)
 
-    block          go to state 183
+    block          go to state 187
     stat_list      go to state 16
     opt_stat       go to state 17
     stat           go to state 18
@@ -3067,31 +3108,39 @@ State 181
     function_call  go to state 27
 
 
+State 181
+
+   57 function_body: '(' par_list ')' block END .
+
+    $default  reduce using rule 57 (function_body)
+
+
 State 182
 
-   30 else_if: else_if ELSEIF exp . THEN block
-   85 exp: exp . BINOP exp
-   86    | exp . MINUS exp
-   87    | exp . '<' exp
-   88    | exp . '>' exp
+   77 field: '[' exp ']' '=' exp .
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
 
     BINOP  shift, and go to state 90
     MINUS  shift, and go to state 91
-    THEN   shift, and go to state 184
     '<'    shift, and go to state 93
     '>'    shift, and go to state 94
+
+    $default  reduce using rule 77 (field)
 
 
 State 183
 
-   31 else_if: ELSEIF exp THEN block .
+   25 for_cycle: FOR NAME '=' cycle_exp_list DO block END .
 
-    $default  reduce using rule 31 (else_if)
+    $default  reduce using rule 25 (for_cycle)
 
 
 State 184
 
-   30 else_if: else_if ELSEIF exp THEN . block
+   33 else_if: ELSEIF exp THEN . block
 
     NAME       shift, and go to state 1
     DO         shift, and go to state 2
@@ -3122,7 +3171,7 @@ State 184
     '('        [reduce using rule 7 (opt_stat)]
     $default   reduce using rule 7 (opt_stat)
 
-    block          go to state 185
+    block          go to state 188
     stat_list      go to state 16
     opt_stat       go to state 17
     stat           go to state 18
@@ -3139,6 +3188,97 @@ State 184
 
 State 185
 
-   30 else_if: else_if ELSEIF exp THEN block .
+   30 statement: IF exp THEN block ELSE block END .
 
-    $default  reduce using rule 30 (else_if)
+    $default  reduce using rule 30 (statement)
+
+
+State 186
+
+   32 else_if: else_if ELSEIF exp . THEN block
+   87 exp: exp . BINOP exp
+   88    | exp . MINUS exp
+   89    | exp . '<' exp
+   90    | exp . '>' exp
+
+    BINOP  shift, and go to state 90
+    MINUS  shift, and go to state 91
+    THEN   shift, and go to state 189
+    '<'    shift, and go to state 93
+    '>'    shift, and go to state 94
+
+
+State 187
+
+   31 statement: IF exp THEN block else_if ELSE block . END
+
+    END  shift, and go to state 190
+
+
+State 188
+
+   33 else_if: ELSEIF exp THEN block .
+
+    $default  reduce using rule 33 (else_if)
+
+
+State 189
+
+   32 else_if: else_if ELSEIF exp THEN . block
+
+    NAME       shift, and go to state 1
+    DO         shift, and go to state 2
+    WHILE      shift, and go to state 3
+    FOR        shift, and go to state 4
+    REPEAT     shift, and go to state 5
+    GOTO       shift, and go to state 6
+    IF         shift, and go to state 7
+    LOCAL      shift, and go to state 8
+    FUNCTION   shift, and go to state 9
+    BREAK      shift, and go to state 10
+    LABEL_DEF  shift, and go to state 11
+    ';'        shift, and go to state 12
+    '('        shift, and go to state 13
+
+    NAME       [reduce using rule 7 (opt_stat)]
+    DO         [reduce using rule 7 (opt_stat)]
+    WHILE      [reduce using rule 7 (opt_stat)]
+    FOR        [reduce using rule 7 (opt_stat)]
+    REPEAT     [reduce using rule 7 (opt_stat)]
+    GOTO       [reduce using rule 7 (opt_stat)]
+    IF         [reduce using rule 7 (opt_stat)]
+    LOCAL      [reduce using rule 7 (opt_stat)]
+    FUNCTION   [reduce using rule 7 (opt_stat)]
+    BREAK      [reduce using rule 7 (opt_stat)]
+    LABEL_DEF  [reduce using rule 7 (opt_stat)]
+    ';'        [reduce using rule 7 (opt_stat)]
+    '('        [reduce using rule 7 (opt_stat)]
+    $default   reduce using rule 7 (opt_stat)
+
+    block          go to state 191
+    stat_list      go to state 16
+    opt_stat       go to state 17
+    stat           go to state 18
+    while_do       go to state 19
+    locals         go to state 20
+    for_cycle      go to state 21
+    statement      go to state 22
+    label          go to state 23
+    var_list       go to state 24
+    var            go to state 25
+    prefix_exp     go to state 26
+    function_call  go to state 27
+
+
+State 190
+
+   31 statement: IF exp THEN block else_if ELSE block END .
+
+    $default  reduce using rule 31 (statement)
+
+
+State 191
+
+   32 else_if: else_if ELSEIF exp THEN block .
+
+    $default  reduce using rule 32 (else_if)

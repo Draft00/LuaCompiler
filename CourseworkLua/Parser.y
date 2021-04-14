@@ -140,9 +140,11 @@ cycle_exp_list: cycle_exp_list ',' exp
 
 
 /* ===> Statement */
-statement: IF exp THEN block END 			{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block END"); }	
+statement: IF exp THEN block END 						{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block END"); }	
 		 /* Optional else_if token */
-		 | IF exp THEN block else_if END 	{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block else_if END"); }	
+		 | IF exp THEN block else_if END 				{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block else_if END"); }
+		 | IF exp THEN block ELSE block END 			{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block ELSE block END"); }
+		 | IF exp THEN block else_if ELSE block END 	{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block else_if ELSE block END"); }
 ;
 
 else_if: else_if ELSEIF exp THEN block 		{ DEBUGPRINT_BISON("\nELSE_IF: else_if ELSEIF exp THEN block"); }	

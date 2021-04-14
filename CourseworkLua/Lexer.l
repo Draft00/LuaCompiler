@@ -100,7 +100,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 
 "if"					{ DEBUGPRINT("\nLex: IF: %s", yytext); 			return IF; }	/* Statements */
 "then"					{ DEBUGPRINT("\nLex: THEN: %s", yytext); 		return THEN; }
-"elseif"				{ DEBUGPRINT("\nLex: ELSEIF: %s", yytext); 		return ELSEIF; }
+"else if"				{ DEBUGPRINT("\nLex: ELSEIF: %s", yytext); 		return ELSEIF; }
 "else"					{ DEBUGPRINT("\nLex: ELSE: %s", yytext); 		return ELSE; }
 
 
@@ -146,7 +146,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 
 "not" 					{ DEBUGPRINT("\nLex: NOT: %s", yytext); 			return UNOP; } /* Unary operators */
 "#"						{ DEBUGPRINT("\nLex: #: %s", yytext); 				return UNOP; }
-"~"						{ DEBUGPRINT("\nLex: MORE_EQUALS: %s", yytext); 	return UNOP; }
+"~"						{ DEBUGPRINT("\nLex: BINARY_NOT: %s", yytext); 		return UNOP; }
 
 
 "nil"					{ DEBUGPRINT("\nLex: operation NIL: %s", yytext); 	return NIL; } /* Keyworded values */
