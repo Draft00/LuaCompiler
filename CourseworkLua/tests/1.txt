@@ -1,1 +1,1 @@
-comp(t[middle], t[low])
+t[low], v[low] = t[low]+1, 2
