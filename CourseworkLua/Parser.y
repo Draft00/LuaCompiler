@@ -298,31 +298,30 @@ field_sep: ',' 				{ DEBUGPRINT_BISON("\nFIELD_SEP: ','"); }
 ;
 
 
-exp:  NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
-	| FALSE 		{ DEBUGPRINT_BISON("\nEXP: FALSE"); }
-	| TRUE			{ DEBUGPRINT_BISON("\nEXP: TRUE"); }
-	| DOTS			{ DEBUGPRINT_BISON("\nEXP: DOTS"); }
-	| NAME 			{ DEBUGPRINT_BISON("\nEXP: NAME"); }
-	
-	| '(' exp ')' 	{ DEBUGPRINT_BISON("\nEXP: '(' exp ')' "); }
-	| exp BINOP exp { DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
-	| exp MINUS exp { DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
+exp: NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
+   | FALSE 			{ DEBUGPRINT_BISON("\nEXP: FALSE"); }
+   | TRUE			{ DEBUGPRINT_BISON("\nEXP: TRUE"); }
+   | DOTS			{ DEBUGPRINT_BISON("\nEXP: DOTS"); }
 
-	/* Because '<' NAME '>' is attribute */
-	| exp '<' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
-	| exp '>' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
+   | NAME 			{ DEBUGPRINT_BISON("\nEXP: NAME"); }
 
-	/* Unary and binary */
-	| MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }
+   | '(' exp ')' 	{ DEBUGPRINT_BISON("\nEXP: '(' exp ')' "); }
+   | exp BINOP exp 	{ DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
+   | exp MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
 
-	| UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }
+   /* Because '<' NAME '>' is attribute */
+   | exp '<' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
+   | exp '>' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
 
-	| numeral		{ DEBUGPRINT_BISON("\nEXP: numeral"); }
-	| literalString { DEBUGPRINT_BISON("\nEXP: literalString"); }
-	| table_body 	{ DEBUGPRINT_BISON("\nEXP: table_body"); }
-
-	| function_def 	{ DEBUGPRINT_BISON("\nEXP: function_def"); }
-	| function_call { DEBUGPRINT_BISON("\nEXP: function_call"); }
+   /* Unary and binary */
+   | MINUS exp 		{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }   
+   | UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }   
+   | numeral		{ DEBUGPRINT_BISON("\nEXP: numeral"); }
+   | literalString 	{ DEBUGPRINT_BISON("\nEXP: literalString"); }
+   | table_body 	{ DEBUGPRINT_BISON("\nEXP: table_body"); }
+   
+   | function_def 	{ DEBUGPRINT_BISON("\nEXP: function_def"); }
+   | function_call 	{ DEBUGPRINT_BISON("\nEXP: function_call"); }
 ;
 
 
