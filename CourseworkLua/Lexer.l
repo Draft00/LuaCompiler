@@ -171,10 +171,15 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "\""([^\\\"]|{EscapeSequence})*"\""					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
 "'"([^\\\']|{EscapeSequence})*"'"					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; } 	
 
-"--[["												{ DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT); }
+"--["(=)*"["											{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT); }
 <MANYLINESCOMMENT>.									{ DEBUGPRINT("\nLex: In_comment1 %s", yytext);   }
 <MANYLINESCOMMENT>\n								{ DEBUGPRINT("\nLex: In_comment2 %s", yytext);   }
-<MANYLINESCOMMENT>"]]"								{ DEBUGPRINT("\nLex: Stop many_lines_comment"); BEGIN(INITIAL); } 
+<MANYLINESCOMMENT>"]"(=)*"]"						{ right_side = strlen(yytext); DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext);
+														BEGIN(INITIAL);
+														if (right_side == left_side)
+														{ /* ignore */ }
+														else { DEBUGPRINT("\nLex: incorrect many_lines_comment"); exit(-20); }
+													} 
 
 "--"												{ DEBUGPRINT("\nLex: Start ONE_lines_comment"); BEGIN(ONELINECOMMENT); }
 <ONELINECOMMENT>.									{ }
