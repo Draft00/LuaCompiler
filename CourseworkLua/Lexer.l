@@ -185,7 +185,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 														else { DEBUGPRINT("\nLex: incorrect many_lines_comment"); exit(-20); }  
 													}		
 
-"--"([^[]*|EOF)										{ DEBUGPRINT("\nLex: ONELINE%s", yytext);/* one line comment */}
+"--"([^[]*|EOF)										{ DEBUGPRINT("\nLex: ONELINE_comment: %s", yytext);/* one line comment */}
 
 "["(=)*"["											{	left_side = strlen(yytext);  
 														DEBUGPRINT("\nLex: LONG_STR count left: %d, %s", left_side, yytext); 
