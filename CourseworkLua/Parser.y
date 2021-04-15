@@ -132,6 +132,7 @@ locals: LOCAL FUNCTION NAME function_body
 /* ===> For_cycle */
 for_cycle: FOR NAME '=' cycle_exp_list DO block END
 		 | FOR cycle_exp_list IN function_call DO block END
+		 | FOR exp IN function_call DO block END
 ;
 
 cycle_exp_list: cycle_exp_list ',' exp

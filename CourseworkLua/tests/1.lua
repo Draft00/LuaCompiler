@@ -1,3 +1,3 @@
-for k,v in pairs( complex ) do
-	complex_meta.__index[k] = v
+for bindir in os.getenv("PATH"):gmatch("[^"..path_sep.."]+") do
+ 
 end

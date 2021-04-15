@@ -338,7 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-CourseworkLua/a.out
-CourseworkLua/lex.yy.c
-CourseworkLua/Parser.tab.c
-CourseworkLua/Parser.tab.h
+*.c
+*.h
+*.out
