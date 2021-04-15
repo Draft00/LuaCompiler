@@ -86,7 +86,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 ","						{ DEBUGPRINT("\nLex: COMMA: %s", yytext);       return *yytext; }
 ";" 					{ DEBUGPRINT("\nLex: SEMICOLON: %s", yytext);   return *yytext; }
 ":" 					{ DEBUGPRINT("\nLex: COLON: %s", yytext);   	return *yytext; }
-"::" 					{ DEBUGPRINT("\nLex: LABEL_DFE: %s", yytext);   return LABEL_DEF; }
+"::" 					{ DEBUGPRINT("\nLex: LABEL_DEF: %s", yytext);   return LABEL_DEF; }
 
 
 "do"            		{ DEBUGPRINT("\nLex: DO: %s", yytext); 			return DO; }	/* Looping */
@@ -96,11 +96,12 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "repeat"        		{ DEBUGPRINT("\nLex: REPEAT: %s", yytext); 		return REPEAT; }
 "end"           		{ DEBUGPRINT("\nLex: END: %s", yytext); 		return END; }
 "goto" 					{ DEBUGPRINT("\nLex: GOTO: %s", yytext); 		return GOTO; }
+"in" 					{ DEBUGPRINT("\nLex: IN: %s", yytext); 			return IN; }
 
 
 "if"					{ DEBUGPRINT("\nLex: IF: %s", yytext); 			return IF; }	/* Statements */
 "then"					{ DEBUGPRINT("\nLex: THEN: %s", yytext); 		return THEN; }
-"else if"				{ DEBUGPRINT("\nLex: ELSEIF: %s", yytext); 		return ELSEIF; }
+"elseif"				{ DEBUGPRINT("\nLex: ELSEIF: %s", yytext); 		return ELSEIF; }
 "else"					{ DEBUGPRINT("\nLex: ELSE: %s", yytext); 		return ELSE; }
 
 
@@ -128,6 +129,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "/="					{ DEBUGPRINT("\nLex: DIVIDE_ASSIGN: %s", yytext); 	return BINOP; }
 "^="					{ DEBUGPRINT("\nLex: POW_ASSIGN: %s", yytext); 		return BINOP; }
 "%="					{ DEBUGPRINT("\nLex: MODULO_ASSIGN: %s", yytext);   return BINOP; }
+"~="					{ DEBUGPRINT("\nLex: NOT_ASSIGN: %s", yytext);   	return BINOP; }
 
 
 "=="					{ DEBUGPRINT("\nLex: EQUALS: %s", yytext);      	return BINOP; } /* Logic binary operators */

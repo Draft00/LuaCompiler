@@ -25,3 +25,13 @@ local function medianOf3(t, low, high, comp)
 	return t[high - 1]
 	
 end
+
+function complex.conjugate( cx )
+	return setmetatable( { cx[1], -cx[2] }, complex_meta )
+end
+
+function complex.round( cx,idp )
+	local mult = 10^( idp or 0 )
+	return setmetatable( { math.floor( cx[1] * mult + 0.5 ) / mult,
+		math.floor( cx[2] * mult + 0.5 ) / mult }, complex_meta )
+end

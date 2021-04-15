@@ -71,15 +71,16 @@ extern int yydebug;
      REPEAT = 280,
      END = 281,
      GOTO = 282,
-     IF = 283,
-     THEN = 284,
-     ELSEIF = 285,
-     ELSE = 286,
-     LOCAL = 287,
-     FUNCTION = 288,
-     BREAK = 289,
-     RETURN = 290,
-     LABEL_DEF = 291
+     IN = 283,
+     IF = 284,
+     THEN = 285,
+     ELSEIF = 286,
+     ELSE = 287,
+     LOCAL = 288,
+     FUNCTION = 289,
+     BREAK = 290,
+     RETURN = 291,
+     LABEL_DEF = 292
    };
 #endif
 
