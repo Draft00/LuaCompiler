@@ -50,10 +50,12 @@ int right_side = 0;
 //(...) deleted
 
 
+//delete n!!!!! EscapeSequence			("\\"[abfrtvz"'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
+
 %}
 
 %option noyywrap yylineno
-%x NESTEDSTR1 MANYLINESCOMMENT ONELINECOMMENT
+%x NESTEDSTR1 MANYLINESCOMMENT ONELINECOMMENT TWOQSTRING_X ONEQSTRING_X
 
 Digit					[0-9]
 HexDigit				[0-9a-fA-F]
@@ -62,7 +64,7 @@ HexExponent				[pP][+-]?[0-9]+
 DecimalEscape			("\\"{Digit})|("\\"{Digit}{Digit})|("\\"[0-2]{Digit}{Digit})
 HexEscape				"\\""x"{HexDigit}{HexDigit}
 UtfEscape				"\\""u{"{HexDigit}+"}" 
-EscapeSequence			("\\"[abfnrtvz\"\'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
+EscapeSequence			("\\"[abfrtvz"'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
 LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 
 %%
@@ -118,6 +120,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "+"						{ DEBUGPRINT("\nLex: PLUS: %s", yytext); 			return BINOP; } /* Digit operators */
 "*"						{ DEBUGPRINT("\nLex: TIMES: %s", yytext); 			return BINOP; }
 "/"						{ DEBUGPRINT("\nLex: DIVIDE: %s", yytext); 			return BINOP; }
+"//"					{ DEBUGPRINT("\nLex: FLOOR_DIVIDE: %s", yytext); 	return BINOP; }
 "^"						{ DEBUGPRINT("\nLex: POWER: %s", yytext); 			return BINOP; }
 "%"						{ DEBUGPRINT("\nLex: MODULO: %s", yytext);      	return BINOP; }
 
@@ -170,8 +173,18 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "0"[xX]"."{HexDigit}+(HexExponent)?					{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
 "0"[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
-"\""([^\][^"]|{EscapeSequence})*"\""				{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
-"'"([^\][^']|{EscapeSequence})*"'"					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; } 	
+"\""												{ BEGIN(TWOQSTRING_X); DEBUGPRINT("\nLex: TWOQSTRING start: ");}
+<TWOQSTRING_X>"\""									{ BEGIN(INITIAL); DEBUGPRINT("\nLex: TWOQSTRING end"); return TWOQSTRING;}
+<TWOQSTRING_X>{EscapeSequence}						{ DEBUGPRINT("1 - %s", yytext); }
+<TWOQSTRING_X>\n									{ DEBUGPRINT("3 - %s", yytext); DEBUGPRINT("Incorrect string"); exit(-20);}
+<TWOQSTRING_X>[^\"]									{ DEBUGPRINT("2 - %s", yytext); }
+
+"'"													{ BEGIN(ONEQSTRING_X); DEBUGPRINT("\nLex: ONEQSTRING start: ");}
+<ONEQSTRING_X>"'"									{ BEGIN(INITIAL); DEBUGPRINT("\nLex: TWOQSTRING end"); return ONEQSTRING;}
+<ONEQSTRING_X>{EscapeSequence}						{ DEBUGPRINT("1 - %s", yytext); }
+<ONEQSTRING_X>\n									{ DEBUGPRINT("3 - %s", yytext); DEBUGPRINT("Incorrect string"); exit(-20);}
+<ONEQSTRING_X>[^\']									{ DEBUGPRINT("2 - %s", yytext); }
+
 
 "--["(=)*"["										{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT); }
 <MANYLINESCOMMENT>.									{ DEBUGPRINT("\nLex: In_comment1 %s", yytext);   }

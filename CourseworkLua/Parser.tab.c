@@ -87,7 +87,7 @@ extern int yylineno;
 extern void DEBUGPRINT(char* format, ...);
 
 #define YYERROR_VERBOSE 1
-#define DEBUG_BISON
+//#define DEBUG_BISON
 
 void DEBUGPRINT_BISON(char* format, ...)
 {
