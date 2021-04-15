@@ -8,7 +8,7 @@
 #define noyywrap
 #define DEBUG
 
-//#define fileno _fileno
+#define fileno _fileno
 
 #define YY_USER_ACTION \
 yylloc.first_line = yylloc.last_line; \
@@ -170,10 +170,10 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "0"[xX]"."{HexDigit}+(HexExponent)?					{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
 "0"[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
-"\""([^\\\"]|{EscapeSequence})*"\""					{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
-"'"([^\\\']|{EscapeSequence})*"'"					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; } 	
+"\""([^\][^"]|{EscapeSequence})*"\""				{ DEBUGPRINT("\nLex: TWOQSTRING: %s", yytext); return TWOQSTRING; }
+"'"([^\][^']|{EscapeSequence})*"'"					{ DEBUGPRINT("\nLex: ONEQSTRING: %s", yytext); return ONEQSTRING; } 	
 
-"--["(=)*"["											{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT); }
+"--["(=)*"["										{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT); }
 <MANYLINESCOMMENT>.									{ DEBUGPRINT("\nLex: In_comment1 %s", yytext);   }
 <MANYLINESCOMMENT>\n								{ DEBUGPRINT("\nLex: In_comment2 %s", yytext);   }
 <MANYLINESCOMMENT>"]"(=)*"]"						{ right_side = strlen(yytext); DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext);

@@ -1,5 +1,1 @@
---[=[
-
-ghgh
-ggfsg
-]=]
+print "Can use both \'s and \"s."
