@@ -33,9 +33,23 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 	#endif
 }
 
+int parse_EscapeSequencez(void)
+{
+	int c = 0;
+	DEBUGPRINT("before: %s", yytext);
+	c = input();
+	DEBUGPRINT("after: %s, %s", yytext, yytext+1);
+	while (c == '\n' || c == '\t' || c == '\r')
+	{
+		c = input();
+	}
+	return c;
+}
 
 int left_side = 0;
 int right_side = 0;
+int unput_character = 0;
+
 /* TEST IT SECTION */
 
 //UtfEscape
@@ -55,7 +69,7 @@ int right_side = 0;
 %}
 
 %option noyywrap yylineno
-%x NESTEDSTR1 MANYLINESCOMMENT ONELINECOMMENT TWOQSTRING_X ONEQSTRING_X
+%x NESTEDSTR1 MANYLINESCOMMENT ONELINECOMMENT TWOQSTRING_X ONEQSTRING_X SKIP_N
 
 Digit					[0-9]
 HexDigit				[0-9a-fA-F]
@@ -64,7 +78,9 @@ HexExponent				[pP][+-]?[0-9]+
 DecimalEscape			("\\"{Digit})|("\\"{Digit}{Digit})|("\\"[0-2]{Digit}{Digit})
 HexEscape				"\\""x"{HexDigit}{HexDigit}
 UtfEscape				"\\""u{"{HexDigit}+"}" 
-EscapeSequence			("\\"[abfrtvz"'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
+EscapeSequence			("\\"[abfrntv"'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
+EscapeSequence2         "\\"[abfnrtv"'\\]|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
+EscapeSequencez			"\z"
 LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 
 %%
@@ -173,17 +189,21 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 "0"[xX]"."{HexDigit}+(HexExponent)?					{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_2: %s", yytext); return HEX_FLOAT; }
 "0"[xX]{HexDigit}+{HexExponent}						{ DEBUGPRINT("\nLex: Numeral HEX_FLOAT_3: %s", yytext); return HEX_FLOAT; }
 
-"\""												{ BEGIN(TWOQSTRING_X); DEBUGPRINT("\nLex: TWOQSTRING start: ");}
+"\""												{ BEGIN(TWOQSTRING_X); DEBUGPRINT("\nLex: TWOQSTRING start: "); }
 <TWOQSTRING_X>"\""									{ BEGIN(INITIAL); DEBUGPRINT("\nLex: TWOQSTRING end"); return TWOQSTRING;}
-<TWOQSTRING_X>{EscapeSequence}						{ DEBUGPRINT("1 - %s", yytext); }
-<TWOQSTRING_X>\n									{ DEBUGPRINT("3 - %s", yytext); DEBUGPRINT("Incorrect string"); exit(-20);}
-<TWOQSTRING_X>[^\"]									{ DEBUGPRINT("2 - %s", yytext); }
+<TWOQSTRING_X>"\z"									{ DEBUGPRINT("\n4 - %s", yytext); unput_character = parse_EscapeSequencez(); unput(unput_character); }
+<TWOQSTRING_X>{EscapeSequence}						{ DEBUGPRINT("\n1 - %s", yytext); }
+<TWOQSTRING_X>\n									{ DEBUGPRINT("\n3 - %s",  yytext); DEBUGPRINT("Error with \\n"); exit(-20); }
+<TWOQSTRING_X>[^\\"]								{ DEBUGPRINT("\n2 - %s", yytext); }
+<TWOQSTRING_X>[\\][^z]								{ DEBUGPRINT("\nError with \\ - %s", yytext); exit(-20);}
 
 "'"													{ BEGIN(ONEQSTRING_X); DEBUGPRINT("\nLex: ONEQSTRING start: ");}
 <ONEQSTRING_X>"'"									{ BEGIN(INITIAL); DEBUGPRINT("\nLex: TWOQSTRING end"); return ONEQSTRING;}
+<TWOQSTRING_X>"\z"									{ DEBUGPRINT("\n4 - %s", yytext); unput_character = parse_EscapeSequencez(); unput(unput_character); }
 <ONEQSTRING_X>{EscapeSequence}						{ DEBUGPRINT("1 - %s", yytext); }
 <ONEQSTRING_X>\n									{ DEBUGPRINT("3 - %s", yytext); DEBUGPRINT("Incorrect string"); exit(-20);}
-<ONEQSTRING_X>[^\']									{ DEBUGPRINT("2 - %s", yytext); }
+<ONEQSTRING_X>[^\\']								{ DEBUGPRINT("2 - %s", yytext); }
+<ONEQSTRING_X>[\\][^z]								{ DEBUGPRINT("\nError with \\ - %s", yytext); exit(-20);}
 
 
 "--["(=)*"["										{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT); }
