@@ -69,7 +69,7 @@ int unput_character = 0;
 %}
 
 %option noyywrap yylineno
-%x NESTEDSTR1 MANYLINESCOMMENT ONELINECOMMENT TWOQSTRING_X ONEQSTRING_X SKIP_N
+%x NESTEDSTR1 NESTEDSTR2 NESTEDSTR3 MANYLINESCOMMENT1 MANYLINESCOMMENT2 MANYLINESCOMMENT3 ONELINECOMMENT TWOQSTRING_X ONEQSTRING_X SKIP_N
 
 Digit					[0-9]
 HexDigit				[0-9a-fA-F]
@@ -78,7 +78,7 @@ HexExponent				[pP][+-]?[0-9]+
 DecimalEscape			("\\"{Digit})|("\\"{Digit}{Digit})|("\\"[0-2]{Digit}{Digit})
 HexEscape				"\\""x"{HexDigit}{HexDigit}
 UtfEscape				"\\""u{"{HexDigit}+"}" 
-EscapeSequence			("\\"[abfrntv"'\\])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
+EscapeSequence			("\\"[abfrntv"'\\\[\]])|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
 EscapeSequence2         "\\"[abfnrtv"'\\]|(\\(\r)?\n)|{DecimalEscape}|{HexEscape}|{UtfEscape}
 EscapeSequencez			"\z"
 LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
@@ -195,7 +195,7 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 <TWOQSTRING_X>{EscapeSequence}						{ DEBUGPRINT("\n1 - %s", yytext); }
 <TWOQSTRING_X>\n									{ DEBUGPRINT("\n3 - %s",  yytext); DEBUGPRINT("Error with \\n"); exit(-20); }
 <TWOQSTRING_X>[^\\"]								{ DEBUGPRINT("\n2 - %s", yytext); }
-<TWOQSTRING_X>[\\][^z]								{ DEBUGPRINT("\nError with \\ - %s", yytext); exit(-20);}
+<TWOQSTRING_X>[\\][^z]								{ DEBUGPRINT("\nError with \\ - %s", yytext); printf("\n in line %d. %d:%d - %d:%d\n", yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column); exit(-20);}
 
 "'"													{ BEGIN(ONEQSTRING_X); DEBUGPRINT("\nLex: ONEQSTRING start: ");}
 <ONEQSTRING_X>"'"									{ BEGIN(INITIAL); DEBUGPRINT("\nLex: TWOQSTRING end"); return ONEQSTRING;}
@@ -203,13 +203,30 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 <ONEQSTRING_X>{EscapeSequence}						{ DEBUGPRINT("1 - %s", yytext); }
 <ONEQSTRING_X>\n									{ DEBUGPRINT("3 - %s", yytext); DEBUGPRINT("Incorrect string"); exit(-20);}
 <ONEQSTRING_X>[^\\']								{ DEBUGPRINT("2 - %s", yytext); }
-<ONEQSTRING_X>[\\][^z]								{ DEBUGPRINT("\nError with \\ - %s", yytext); exit(-20);}
-
-
-"--["(=)*"["										{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT); }
-<MANYLINESCOMMENT>.									{ DEBUGPRINT("\nLex: In_comment1 %s", yytext);   }
-<MANYLINESCOMMENT>\n								{ DEBUGPRINT("\nLex: In_comment2 %s", yytext);   }
-<MANYLINESCOMMENT>"]"(=)*"]"						{ right_side = strlen(yytext); DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext);
+<ONEQSTRING_X>[\\][^z]								{ DEBUGPRINT("\nError with \\ - %s", yytext); printf("\nin line %d. %d:%d - %d:%d\n", yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column); exit(-20);}
+ 
+"--[=["												{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT2); }
+<MANYLINESCOMMENT2>.								{ DEBUGPRINT("\nLex: In_comment1 %s", yytext);   }
+<MANYLINESCOMMENT2>\n								{ DEBUGPRINT("\nLex: In_comment2 %s", yytext);   }
+<MANYLINESCOMMENT2>"]=]"								{ right_side = strlen(yytext); DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext);
+														BEGIN(INITIAL);
+														if (right_side == left_side)
+														{ /* ignore */ }
+														else { DEBUGPRINT("\nLex: incorrect many_lines_comment"); exit(-20); }
+													}
+"--[==["											{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT3); }
+<MANYLINESCOMMENT3>.								{ DEBUGPRINT("\nLex: In_comment1 %s", yytext);   }
+<MANYLINESCOMMENT3>\n								{ DEBUGPRINT("\nLex: In_comment2 %s", yytext);   }
+<MANYLINESCOMMENT3>"]==]"								{ right_side = strlen(yytext); DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext);
+														BEGIN(INITIAL);
+														if (right_side == left_side)
+														{ /* ignore */ }
+														else { DEBUGPRINT("\nLex: incorrect many_lines_comment"); exit(-20); }
+													}
+"--[["												{ left_side = strlen(yytext) - 2; DEBUGPRINT("\nLex: LINES_COMMENT count left: %d, %s", left_side, yytext); DEBUGPRINT("\nLex: Start many_lines_comment"); BEGIN(MANYLINESCOMMENT1); }
+<MANYLINESCOMMENT1>.									{ DEBUGPRINT("\nLex: In_comment1 %s", yytext);   }
+<MANYLINESCOMMENT1>\n								{ DEBUGPRINT("\nLex: In_comment2 %s", yytext);   }
+<MANYLINESCOMMENT1>"]]"								{ right_side = strlen(yytext); DEBUGPRINT("\nLex: LINES_COMMENT count right: %d, %s", right_side, yytext);
 														BEGIN(INITIAL);
 														if (right_side == left_side)
 														{ /* ignore */ }
@@ -220,17 +237,26 @@ LONGSTR_LVL1			(=){LONGSTR_LVL1}(=)
 <ONELINECOMMENT>.									{ }
 <ONELINECOMMENT>\n									{ DEBUGPRINT("\nLex: Stop ONE_lines_comment"); BEGIN(INITIAL);  }
 
-"["(=)*"["											{	left_side = strlen(yytext);  
+"[==["											{	left_side = strlen(yytext);  
 														DEBUGPRINT("\nLex: LONG_STR count left: %d, %s", left_side, yytext); 
 														BEGIN(NESTEDSTR1);
-													}
-<NESTEDSTR1>.										{ }
-<NESTEDSTR1>\n										{ }
-<NESTEDSTR1>"]"(=)*"]"								{	right_side = strlen(yytext);  
+												}
+<NESTEDSTR1>.									{ }
+<NESTEDSTR1>\n									{ }
+<NESTEDSTR1>"]==]"								{	right_side = strlen(yytext);  
 														DEBUGPRINT("\nLex: LONG_STR count right: %d, %s", right_side, yytext); 
 														BEGIN(INITIAL); 
 														if (right_side == left_side) return LONGSTRING;
 													}
+"[["											{ BEGIN(NESTEDSTR2); }
+<NESTEDSTR2>.									{ }
+<NESTEDSTR2>\n									{ }
+<NESTEDSTR2>"]]"								{ BEGIN(INITIAL); return LONGSTRING; }
+
+"[=["											{ BEGIN(NESTEDSTR3); }
+<NESTEDSTR3>.									{ }
+<NESTEDSTR3>\n									{ }
+<NESTEDSTR3>"]=]"								{ BEGIN(INITIAL); return LONGSTRING; }
 .						{
 							DEBUGPRINT("\nLex: unknown: %s", yytext);
 							return yytext[0]; 
