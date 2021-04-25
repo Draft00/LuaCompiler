@@ -16,7 +16,7 @@ extern int yylineno;
 extern void DEBUGPRINT(char* format, ...);
 
 #define YYERROR_VERBOSE 1
-//#define DEBUG_BISON
+#define DEBUG_BISON
 
 void DEBUGPRINT_BISON(char* format, ...)
 {
@@ -130,13 +130,8 @@ locals: LOCAL FUNCTION NAME function_body
 
 
 /* ===> For_cycle */
-for_cycle: FOR NAME '=' cycle_exp_list DO block END
-		 | FOR cycle_exp_list IN function_call DO block END
-		 | FOR exp IN function_call DO block END
-;
-
-cycle_exp_list: cycle_exp_list ',' exp
-			  | exp ',' exp
+for_cycle: FOR NAME '=' exp_list DO block END
+		 | FOR exp_list IN exp_list DO block END
 ;
 /* <=== For_cycle */
 

@@ -6,9 +6,9 @@
 #include <stdarg.h> //va_list
 
 #define noyywrap
-//#define DEBUG
+#define DEBUG
 
-#define fileno _fileno
+#define fileno fileno
 
 #define YY_USER_ACTION \
 yylloc.first_line = yylloc.last_line; \
@@ -35,6 +35,7 @@ void DEBUGPRINT(char* format, ...) // должен быть хотя бы один аргумент
 
 int parse_EscapeSequencez(void)
 {
+	/*
 	int c = 0;
 	DEBUGPRINT("before: %s", yytext);
 	c = input();
@@ -43,7 +44,8 @@ int parse_EscapeSequencez(void)
 	{
 		c = input();
 	}
-	return c;
+	*/
+	return 1;
 }
 
 int left_side = 0;
