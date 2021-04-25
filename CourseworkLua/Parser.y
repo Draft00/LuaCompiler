@@ -43,11 +43,11 @@ void DEBUGPRINT_BISON(char* format, ...)
 /* Keyworded values */
 %token NIL FALSE TRUE
 
-/* Operators */
-%token BINOP UNOP MINUS
-
 /* Looping */
 %token DO WHILE FOR UNTIL REPEAT END GOTO IN
+
+/* Functions */
+%token FUNCTION BREAK RETURN LABEL_DEF
 
 /* If/else statements */
 %token IF THEN ELSEIF ELSE
@@ -55,8 +55,10 @@ void DEBUGPRINT_BISON(char* format, ...)
 /* Values */
 %token LOCAL
 
-/* Functions */
-%token FUNCTION BREAK RETURN LABEL_DEF
+/* Operators */
+%left BINOP UNOP MINUS
+
+%left UMINUS
 
 
 /* SECTION OF WHAT WE SHOULD TEST */
@@ -137,11 +139,14 @@ for_cycle: FOR NAME '=' exp_list DO block END
 
 
 /* ===> Statement */
-statement: IF exp THEN block END 						{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block END"); }	
+statement: if_start END 					{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block END"); }	
 		 /* Optional else_if token */
-		 | IF exp THEN block else_if END 				{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block else_if END"); }
-		 | IF exp THEN block ELSE block END 			{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block ELSE block END"); }
-		 | IF exp THEN block else_if ELSE block END 	{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block else_if ELSE block END"); }
+		 | if_start else_if END 			{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block else_if END"); }
+		 | if_start ELSE block END 			{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block ELSE block END"); }
+		 | if_start else_if ELSE block END 	{ DEBUGPRINT_BISON("\nSTATEMENT: IF exp THEN block else_if ELSE block END"); }
+;
+
+if_start: IF exp THEN block					{ DEBUGPRINT_BISON("\nEIF_START: IF exp THEN"); }	
 ;
 
 else_if: else_if ELSEIF exp THEN block 		{ DEBUGPRINT_BISON("\nELSE_IF: else_if ELSEIF exp THEN block"); }	
@@ -307,8 +312,8 @@ exp: NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
    | exp MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
 
    /* Because '<' NAME '>' is attribute */
-   | exp '<' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
-   | exp '>' exp 	{ DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
+   | exp '<' exp %prec MINUS	{ DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
+   | exp '>' exp %prec MINUS 	{ DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
 
    /* Unary and binary */
    | MINUS exp 		{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }   
@@ -320,11 +325,11 @@ exp: NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
    | function_def 	{ DEBUGPRINT_BISON("\nEXP: function_def"); }
    | function_call 	{ DEBUGPRINT_BISON("\nEXP: function_call"); }
 
-   | var
+   | var 			{ DEBUGPRINT_BISON("\nEXP: function_call"); }
 ;
 
 
-literalString: ONEQSTRING 		{ DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
+literalString: ONEQSTRING 	{ DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
 			 | TWOQSTRING	{ DEBUGPRINT_BISON("\nVAR: TWOQSTRING"); }
 			 | LONGSTRING 	{ DEBUGPRINT_BISON("\nVAR: LONGSTRING"); }/* TODO */
 		     //| LongString
