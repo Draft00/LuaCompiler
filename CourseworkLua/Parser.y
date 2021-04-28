@@ -93,8 +93,10 @@ stat_list: stat_list opt_stat 	{ DEBUGPRINT_BISON("\nSTAT_LIST: stat_list opt_st
 		 | opt_stat   			{ DEBUGPRINT_BISON("\nSTAT_LIST: opt_stat"); }
 ;
 
+
 opt_stat: stat 			{ DEBUGPRINT_BISON("\nOPT_STAT: stat"); }
 		| /* empty */	{ DEBUGPRINT_BISON("\nOPT_STAT: empty"); }
+;
 /* <=== Block */
 
 
