@@ -317,7 +317,6 @@ exp: NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
    | TRUE			{ DEBUGPRINT_BISON("\nEXP: TRUE"); }
    | DOTS			{ DEBUGPRINT_BISON("\nEXP: DOTS"); }
 
-   | '(' exp ')' 	{ DEBUGPRINT_BISON("\nEXP: '(' exp ')' "); }
    | exp BINOP exp 	{ DEBUGPRINT_BISON("\nEXP: exp BINOP exp"); }
    | exp MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
 
@@ -333,9 +332,7 @@ exp: NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
    | table_body 	{ DEBUGPRINT_BISON("\nEXP: table_body"); }
    
    | function_def 	{ DEBUGPRINT_BISON("\nEXP: function_def"); }
-   | function_call 	{ DEBUGPRINT_BISON("\nEXP: function_call"); }
-
-   | var 			{ DEBUGPRINT_BISON("\nEXP: function_call"); }
+   | prefix_exp 	{ DEBUGPRINT_BISON("\nEXP: function_def"); }
 ;
 
 
