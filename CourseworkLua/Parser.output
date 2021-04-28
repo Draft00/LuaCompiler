@@ -3,7 +3,6 @@ Terminals unused in grammar
    TWOQ
    ONEQ
    NESTED_STR
-   UMINUS
 
 
 State 31 conflicts: 1 reduce/reduce
@@ -213,7 +212,7 @@ LOCAL (289) 21 22 23
 MINUS (290) 87 90
 UNOP (291) 91
 BINOP (292) 86
-UMINUS (293)
+NEG (293)
 
 
 Nonterminals, with rules where they appear

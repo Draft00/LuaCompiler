@@ -81,7 +81,7 @@ extern int yydebug;
      MINUS = 290,
      UNOP = 291,
      BINOP = 292,
-     UMINUS = 293
+     NEG = 293
    };
 #endif
 

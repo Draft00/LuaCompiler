@@ -16,7 +16,7 @@ extern int yylineno;
 extern void DEBUGPRINT(char* format, ...);
 
 #define YYERROR_VERBOSE 1
-#define DEBUG_BISON
+//#define DEBUG_BISON
 
 void DEBUGPRINT_BISON(char* format, ...)
 {
@@ -58,7 +58,7 @@ void DEBUGPRINT_BISON(char* format, ...)
 /* Operators */
 %left BINOP UNOP MINUS
 
-%left UMINUS
+%left NEG
 
 
 /* SECTION OF WHAT WE SHOULD TEST */
@@ -321,12 +321,13 @@ exp: NIL 			{ DEBUGPRINT_BISON("\nEXP: NIL"); }
    | exp MINUS exp 	{ DEBUGPRINT_BISON("\nEXP: exp MINUS exp"); }
 
    /* Because '<' NAME '>' is attribute */
-   | exp '<' exp %prec MINUS	{ DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
-   | exp '>' exp %prec MINUS 	{ DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
+   | exp '<' exp %prec NEG	{ DEBUGPRINT_BISON("\nEXP: exp '<' exp"); }
+   | exp '>' exp %prec NEG 	{ DEBUGPRINT_BISON("\nEXP: exp '>' exp"); }
 
    /* Unary and binary */
-   | MINUS exp 		{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }   
-   | UNOP exp 		{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }   
+   | MINUS exp %prec NEG		{ DEBUGPRINT_BISON("\nEXP: MINUS exp"); }   
+   | UNOP exp 						{ DEBUGPRINT_BISON("\nEXP: UNOP exp"); }   
+
    | numeral		{ DEBUGPRINT_BISON("\nEXP: numeral"); }
    | literalString 	{ DEBUGPRINT_BISON("\nEXP: literalString"); }
    | table_body 	{ DEBUGPRINT_BISON("\nEXP: table_body"); }
@@ -383,6 +384,7 @@ int parser_main(int argc, char *argv[])
 		}
 	}
 	yyparse();
+	printf("OK\n");
 
 	if(fp != NULL)
 	{
@@ -395,5 +397,5 @@ int parser_main(int argc, char *argv[])
 int yyerror(const char *p)
 { 
 	printf("\n%s in line %d. %d:%d - %d:%d\n", p, yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
-	return 0;
+	exit(-1);
 }

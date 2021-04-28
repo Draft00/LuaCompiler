@@ -82,7 +82,7 @@ extern int yylineno;
 extern void DEBUGPRINT(char* format, ...);
 
 #define YYERROR_VERBOSE 1
-#define DEBUG_BISON
+//#define DEBUG_BISON
 
 void DEBUGPRINT_BISON(char* format, ...)
 {
@@ -168,7 +168,7 @@ extern int yydebug;
      MINUS = 290,
      UNOP = 291,
      BINOP = 292,
-     UMINUS = 293
+     NEG = 293
    };
 #endif
 
@@ -566,8 +566,8 @@ static const yytype_uint16 yyrline[] =
      247,   253,   254,   255,   256,   262,   263,   264,   270,   271,
      278,   279,   285,   286,   293,   294,   298,   299,   304,   305,
      306,   310,   311,   315,   316,   317,   318,   320,   321,   324,
-     325,   328,   329,   330,   331,   332,   334,   335,   339,   340,
-     341,   346,   347,   348,   349
+     325,   328,   329,   331,   332,   333,   335,   336,   340,   341,
+     342,   347,   348,   349,   350
 };
 #endif
 
@@ -581,8 +581,8 @@ static const char *const yytname[] =
   "NAME", "DOTS", "NIL", "FALSE", "TRUE", "DO", "WHILE", "FOR", "UNTIL",
   "REPEAT", "END", "GOTO", "IN", "FUNCTION", "BREAK", "RETURN",
   "LABEL_DEF", "IF", "THEN", "ELSEIF", "ELSE", "LOCAL", "MINUS", "UNOP",
-  "BINOP", "UMINUS", "';'", "'='", "','", "'<'", "'>'", "':'", "'.'",
-  "'['", "']'", "'('", "')'", "'{'", "'}'", "$accept", "main", "block",
+  "BINOP", "NEG", "';'", "'='", "','", "'<'", "'>'", "':'", "'.'", "'['",
+  "']'", "'('", "')'", "'{'", "'}'", "$accept", "main", "block",
   "block_ret", "stat_list", "stat", "while_do", "locals", "for_cycle",
   "statement", "if_start", "else_if", "attr_list", "attr", "ret",
   "ret_wrap_endl", "ret_wrap_exp", "label", "function_name",
@@ -2218,73 +2218,73 @@ yyreduce:
 
   case 93:
 /* Line 1802 of yacc.c  */
-#line 330 "Parser.y"
+#line 331 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: numeral"); }
     break;
 
   case 94:
 /* Line 1802 of yacc.c  */
-#line 331 "Parser.y"
+#line 332 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: literalString"); }
     break;
 
   case 95:
 /* Line 1802 of yacc.c  */
-#line 332 "Parser.y"
+#line 333 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: table_body"); }
     break;
 
   case 96:
 /* Line 1802 of yacc.c  */
-#line 334 "Parser.y"
+#line 335 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: function_def"); }
     break;
 
   case 97:
 /* Line 1802 of yacc.c  */
-#line 335 "Parser.y"
+#line 336 "Parser.y"
     { DEBUGPRINT_BISON("\nEXP: function_def"); }
     break;
 
   case 98:
 /* Line 1802 of yacc.c  */
-#line 339 "Parser.y"
+#line 340 "Parser.y"
     { DEBUGPRINT_BISON("\nVAR: ONEQSTRING"); }
     break;
 
   case 99:
 /* Line 1802 of yacc.c  */
-#line 340 "Parser.y"
+#line 341 "Parser.y"
     { DEBUGPRINT_BISON("\nVAR: TWOQSTRING"); }
     break;
 
   case 100:
 /* Line 1802 of yacc.c  */
-#line 341 "Parser.y"
+#line 342 "Parser.y"
     { DEBUGPRINT_BISON("\nVAR: LONGSTRING"); }
     break;
 
   case 101:
 /* Line 1802 of yacc.c  */
-#line 346 "Parser.y"
+#line 347 "Parser.y"
     { DEBUGPRINT_BISON("\nNUMERAL: INT"); }
     break;
 
   case 102:
 /* Line 1802 of yacc.c  */
-#line 347 "Parser.y"
+#line 348 "Parser.y"
     { DEBUGPRINT_BISON("\nNUMERAL: HEX"); }
     break;
 
   case 103:
 /* Line 1802 of yacc.c  */
-#line 348 "Parser.y"
+#line 349 "Parser.y"
     { DEBUGPRINT_BISON("\nNUMERAL: FLOAT"); }
     break;
 
   case 104:
 /* Line 1802 of yacc.c  */
-#line 349 "Parser.y"
+#line 350 "Parser.y"
     { DEBUGPRINT_BISON("\nNUMERAL: HEX_FLOAT"); }
     break;
 
@@ -2529,7 +2529,7 @@ yyreturn:
 
 
 /* Line 2050 of yacc.c  */
-#line 367 "Parser.y"
+#line 368 "Parser.y"
 
 
 int parser_main(int argc, char *argv[])
@@ -2549,6 +2549,7 @@ int parser_main(int argc, char *argv[])
 		}
 	}
 	yyparse();
+	printf("OK\n");
 
 	if(fp != NULL)
 	{
@@ -2561,5 +2562,5 @@ int parser_main(int argc, char *argv[])
 int yyerror(const char *p)
 { 
 	printf("\n%s in line %d. %d:%d - %d:%d\n", p, yylineno, yylloc.first_line, yylloc.first_column, yylloc.last_line, yylloc.last_column);
-	return 0;
+	exit(-1);
 }
