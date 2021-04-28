@@ -6,7 +6,7 @@
 #include <stdarg.h> //va_list
 
 #define noyywrap
-#define DEBUG
+//#define DEBUG
 
 #define fileno fileno
 

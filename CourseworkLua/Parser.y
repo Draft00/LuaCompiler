@@ -85,18 +85,20 @@ main: block				{ DEBUGPRINT_BISON("\nMAIN: block"); }
 ;
 
 /* ===> Block */
-block: stat_list 		{ DEBUGPRINT_BISON("\nBLOCK: stat_list"); }
-	 | stat_list ret 	{ DEBUGPRINT_BISON("\nBLOCK: stat_list ret"); }
+block: stat_list block_ret 	{ DEBUGPRINT_BISON("\nBLOCK: stat_list ret"); }
 ;
 
-stat_list: stat_list opt_stat 	{ DEBUGPRINT_BISON("\nSTAT_LIST: stat_list opt_stat"); }
-		 | opt_stat   			{ DEBUGPRINT_BISON("\nSTAT_LIST: opt_stat"); }
+block_ret: ret  			{ DEBUGPRINT_BISON("\nBLOCK_RET: ret"); }
+		 | /* empty */  	{ DEBUGPRINT_BISON("\nBLOCK_RET: empty"); }
+
+stat_list: stat_list stat 	{ DEBUGPRINT_BISON("\nSTAT_LIST: stat_list stat"); }
+		 | /* empty */		{ DEBUGPRINT_BISON("\nSTAT_LIST: empty"); }
 ;
 
+//opt_stat: stat 			{ DEBUGPRINT_BISON("\nOPT_STAT: stat"); }
+//		| /* empty */	{ DEBUGPRINT_BISON("\nOPT_STAT: empty"); }
+//;
 
-opt_stat: stat 			{ DEBUGPRINT_BISON("\nOPT_STAT: stat"); }
-		| /* empty */	{ DEBUGPRINT_BISON("\nOPT_STAT: empty"); }
-;
 /* <=== Block */
 
 
@@ -174,11 +176,17 @@ attr: '<' NAME '>' 			 	{ DEBUGPRINT_BISON("\nATTR: '<' NAME '>'"); }
 
 /* ===> Ret */
 /* All possible combinations: RETURN optional(exp_list) optional(';') */
-ret: RETURN 					{ DEBUGPRINT_BISON("\nRET: RETURN"); }
-   | RETURN ';' 				{ DEBUGPRINT_BISON("\nRET: RETURN ;'"); }
-   | RETURN exp_list 			{ DEBUGPRINT_BISON("\nRET: RETURN exp_list"); }
-   | RETURN exp_list ';'  		{ DEBUGPRINT_BISON("\nRET: RETURN exp_list ';'"); }
- ;
+ret: RETURN ret_wrap_exp ret_wrap_endl	{ DEBUGPRINT_BISON("\nRET: RETURN"); }
+;
+
+ret_wrap_endl: ';' 			{ DEBUGPRINT_BISON("\nRET_WRAP_ENDL: exp_list"); }
+			 | /* empty */ 	{ DEBUGPRINT_BISON("\nRET_WRAP_ENDL: empty"); }
+;
+
+ret_wrap_exp: exp_list 		{ DEBUGPRINT_BISON("\nRET_WRAP_EXP: exp_list"); }
+ 			| /* empty */ 	{ DEBUGPRINT_BISON("\nRET_WRAP_EXP: empty"); }
+;
+;
 /* <=== Ret */
 
 
