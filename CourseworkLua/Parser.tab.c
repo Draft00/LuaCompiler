@@ -1769,7 +1769,7 @@ yyreduce:
   case 10:
 /* Line 1802 of yacc.c  */
 #line 107 "Parser.y"
-    { DEBUGPRINT_BISON("\nSTAT: function_call"); }
+    { DEBUGPRINT_BISON("\nSTAT: function_call"); printf("stat\n"); }
     break;
 
   case 11:
@@ -1985,7 +1985,7 @@ yyreduce:
   case 54:
 /* Line 1802 of yacc.c  */
 #line 229 "Parser.y"
-    { DEBUGPRINT_BISON("\nPREFIX_EXP: function_call"); }
+    { DEBUGPRINT_BISON("\nPREFIX_EXP: function_call"); printf("exp\n"); }
     break;
 
   case 55:
